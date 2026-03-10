@@ -52,7 +52,7 @@ export default function Header() {
                 </Link>
 
                 {/* Desktop nav */}
-                <div className="hidden md:flex gap-7 items-center">
+                <div className="hidden lg:flex gap-7 items-center">
                     {navLinks.map((link, i) => (
                         <Link
                             key={i}
@@ -72,7 +72,7 @@ export default function Header() {
 
                 {/* Hamburger */}
                 <button
-                    className="md:hidden bg-transparent border-none cursor-pointer p-2 text-white"
+                    className="lg:hidden bg-transparent border-none cursor-pointer p-2 text-white"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     aria-label="Abrir menú"
                 >
@@ -95,7 +95,7 @@ export default function Header() {
 
             {/* Mobile dropdown */}
             {mobileMenuOpen && (
-                <div className="md:hidden fixed top-[56px] left-0 right-0 z-[99] bg-[#0F2035]/97 backdrop-blur-md px-6 py-5 flex flex-col gap-3">
+                <div className="lg:hidden fixed top-[56px] left-0 right-0 z-[99] bg-[#0F2035]/97 backdrop-blur-md px-6 py-5 flex flex-col gap-3">
                     {navLinks.map((link, i) => (
                         <Link
                             key={i}

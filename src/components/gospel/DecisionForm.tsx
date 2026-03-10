@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Reveal } from "./Reveal";
 import { submitDecision } from "@/app/conoce-a-jesus/actions/submitDecision";
+import { Turnstile } from "@marsidev/react-turnstile";
 import Link from "next/link";
 
 export default function DecisionForm() {
@@ -11,6 +12,8 @@ export default function DecisionForm() {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const [turnstileToken, setTurnstileToken] = useState("");
+    const [website, setWebsite] = useState(""); // honeypot
 
     const [formData, setFormData] = useState({
         nombre: "",
@@ -32,10 +35,22 @@ export default function DecisionForm() {
             return;
         }
 
+        if (website.trim() !== "") {
+            // Honeypot tripped
+            setSubmitted(true);
+            return;
+        }
+
+        if (!turnstileToken) {
+            setErrorMsg("Por favor, verifica que eres humano.");
+            return;
+        }
+
         setLoading(true);
         const result = await submitDecision({
             ...formData,
-            quiereContacto: contactToggle
+            quiereContacto: contactToggle,
+            turnstileToken
         });
 
         if (result.success) {
@@ -82,6 +97,20 @@ export default function DecisionForm() {
                             </Reveal>
 
                             <form onSubmit={handleSubmit} className="text-left space-y-4">
+                                {/* Honeypot field */}
+                                <div className="absolute -z-10 opacity-0 overflow-hidden w-0 h-0" aria-hidden="true" tabIndex={-1}>
+                                    <label htmlFor="website">Website</label>
+                                    <input 
+                                        type="text" 
+                                        id="website" 
+                                        name="website"
+                                        value={website}
+                                        onChange={(e) => setWebsite(e.target.value)}
+                                        tabIndex={-1}
+                                        autoComplete="off" 
+                                    />
+                                </div>
+
                                 <div>
                                     <label htmlFor="nombre" className="block text-[13px] font-semibold text-gray-500 mb-1.5 tracking-[0.3px]">
                                         Nombre <span className="text-red-500">*</span>
@@ -177,6 +206,19 @@ export default function DecisionForm() {
                                         <span>{errorMsg}</span>
                                     </div>
                                 )}
+
+                                <div className="pt-2">
+                                    <Turnstile 
+                                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                                        onSuccess={(token) => setTurnstileToken(token)}
+                                        onError={() => setErrorMsg("No pudimos verificar que eres humano. Por favor, recarga la página.")}
+                                        onExpire={() => setTurnstileToken("")}
+                                        options={{
+                                            size: 'flexible',
+                                            theme: 'light'
+                                        }}
+                                    />
+                                </div>
 
                                 <button
                                     type="submit"

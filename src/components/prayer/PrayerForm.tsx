@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { submitPrayer } from "@/app/oracion/actions/submitPrayer";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 const CheckIco = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -22,6 +23,8 @@ export function PrayerForm() {
     const [contacto, setContacto] = useState("");
     const [showWall, setShowWall] = useState(false);
     const [wantContact, setWantContact] = useState(false);
+    const [turnstileToken, setTurnstileToken] = useState("");
+    const [website, setWebsite] = useState(""); // honeypot
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -29,6 +32,19 @@ export function PrayerForm() {
             setErrorMsg("La petición no puede estar vacía.");
             return;
         }
+
+        if (website.trim() !== "") {
+            // Honeypot tripped - simulated success
+            resetForm();
+            setView("success");
+            return;
+        }
+
+        if (!turnstileToken) {
+            setErrorMsg("Por favor, verifica que eres humano.");
+            return;
+        }
+
         setErrorMsg(null);
 
         const formData = new FormData();
@@ -36,7 +52,9 @@ export function PrayerForm() {
         formData.append("peticion", peticion);
         formData.append("contacto", contacto);
         formData.append("showWall", showWall ? "true" : "false");
+        formData.append("showWall", showWall ? "true" : "false");
         formData.append("wantContact", wantContact ? "true" : "false");
+        formData.append("turnstileToken", turnstileToken);
 
         startTransition(async () => {
             const res = await submitPrayer(formData);
@@ -78,6 +96,20 @@ export function PrayerForm() {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-5" aria-label="Formulario de petición de oración">
+                        {/* Honeypot field - Invisible to humans, tempting for bots */}
+                        <div className="absolute -z-10 opacity-0 overflow-hidden w-0 h-0" aria-hidden="true" tabIndex={-1}>
+                            <label htmlFor="website">Website</label>
+                            <input 
+                                type="text" 
+                                id="website" 
+                                name="website"
+                                value={website}
+                                onChange={(e) => setWebsite(e.target.value)}
+                                tabIndex={-1}
+                                autoComplete="off" 
+                            />
+                        </div>
+
                         <div>
                             <label htmlFor="prayer-nombre" className="block text-[13px] font-bold text-muted mb-1.5 tracking-wide">
                                 Tu nombre <span className="font-normal text-light italic">(opcional)</span>
@@ -168,6 +200,19 @@ export function PrayerForm() {
                             <span className="text-[14px] text-gray-800 leading-snug select-none">
                                 Me gustaría que alguien me contacte para conversar
                             </span>
+                        </div>
+
+                        <div className="pt-2">
+                            <Turnstile 
+                                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                                onSuccess={(token) => setTurnstileToken(token)}
+                                onError={() => setErrorMsg("No pudimos verificar que eres humano. Por favor, recarga la página.")}
+                                onExpire={() => setTurnstileToken("")}
+                                options={{
+                                    size: 'flexible',
+                                    theme: 'light'
+                                }}
+                            />
                         </div>
 
                         <button

@@ -19,7 +19,7 @@ export default function GospelChapter({
 
     const themes = {
         'ch-1': {
-            bg: 'bg-gradient-to-b from-white to-[#F8F6F0]',
+            bg: 'bg-white bg-gradient-to-b from-white to-[#F8F6F0]',
             num: 'text-[#D4A843]',
             title: 'text-[#1E3A5F]',
             text: 'text-[#2C2C2C]',
@@ -29,7 +29,7 @@ export default function GospelChapter({
             verseRef: 'text-[#D4A843]'
         },
         'ch-2': {
-            bg: 'bg-gradient-to-b from-[#2A2A35] to-[#1F1F28]',
+            bg: 'bg-[#2A2A35] bg-gradient-to-b from-[#2A2A35] to-[#1F1F28]',
             num: 'text-white/50',
             title: 'text-[#E8E4DC]',
             text: 'text-[#E8E4DC]/75',
@@ -39,7 +39,7 @@ export default function GospelChapter({
             verseRef: 'text-white/40'
         },
         'ch-3': {
-            bg: 'bg-gradient-to-b from-[#1F1F28] via-[#1E3A5F] to-[#2A4A6F]',
+            bg: 'bg-[#1E3A5F] bg-gradient-to-b from-[#1F1F28] via-[#1E3A5F] to-[#2A4A6F]',
             num: 'text-[#D4A843]',
             title: 'text-[#F5E6C4]',
             text: 'text-[#F8F6F0]/80',
@@ -49,7 +49,7 @@ export default function GospelChapter({
             verseRef: 'text-[#D4A843]'
         },
         'ch-4': {
-            bg: 'bg-gradient-to-b from-[#F8F6F0] to-white',
+            bg: 'bg-[#F8F6F0] bg-gradient-to-b from-[#F8F6F0] to-white',
             num: 'text-[#D4A843]',
             title: 'text-[#1E3A5F]',
             text: 'text-[#2C2C2C]',
@@ -63,7 +63,7 @@ export default function GospelChapter({
     const t = themes[colorTheme];
 
     return (
-        <section id={id} className={`chapter relative min-h-[100svh] flex items-center justify-center py-20 px-6 overflow-hidden ${t.bg}`}>
+        <section id={id} className={`chapter relative min-h-screen min-h-[100svh] flex items-center justify-center py-20 px-6 overflow-hidden ${t.bg}`}>
             <div className="relative z-10 w-full max-w-[680px]">
                 {/* Chapter Number Background */}
                 <div className={`absolute -top-10 -left-6 md:-left-12 font-serif font-light text-[clamp(140px,22vw,240px)] opacity-5 leading-none select-none pointer-events-none ${t.num}`}>

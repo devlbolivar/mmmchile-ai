@@ -3,6 +3,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { sendDecisionNotification, sendDecisionConfirmation } from "@/lib/resend";
+import { verifyTurnstileToken } from "@/lib/turnstile";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -22,7 +24,14 @@ export async function submitDecision(formData: {
     contacto: string;
     siguiente: string;
     quiereContacto: boolean;
+    turnstileToken: string;
 }) {
+    const rateLimitConfig = { endpoint: "submitDecision", maxRequests: 3, windowMinutes: 60 };
+    const rateLimitCheck = await checkRateLimit(rateLimitConfig);
+    if (!rateLimitCheck.success) {
+        return { success: false, error: rateLimitCheck.error };
+    }
+
     const data = {
         name: formData.nombre,
         city: formData.ciudad,
@@ -36,6 +45,14 @@ export async function submitDecision(formData: {
     if (!validatedFields.success) {
         return {
             error: "Hay errores en el formulario.",
+            success: false,
+        };
+    }
+
+    const isValidToken = await verifyTurnstileToken(formData.turnstileToken);
+    if (!isValidToken) {
+        return {
+            error: "Verificación de seguridad fallida. Por favor, intenta de nuevo.",
             success: false,
         };
     }

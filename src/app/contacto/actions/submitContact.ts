@@ -3,6 +3,8 @@
 import { z } from "zod";
 import { supabase } from "@/lib/supabase";
 import { sendContactNotification, sendContactConfirmation } from "@/lib/resend";
+import { verifyTurnstileToken } from "@/lib/turnstile";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const contactSchema = z.object({
     name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -22,6 +24,12 @@ const contactSchema = z.object({
 
 export async function submitContact(formData: FormData) {
     try {
+        const rateLimitConfig = { endpoint: "submitContact", maxRequests: 5, windowMinutes: 60 };
+        const rateLimitCheck = await checkRateLimit(rateLimitConfig);
+        if (!rateLimitCheck.success) {
+            return { success: false, error: rateLimitCheck.error };
+        }
+
         const rawData = {
             name: formData.get("name")?.toString() || "",
             email: formData.get("email")?.toString() || "",
@@ -29,11 +37,17 @@ export async function submitContact(formData: FormData) {
             subject: formData.get("subject")?.toString() || "",
             message: formData.get("message")?.toString() || "",
             source_page: formData.get("source_page")?.toString() || "",
+            turnstileToken: formData.get("turnstileToken")?.toString() || "",
         };
 
         const validationResult = contactSchema.safeParse(rawData);
         if (!validationResult.success) {
             return { success: false, error: validationResult.error.issues[0].message };
+        }
+
+        const isValidToken = await verifyTurnstileToken(rawData.turnstileToken);
+        if (!isValidToken) {
+            return { success: false, error: "Verificación de seguridad fallida. Por favor, intenta de nuevo." };
         }
 
         const validatedData = validationResult.data;

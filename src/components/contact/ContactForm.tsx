@@ -3,6 +3,7 @@
 import { useTransition, useRef, useState, useEffect } from "react";
 import { submitContact } from "@/app/contacto/actions/submitContact";
 import { Send, CheckCircle2, AlertCircle, Loader2, Heart, MapPin, BookOpen } from "lucide-react";
+import { Turnstile } from "@marsidev/react-turnstile";
 import Link from "next/link";
 import { useSearchParams } from 'next/navigation';
 
@@ -50,6 +51,8 @@ export default function ContactForm() {
     const [selectedSubject, setSelectedSubject] = useState("");
     const [showFunnelCTAs, setShowFunnelCTAs] = useState(false);
     const [fieldErrors, setFieldErrors] = useState({ name: "", email: "", message: "" });
+    const [turnstileToken, setTurnstileToken] = useState("");
+    const [website, setWebsite] = useState(""); // honeypot
     const formRef = useRef<HTMLFormElement>(null);
     const searchParams = useSearchParams();
     const sourcePage = searchParams?.get("from") || "direct";
@@ -85,11 +88,25 @@ export default function ContactForm() {
             message: validateMessage(message),
         };
         setFieldErrors(errors);
+        
+        if (website.trim() !== "") {
+            // Honeypot tripped
+            setStatus("success");
+            return;
+        }
+
         if (Object.values(errors).some(Boolean)) return;
+
+        if (!turnstileToken) {
+            setStatus("error");
+            setErrorMsg("Por favor, verifica que eres humano.");
+            return;
+        }
 
         setStatus("idle");
         setErrorMsg(null);
         formData.append("source_page", sourcePage);
+        formData.append("turnstileToken", turnstileToken);
         trackEvent("contact_form_submit", { subject: selectedSubject });
 
         startTransition(async () => {
@@ -167,6 +184,20 @@ export default function ContactForm() {
             )}
 
             <form ref={formRef} action={handleAction} className="space-y-5">
+                {/* Honeypot field */}
+                <div className="absolute -z-10 opacity-0 overflow-hidden w-0 h-0" aria-hidden="true" tabIndex={-1}>
+                    <label htmlFor="website">Website</label>
+                    <input 
+                        type="text" 
+                        id="website" 
+                        name="website"
+                        value={website}
+                        onChange={(e) => setWebsite(e.target.value)}
+                        tabIndex={-1}
+                        autoComplete="off" 
+                    />
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
                         <label htmlFor="name" className="block text-xs font-bold text-muted tracking-wide">
@@ -273,6 +304,22 @@ export default function ContactForm() {
                     {fieldErrors.message && (
                         <p className="text-xs text-red-500 font-medium">{fieldErrors.message}</p>
                     )}
+                </div>
+
+                <div className="pt-2">
+                    <Turnstile 
+                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                        onSuccess={(token) => setTurnstileToken(token)}
+                        onError={() => {
+                            setStatus("error");
+                            setErrorMsg("No pudimos verificar que eres humano. Por favor, recarga la página.");
+                        }}
+                        onExpire={() => setTurnstileToken("")}
+                        options={{
+                            size: 'flexible',
+                            theme: 'light'
+                        }}
+                    />
                 </div>
 
                 <button
