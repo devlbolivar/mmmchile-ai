@@ -1,3 +1,0 @@
-[     324ms] [WARNING] Image with src "/logo.png" is using quality "100" which is not configured in images.qualities [70, 70, 70, 70, 75]. Please update your config to [100, 70, 70, 70, 70, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
-[   10999ms] [WARNING] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297

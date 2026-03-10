@@ -1,3 +1,0 @@
-[     159ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/blog/superar-ansiedad:0
-[     388ms] [WARNING] Image with src "/logo.png" is using quality "100" which is not configured in images.qualities [70, 70, 70, 70, 75]. Please update your config to [100, 70, 70, 70, 70, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297

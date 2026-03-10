@@ -32,7 +32,7 @@ export default function Header() {
                     : "px-5 md:px-10 py-4 bg-gradient-to-b from-black/30 to-transparent"
                     }`}
             >
-                <Link href="/" className="flex items-center gap-3 no-underline group">
+                <Link href="/" className="flex items-center gap-3 no-underline group" onClick={() => setMobileMenuOpen(false)}>
                     <Image
                         src="/logo.png"
                         alt="MMM Chile Logo"
