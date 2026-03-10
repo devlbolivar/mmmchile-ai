@@ -1,7 +1,25 @@
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      {
+        source: '/quienes-somos',
+        destination: '/doctrina',
+        permanent: true,
+      },
+      {
+        source: '/nosotros',
+        destination: '/doctrina',
+        permanent: true,
+      }
+    ];
+  },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);
