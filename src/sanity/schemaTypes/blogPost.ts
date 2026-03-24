@@ -27,6 +27,13 @@ export const blogPost = defineType({
             validation: (Rule) => Rule.max(160),
         }),
         defineField({
+            name: 'readTime',
+            title: 'Read Time (minutes)',
+            type: 'number',
+            description: 'Estimated reading time in minutes',
+            validation: (Rule) => Rule.min(1),
+        }),
+        defineField({
             name: 'category',
             title: 'Category',
             type: 'reference',

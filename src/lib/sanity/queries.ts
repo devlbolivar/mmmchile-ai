@@ -7,6 +7,7 @@ export const GET_ALL_POSTS_QUERY = defineQuery(`
     title,
     "slug": slug.current,
     excerpt,
+    readTime,
     coverImage,
     category -> {
       title,
@@ -29,6 +30,7 @@ export const GET_LATEST_POSTS_QUERY = defineQuery(`
     title,
     "slug": slug.current,
       excerpt,
+      readTime,
       coverImage,
       category -> {
         title,
@@ -55,6 +57,7 @@ export const GET_POST_BY_SLUG_QUERY = defineQuery(`
     title,
     "slug": slug.current,
       excerpt,
+      readTime,
       coverImage,
       body,
       bibleVerses,
@@ -82,6 +85,7 @@ export const GET_POSTS_BY_CATEGORY_QUERY = defineQuery(`
     title,
     "slug": slug.current,
       excerpt,
+      readTime,
       coverImage,
       category -> {
         title,

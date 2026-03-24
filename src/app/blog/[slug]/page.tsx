@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { sanityFetch } from '@/lib/sanity/client';
 import { GET_POST_BY_SLUG_QUERY, GET_POSTS_BY_CATEGORY_QUERY, GET_ALL_POST_SLUGS_QUERY } from '@/lib/sanity/queries';
 import { BlogPost } from '@/lib/mock-data/blog';
+import Image from 'next/image';
+import { urlForImage } from '@/lib/sanity/image';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mmmchile.cl';
 import ArticleHeader from '@/components/blog/ArticleHeader';
@@ -120,13 +122,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
 
             {/* COVER IMAGE */}
-            <div className="w-full h-[clamp(240px,35vw,400px)] relative overflow-hidden mt-6">
-                <div
-                    className="w-full h-full flex items-center justify-center"
-                    style={bgStyle}
-                >
-                    <span className="font-serif text-[120px] text-white/5 select-none">✦</span>
-                </div>
+            <div className="w-full h-[clamp(240px,35vw,400px)] relative overflow-hidden mt-6 bg-muted">
+                {post.coverImage ? (
+                    <Image
+                        src={urlForImage(post.coverImage).url()}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                ) : (
+                    <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={bgStyle}
+                    >
+                        <span className="font-serif text-[120px] text-white/5 select-none">✦</span>
+                    </div>
+                )}
             </div>
 
             <div className="bg-[#F8F6F0] -mt-10 relative z-10 rounded-t-[40px] sm:rounded-none sm:mt-0 pb-16">

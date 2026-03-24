@@ -31,7 +31,7 @@ export default function ArticleHeader({ post }: ArticleHeaderProps) {
                 <span className="w-[3px] h-[3px] rounded-full bg-muted-foreground/30" />
                 <span className="flex items-center gap-1.5">
                     <Clock className="w-[14px] h-[14px]" />
-                    {post.readTime} min lectura
+                    {post.readTime || 5} min lectura
                 </span>
             </div>
         </div>
