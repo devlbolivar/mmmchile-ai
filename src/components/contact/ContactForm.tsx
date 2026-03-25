@@ -6,6 +6,7 @@ import { Send, CheckCircle2, AlertCircle, Loader2, Heart, MapPin, BookOpen } fro
 import { Turnstile } from "@marsidev/react-turnstile";
 import Link from "next/link";
 import { useSearchParams } from 'next/navigation';
+import { trackEvent } from '@/lib/analytics';
 
 const SUBJECTS = [
     { value: "informacion-general", label: "Quiero información general" },
@@ -15,12 +16,6 @@ const SUBJECTS = [
     { value: "consulta-pastoral", label: "Consulta pastoral" },
     { value: "otro", label: "Otro" },
 ];
-
-function trackEvent(name: string, params?: Record<string, string>) {
-    if (typeof window !== "undefined" && (window as any).gtag) {
-        (window as any).gtag("event", name, params ?? {});
-    }
-}
 
 function validateName(v: string): string {
     if (!v.trim()) return "El nombre es obligatorio";

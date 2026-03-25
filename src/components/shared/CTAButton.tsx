@@ -6,9 +6,10 @@ type CTAButtonProps = {
     href: string;
     children: ReactNode;
     className?: string;
+    onClick?: () => void;
 };
 
-export default function CTAButton({ variant = 'primary', href, children, className = '' }: CTAButtonProps) {
+export default function CTAButton({ variant = 'primary', href, children, className = '', onClick }: CTAButtonProps) {
     const baseStyles = "inline-flex items-center justify-center font-sans font-semibold rounded-lg transition-all duration-300 text-[15px] sm:text-[16px] px-6 sm:px-8 py-3 sm:py-4";
 
     const variants = {
@@ -18,7 +19,7 @@ export default function CTAButton({ variant = 'primary', href, children, classNa
     };
 
     return (
-        <Link href={href} className={`${baseStyles} ${variants[variant]} ${className}`}>
+        <Link href={href} onClick={onClick} className={`${baseStyles} ${variants[variant]} ${className}`}>
             {children}
         </Link>
     );

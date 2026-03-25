@@ -11,6 +11,7 @@ import ChurchFilters from "@/components/church/ChurchFilters";
 import GeolocationPrompt from "@/components/church/GeolocationPrompt";
 import ChurchDetail from "@/components/church/ChurchDetail";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import { trackEvent } from '@/lib/analytics';
 
 // Dynamic import for Leaflet (client-only)
 const ChurchMap = dynamic(() => import("@/components/church/ChurchMap"), {
@@ -122,7 +123,10 @@ export default function ChurchClient({ initialChurches }: ChurchClientProps) {
                             search={search}
                             zone={zone}
                             onSearchChange={setSearch}
-                            onZoneChange={setZone}
+                            onZoneChange={(val) => {
+                                setZone(val);
+                                trackEvent('buscar_iglesia', { search_term: '', zone: val, source: 'church_client' });
+                            }}
                             resultCount={filtered.length}
                             hasLocation={!!userLocation}
                         />

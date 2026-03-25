@@ -5,6 +5,7 @@ import { Reveal } from "./Reveal";
 import { submitDecision } from "@/app/conoce-a-jesus/actions/submitDecision";
 import { Turnstile } from "@marsidev/react-turnstile";
 import Link from "next/link";
+import { trackEvent } from '@/lib/analytics';
 
 export default function DecisionForm() {
     const [showForm, setShowForm] = useState(false);
@@ -54,6 +55,10 @@ export default function DecisionForm() {
         });
 
         if (result.success) {
+            trackEvent('decision_fe', { 
+                quiere_contacto: contactToggle,
+                siguiente_paso: formData.siguiente || 'no_seleccionado'
+            });
             setSubmitted(true);
         } else {
             setErrorMsg(result.error || "Ocurrió un error. Inténtalo más tarde.");

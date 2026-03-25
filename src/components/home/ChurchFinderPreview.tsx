@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import type { ChurchListItem } from '@/lib/types/church';
+import { trackEvent } from '@/lib/analytics';
 
 const SearchIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -88,14 +89,26 @@ export default function ChurchFinderPreview({ churches }: { churches?: ChurchLis
                                 onChange={(e) => setSearchCity(e.target.value)}
                                 className="flex-1 p-[14px_18px] bg-transparent border-none text-white text-[15px] font-sans outline-none placeholder:text-white/50"
                             />
-                            <button aria-label="Buscar" className="p-[14px_18px] bg-[#D4A843] border-none cursor-pointer flex items-center text-[#0F2035] transition-colors hover:bg-[#E8C976]">
+                            <button 
+                                onClick={() => {
+                                    if (searchCity.trim()) {
+                                        trackEvent('buscar_iglesia', { search_term: searchCity, source: 'home_preview' });
+                                    }
+                                }}
+                                aria-label="Buscar" className="p-[14px_18px] bg-[#D4A843] border-none cursor-pointer flex items-center text-[#0F2035] transition-colors hover:bg-[#E8C976]"
+                            >
                                 <SearchIcon />
                             </button>
                         </div>
 
                         <div className="flex flex-col gap-3 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
                             {filteredChurches.length > 0 ? filteredChurches.map((c, i) => (
-                                <Link key={c._id || i} href={c.slug ? `/iglesias/${c.slug}` : "/iglesias"} className="block bg-white/5 border border-white/10 rounded-[10px] p-4 transition-colors duration-300 hover:bg-white/10">
+                                <Link 
+                                    key={c._id || i} 
+                                    href={c.slug ? `/iglesias/${c.slug}` : "/iglesias"}
+                                    onClick={() => trackEvent('ver_detalle_iglesia', { church_id: c._id, church_name: c.name, source: 'home_preview' })}
+                                    className="block bg-white/5 border border-white/10 rounded-[10px] p-4 transition-colors duration-300 hover:bg-white/10"
+                                >
                                     <h4 className="text-white text-[15px] font-semibold mb-1">{c.name}</h4>
                                     <p className="text-white/60 text-[13px] flex items-center gap-1 mb-1.5"><MapPinIcon /> {c.city}{c.address ? `, ${c.address}` : ''}</p>
                                     <span className="text-[#D4A843] text-[13px] font-semibold flex items-center gap-1">

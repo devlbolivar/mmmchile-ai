@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Crosshair, Loader2 } from "lucide-react";
 import { getCurrentPosition } from "@/lib/utils/geolocation";
 import type { Coordinates } from "@/lib/types/church";
+import { trackEvent } from '@/lib/analytics';
 
 interface GeolocationPromptProps {
     userLocation: Coordinates | null;
@@ -22,6 +23,7 @@ export default function GeolocationPrompt({ userLocation, onLocationChange }: Ge
         setLoading(true);
         try {
             const coords = await getCurrentPosition();
+            trackEvent('usar_ubicacion', { source: 'geolocation_prompt' });
             onLocationChange(coords);
         } catch {
             // Fallback: Santiago

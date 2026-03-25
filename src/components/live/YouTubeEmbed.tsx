@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-declare global { interface Window { gtag?: (...args: unknown[]) => void } }
+import { trackEvent } from '@/lib/analytics';
 
 interface YouTubeEmbedProps {
     channelId: string | null;
@@ -17,7 +16,7 @@ export default function YouTubeEmbed({ channelId }: YouTubeEmbedProps) {
 
     const handlePlayClick = () => {
         if (!embedSrc) return;
-        window.gtag?.('event', 'live_player_click', {
+        trackEvent('live_player_click', {
             event_category: 'live',
             channel_id: channelId,
         });

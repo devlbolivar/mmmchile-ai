@@ -1,6 +1,6 @@
 'use client';
 
-declare global { interface Window { gtag?: (...args: unknown[]) => void } }
+import { trackEvent } from '@/lib/analytics';
 
 interface SubscribeButtonProps {
     channelUrl: string;
@@ -8,7 +8,7 @@ interface SubscribeButtonProps {
 
 export default function SubscribeButton({ channelUrl }: SubscribeButtonProps) {
     const handleClick = () => {
-        window.gtag?.('event', 'live_subscribe_click', {
+        trackEvent('live_subscribe_click', {
             event_category: 'live',
         });
     };

@@ -1,12 +1,7 @@
 'use client';
 
 import { useRadio } from './RadioContext';
-
-// Safe GA4 event helper
-declare global { interface Window { gtag?: (...args: unknown[]) => void } }
-function trackEvent(name: string, params?: Record<string, string>) {
-    window.gtag?.('event', name, { event_category: 'radio', ...params });
-}
+import { trackEvent } from '@/lib/analytics';
 
 /* ── Sound waves (local variant for the standalone page card) ── */
 function SoundWaves({ isPlaying }: { isPlaying: boolean }) {

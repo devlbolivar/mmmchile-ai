@@ -2,12 +2,7 @@
 
 import { useState } from "react";
 import { MessageCircle, Mail, Phone, MapPin, Copy, Clock, Check } from "lucide-react";
-
-function trackEvent(name: string) {
-    if (typeof window !== "undefined" && (window as any).gtag) {
-        (window as any).gtag("event", name, {});
-    }
-}
+import { trackEvent } from '@/lib/analytics';
 
 const WA_URL = "https://wa.me/56975587223";
 

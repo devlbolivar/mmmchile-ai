@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { submitPrayer } from "@/app/oracion/actions/submitPrayer";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { trackEvent } from '@/lib/analytics';
 
 const CheckIco = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -59,6 +60,7 @@ export function PrayerForm() {
         startTransition(async () => {
             const res = await submitPrayer(formData);
             if (res.success) {
+                trackEvent('peticion_oracion', { show_wall: showWall, want_contact: wantContact });
                 setView("success");
             } else {
                 setErrorMsg(res.error || "Ocurrió un error. Intenta de nuevo.");

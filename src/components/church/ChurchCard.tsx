@@ -3,6 +3,7 @@
 import { MapPin, Clock, MessageCircle, ChevronRight } from "lucide-react";
 import type { ChurchListItem } from "@/lib/types/church";
 import { getNextService, formatDistance } from "@/lib/data/churches-seed";
+import { trackEvent } from '@/lib/analytics';
 
 interface ChurchCardProps {
     church: ChurchListItem & { distance?: number };
@@ -21,7 +22,10 @@ export default function ChurchCard({ church, isSelected, onSelect, onDetail }: C
 
     return (
         <div
-            onClick={() => onSelect(church._id)}
+            onClick={() => {
+                trackEvent('ver_detalle_iglesia', { church_id: church._id, church_name: church.name, source: 'church_list' });
+                onSelect(church._id);
+            }}
             className={`
         relative p-[18px_20px] rounded-xl cursor-pointer border mb-2 bg-white
         transition-all duration-250
@@ -73,6 +77,7 @@ export default function ChurchCard({ church, isSelected, onSelect, onDetail }: C
                 <button
                     onClick={(e) => {
                         e.stopPropagation();
+                        trackEvent('ver_detalle_iglesia_button', { church_id: church._id, church_name: church.name });
                         onDetail(church);
                     }}
                     className="inline-flex items-center gap-1 px-3.5 py-[7px] rounded-lg text-xs font-semibold

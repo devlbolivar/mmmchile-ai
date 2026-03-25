@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import CTAButton from '../shared/CTAButton';
+import { trackEvent } from '@/lib/analytics';
 
 const CrossPattern = ({ opacity = 0.04, color = "#1E3A5F" }) => (
     <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity }}>
@@ -47,10 +50,20 @@ export default function HeroSection() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <CTAButton href="/conoce-a-jesus" variant="primary" className="w-full sm:w-auto">
+                    <CTAButton 
+                        href="/conoce-a-jesus" 
+                        variant="primary" 
+                        className="w-full sm:w-auto"
+                        onClick={() => trackEvent('click_hero_cta')}
+                    >
                         Quiero Conocer a Jesús
                     </CTAButton>
-                    <CTAButton href="/iglesias" variant="outline" className="w-full sm:w-auto">
+                    <CTAButton 
+                        href="/iglesias" 
+                        variant="outline" 
+                        className="w-full sm:w-auto"
+                        onClick={() => trackEvent('click_home_iglesias', { source: 'hero' })}
+                    >
                         Encuentra una Iglesia Cerca de Ti
                     </CTAButton>
                 </div>
