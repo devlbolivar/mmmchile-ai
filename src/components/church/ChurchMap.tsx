@@ -47,22 +47,41 @@ const userIcon = L.divIcon({
 function MapCenterUpdater({
     center,
     zoom,
+    isVisible,
 }: {
     center: [number, number];
     zoom: number;
+    isVisible: boolean;
 }) {
     const map = useMap();
     const prevCenter = useRef(center);
+    const hasPendingCenter = useRef(false);
 
     useEffect(() => {
         if (
             prevCenter.current[0] !== center[0] ||
             prevCenter.current[1] !== center[1]
         ) {
-            map.flyTo(center, zoom, { duration: 1.2 });
-            prevCenter.current = center;
+            if (isVisible) {
+                map.flyTo(center, zoom, { duration: 1.2 });
+                prevCenter.current = center;
+                hasPendingCenter.current = false;
+            } else {
+                hasPendingCenter.current = true;
+                prevCenter.current = center;
+            }
         }
-    }, [center, zoom, map]);
+    }, [center, zoom, isVisible, map]);
+
+    useEffect(() => {
+        if (isVisible && hasPendingCenter.current) {
+            const timer = setTimeout(() => {
+                map.setView(prevCenter.current, zoom);
+                hasPendingCenter.current = false;
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [isVisible, zoom, map]);
 
     return null;
 }
@@ -120,7 +139,7 @@ export default function ChurchMap({
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <MapCenterUpdater center={center} zoom={zoom} />
+                <MapCenterUpdater center={center} zoom={zoom} isVisible={isVisible} />
                 <InvalidateSize isVisible={isVisible} />
 
                 {/* User location marker */}
