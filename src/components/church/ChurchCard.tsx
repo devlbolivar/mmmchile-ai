@@ -77,7 +77,7 @@ export default function ChurchCard({ church, isSelected, onSelect, onDetail }: C
                     }}
                     className="inline-flex items-center gap-1 px-3.5 py-[7px] rounded-lg text-xs font-semibold
                      bg-[rgba(30,58,95,0.06)] text-[#1E3A5F] hover:bg-[rgba(30,58,95,0.12)]
-                     transition-colors border-none cursor-pointer font-[var(--font-karla)]"
+                     transition-colors border-none cursor-pointer font-sans"
                 >
                     Ver detalles <ChevronRight size={12} />
                 </button>

@@ -43,7 +43,7 @@ export default function ChurchFilters({
                     value={search}
                     onChange={(e) => onSearchChange(e.target.value)}
                     className="flex-1 border-none outline-none text-[15px] py-[13px] bg-transparent text-[#2C2C2C]
-                     placeholder:text-[#B0A99E] font-[var(--font-karla)]"
+                     placeholder:text-[#B0A99E] font-sans"
                 />
                 {search && (
                     <button
@@ -64,7 +64,7 @@ export default function ChurchFilters({
                         onClick={() => onZoneChange(pill.value)}
                         className={`
               px-4 py-2 rounded-[20px] text-[13px] font-semibold border-[1.5px] cursor-pointer
-              whitespace-nowrap transition-all duration-200 font-[var(--font-karla)]
+              whitespace-nowrap transition-all duration-200 font-sans
               ${zone === pill.value
                                 ? "bg-[#1E3A5F] text-white border-[#1E3A5F]"
                                 : "bg-white text-[#6B7280] border-[#E8E4DC] hover:border-[#D4A843] hover:text-[#1E3A5F]"

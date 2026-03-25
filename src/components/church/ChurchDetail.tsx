@@ -179,7 +179,7 @@ export default function ChurchDetail({ church, onClose }: ChurchDetailProps) {
                         <button
                             onClick={() => setFvOpen(!fvOpen)}
                             className="w-full px-5 py-4 bg-transparent border-none flex items-center justify-between
-                         text-sm font-semibold text-[#1E3A5F] cursor-pointer font-[var(--font-karla)]"
+                         text-sm font-semibold text-[#1E3A5F] cursor-pointer font-sans"
                         >
                             ¿Qué esperar en tu primera visita?
                             <ChevronDown

@@ -1,4 +1,5 @@
 export async function verifyTurnstileToken(token: string): Promise<boolean> {
+  if (process.env.NODE_ENV === "development" && token === "dummy-token") return true;
   if (!token) return false;
 
   try {

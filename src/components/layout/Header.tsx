@@ -42,7 +42,7 @@ export default function Header() {
                         className="h-[32px] w-auto drop-shadow-md"
                     />
                     <span className="hidden sm:flex flex-col leading-tight">
-                        <span className="font-serif text-white text-[20px] font-bold tracking-wide leading-none">
+                        <span className="font-sans text-white text-[20px] font-bold tracking-wide leading-none">
                             MMM <span className="text-[#D4A843]">Chile</span>
                         </span>
                         <span className="text-white/60 text-[10px] tracking-[0.15em] uppercase font-sans leading-none mt-0.5">

@@ -4,6 +4,8 @@ import CTAButton from '../shared/CTAButton';
 import { sanityFetch } from '@/lib/sanity/client';
 import { GET_LATEST_POSTS_QUERY } from '@/lib/sanity/queries';
 import { BlogPost } from '@/lib/mock-data/blog';
+import Image from 'next/image';
+import { urlForImage } from '@/lib/sanity/image';
 
 const ArrowRight = ({ size = 16 }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -34,12 +36,21 @@ export default async function BlogPreview() {
                             <Link href={`/blog/${b.slug}`} key={b._id || i} className="group block">
                                 <div className="rounded-[16px] overflow-hidden bg-white border border-[#E8E4DC] transition-all duration-350 hover:shadow-[0_12px_36px_rgba(0,0,0,0.08)] hover:-translate-y-1 h-full flex flex-col">
                                     <div className="h-[200px] relative overflow-hidden shrink-0">
-                                        <div
-                                            className="w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105"
-                                            style={bgStyle}
-                                        >
-                                            <span className="font-serif text-[48px] text-white/10">✦</span>
-                                        </div>
+                                        {b.coverImage ? (
+                                            <Image
+                                                src={urlForImage(b.coverImage).url()}
+                                                alt={b.title}
+                                                fill
+                                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                            />
+                                        ) : (
+                                            <div
+                                                className="w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105"
+                                                style={bgStyle}
+                                            >
+                                                <span className="font-serif text-[48px] text-white/10">✦</span>
+                                            </div>
+                                        )}
                                         {b.category && (
                                             <span className="absolute top-3.5 left-3.5 z-10 bg-[#0F2035]/85 text-[#D4A843] px-3 py-1 rounded-full text-[12px] font-semibold tracking-[0.5px] backdrop-blur-[4px]" style={b.category.color ? { backgroundColor: b.category.color } : {}}>
                                                 {b.category.title}

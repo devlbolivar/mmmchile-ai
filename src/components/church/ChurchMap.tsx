@@ -150,7 +150,7 @@ export default function ChurchMap({
                             }}
                         >
                             <Popup>
-                                <div className="font-[var(--font-karla)] min-w-[200px]">
+                                <div className="font-sans min-w-[200px]">
                                     <h4 className="text-sm font-bold text-[#1E3A5F] mb-1">{church.name}</h4>
                                     <p className="text-xs text-[#6B7280] mb-2.5 leading-[1.4]">
                                         {church.address}, {church.city}

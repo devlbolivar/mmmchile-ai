@@ -208,16 +208,26 @@ export default function DecisionForm() {
                                 )}
 
                                 <div className="pt-2">
-                                    <Turnstile 
-                                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-                                        onSuccess={(token) => setTurnstileToken(token)}
-                                        onError={() => setErrorMsg("No pudimos verificar que eres humano. Por favor, recarga la página.")}
-                                        onExpire={() => setTurnstileToken("")}
-                                        options={{
-                                            size: 'flexible',
-                                            theme: 'light'
-                                        }}
-                                    />
+                                    {process.env.NODE_ENV === 'development' ? (
+                                        <div className="p-4 bg-green-50 text-green-800 rounded-xl mb-4 text-sm border border-green-200">
+                                            <p className="font-semibold mb-2">Desarrollo: Turnstile omitido</p>
+                                            <button type="button" onClick={() => setTurnstileToken('dummy-token')} className="px-3 py-1.5 bg-green-200 hover:bg-green-300 text-green-900 rounded font-medium transition-colors">
+                                                Simular Captcha Válido
+                                            </button>
+                                            {turnstileToken === 'dummy-token' && <span className="ml-3 text-green-700">✓ Token simulado exitosamente</span>}
+                                        </div>
+                                    ) : (
+                                        <Turnstile 
+                                            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                                            onSuccess={(token) => setTurnstileToken(token)}
+                                            onError={() => setErrorMsg("No pudimos verificar que eres humano. Por favor, recarga la página.")}
+                                            onExpire={() => setTurnstileToken("")}
+                                            options={{
+                                                size: 'flexible',
+                                                theme: 'light'
+                                            }}
+                                        />
+                                    )}
                                 </div>
 
                                 <button

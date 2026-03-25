@@ -40,7 +40,7 @@ export default function GeolocationPrompt({ userLocation, onLocationChange }: Ge
             className={`
         flex items-center gap-[7px] px-4 py-3 border-[1.5px] rounded-[10px]
         text-[13px] font-semibold cursor-pointer whitespace-nowrap transition-all duration-200
-        font-[var(--font-karla)]
+        font-sans
         ${isActive
                     ? "bg-[#1E3A5F] text-white border-[#1E3A5F]"
                     : "bg-white text-[#1E3A5F] border-[#E8E4DC] hover:border-[#D4A843] hover:text-[#D4A843]"
