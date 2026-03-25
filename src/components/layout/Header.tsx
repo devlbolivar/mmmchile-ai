@@ -39,6 +39,7 @@ export default function Header() {
                         width={80}
                         height={80}
                         quality={100}
+                        priority
                         className="h-[32px] w-auto drop-shadow-md"
                     />
                     <span className="hidden sm:flex flex-col leading-tight">

@@ -15,7 +15,7 @@ export async function sendPrayerNotification(data: PrayerEmailData) {
     const { name, request, contact, wantContact, isPublic } = data;
 
     const { error } = await resend.emails.send({
-      from: "MMM Chile <oracion@mmmchile.cl>",
+      from: "MMM Chile <onboarding@resend.dev>",
       to: [process.env.PRAYER_NOTIFICATION_EMAIL || "intercesion@mmmchile.cl"],
       subject: `Nueva petición de oración — ${name}`,
       html: `
@@ -76,8 +76,8 @@ export async function sendContactNotification(data: ContactEmailData) {
     const { name, email, whatsapp, subject, message, sourcePage } = data;
 
     const { error } = await resend.emails.send({
-      from: "MMM Chile <oracion@mmmchile.cl>", // Note: Use the verified domain here. If only oracion@ is verified, stick with it or use a default one like no-reply
-      to: ["secretariammmchile@gmail.com"],
+      from: "MMM Chile <onboarding@resend.dev>", // Note: Use the verified domain here. If only oracion@ is verified, stick with it or use a default one like no-reply
+      to: [process.env.CONTACT_NOTIFICATION_EMAIL || "secretariammmchile@gmail.com"],
       subject: `[MMM Chile Web] Nuevo mensaje: ${subject}`,
       html: `
         <div style="font-family: 'Segoe UI', system-ui, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px; background: #FDF8F0; border-radius: 16px;">
@@ -132,7 +132,7 @@ export async function sendContactNotification(data: ContactEmailData) {
 export async function sendContactConfirmation(email: string, name: string) {
   try {
     const { error } = await resend.emails.send({
-      from: "MMM Chile <oracion@mmmchile.cl>", // Update if needed
+      from: "MMM Chile <onboarding@resend.dev>", // Update if needed
       to: [email],
       subject: "Hemos recibido tu mensaje — MMM Chile",
       html: `
@@ -179,8 +179,8 @@ export async function sendDecisionNotification(data: DecisionEmailData) {
     const { nombre, ciudad, contacto, siguiente, quiereContacto } = data;
 
     const { error } = await resend.emails.send({
-      from: "MMM Chile <oracion@mmmchile.cl>", // Update if needed
-      to: ["secretariammmchile@gmail.com"],
+      from: "MMM Chile <onboarding@resend.dev>", // Update if needed
+      to: [process.env.CONTACT_NOTIFICATION_EMAIL || "secretariammmchile@gmail.com"],
       subject: `🎉 Nueva Decisión de Fe: ${nombre}`,
       html: `
         <div style="font-family: 'Segoe UI', system-ui, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px; background: #FDF8F0; border-radius: 16px;">
@@ -233,7 +233,7 @@ export async function sendDecisionNotification(data: DecisionEmailData) {
 export async function sendDecisionConfirmation(email: string, nombre: string) {
   try {
     const { error } = await resend.emails.send({
-      from: "MMM Chile <oracion@mmmchile.cl>", // Update if needed
+      from: "MMM Chile <onboarding@resend.dev>", // Update if needed
       to: [email],
       subject: "¡El cielo celebra contigo!",
       html: `
