@@ -854,6 +854,22 @@ export const churchesSeed: ChurchListItem[] = [
         "serviceSchedule": [],
         "extraEmail": "",
         "image": ""
+    },
+    {
+        "_id": "church-39",
+        "name": "MMM Renca",
+        "slug": "mmm-renca",
+        "city": "Renca",
+        "zone": "centro",
+        "address": "Blanco Encalada 1434",
+        "latitude": -33.4135,
+        "longitude": -70.7188,
+        "phone": "+56 9 8274 4382",
+        "whatsapp": "+56 9 8274 4382",
+        "pastorName": "Pastor Diego Araya",
+        "serviceSchedule": [],
+        "extraEmail": "",
+        "image": ""
     }
 ];
 

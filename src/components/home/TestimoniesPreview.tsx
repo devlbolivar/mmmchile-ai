@@ -68,10 +68,19 @@ export default async function TestimoniesPreview() {
                     ))}
                 </div>
 
-                <div className="text-center mt-10">
-                    <Link href="/testimonios" className="inline-flex items-center gap-2 text-[#D4A843] font-semibold text-[15px] hover:text-[#E8C976] transition-colors">
-                        Ver más testimonios <ArrowRight size={16} />
-                    </Link>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12 bg-white p-6 rounded-2xl shadow-[0_4px_20px_rgba(30,58,95,0.04)] border border-[#E8E4DC] max-w-3xl mx-auto">
+                    <div className="text-center sm:text-left">
+                        <h3 className="font-serif text-[20px] text-[#1E3A5F] mb-1">¿Inspirado por estas historias?</h3>
+                        <p className="text-[#6B7280] text-[15px]">Tú también puedes experimentar este cambio.</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-4 items-center sm:ml-auto">
+                        <Link href="/conoce-a-jesus" className="bg-[#D4A843] text-[#0F2035] py-2.5 px-6 rounded-lg font-semibold hover:bg-[#E8C976] transition-colors shadow-[0_4px_15px_rgba(212,168,67,0.2)]">
+                            Conocer a Jesús
+                        </Link>
+                        <Link href="/testimonios" className="inline-flex items-center gap-1.5 text-[#1E3A5F] font-semibold text-[15px] hover:text-[#2a5280] transition-colors">
+                            Ver más <ArrowRight size={16} />
+                        </Link>
+                    </div>
                 </div>
             </div>
         </section>

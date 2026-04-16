@@ -8,12 +8,14 @@ interface ArticleHeaderProps {
 export default function ArticleHeader({ post }: ArticleHeaderProps) {
     return (
         <div className="max-w-[740px] mx-auto px-6 pt-10 text-center">
-            <span
-                className="inline-block px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-wider text-white mb-4"
-                style={{ background: post.category.color || "var(--accent)" }}
-            >
-                {post.category.title}
-            </span>
+            {post.category && (
+                <span
+                    className="inline-block px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-wider text-white mb-4"
+                    style={{ background: post.category.color || "var(--accent)" }}
+                >
+                    {post.category.title}
+                </span>
+            )}
 
             <h1 className="font-serif text-[clamp(28px,5vw,44px)] text-primary leading-tight mb-5 font-semibold">
                 {post.title}

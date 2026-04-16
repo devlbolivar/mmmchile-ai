@@ -5,6 +5,7 @@ import SalvationPrayer from '@/components/gospel/SalvationPrayer';
 import DecisionForm from '@/components/gospel/DecisionForm';
 import GospelFAQ from '@/components/gospel/GospelFAQ';
 import GospelShare from '@/components/gospel/GospelShare';
+import PrayerLink from '@/components/gospel/PrayerLink';
 import ProgressDots from '@/components/gospel/ProgressDots';
 import { HandsLight, BrokenVessel, CrossLight, SunriseIcon } from '@/components/gospel/Icons';
 import Breadcrumb from '@/components/shared/Breadcrumb';
@@ -94,6 +95,7 @@ export default function GospelPage() {
 
             <SalvationPrayer />
             <DecisionForm />
+            <PrayerLink />
             <GospelFAQ />
             <GospelShare />
         </main>

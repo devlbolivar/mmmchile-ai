@@ -4,6 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import GlobalEvangelisticCTA from "@/components/layout/GlobalEvangelisticCTA";
 import WhatsAppFloatingBtn from "@/components/layout/WhatsAppFloatingBtn";
 import RadioProviderWrapper from "@/components/radio/RadioProviderWrapper";
 
@@ -53,6 +54,7 @@ export default function RootLayout({
         <RadioProviderWrapper>
           <Header />
           {children}
+          <GlobalEvangelisticCTA />
           <Footer />
           <WhatsAppFloatingBtn />
         </RadioProviderWrapper>

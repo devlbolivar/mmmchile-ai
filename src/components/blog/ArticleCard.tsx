@@ -31,12 +31,14 @@ export default function ArticleCard({ post }: ArticleCardProps) {
                         <span className="font-serif text-[56px] text-white/5 select-none">✦</span>
                     </div>
                 )}
-                <span
-                    className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider text-white z-10"
-                    style={{ background: post.category.color }}
-                >
-                    {post.category.title}
-                </span>
+                {post.category && (
+                    <span
+                        className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider text-white z-10"
+                        style={{ background: post.category.color || "#0F2035" }}
+                    >
+                        {post.category.title}
+                    </span>
+                )}
             </div>
 
             <div className="p-5 flex flex-col flex-1">

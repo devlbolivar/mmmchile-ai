@@ -20,15 +20,15 @@ export default function BlogClient({ posts, categories }: { posts: BlogPost[], c
     const filtered = useMemo(() => {
         let list = rest;
         if (activeCategory !== "todos") {
-            list = list.filter((a) => a.category.slug === activeCategory);
+            list = list.filter((a) => a.category?.slug === activeCategory);
         }
         if (searchQuery.trim()) {
             const q = searchQuery.toLowerCase();
             list = list.filter(
                 (a) =>
                     a.title.toLowerCase().includes(q) ||
-                    a.excerpt.toLowerCase().includes(q) ||
-                    a.category.title.toLowerCase().includes(q)
+                    a.excerpt?.toLowerCase().includes(q) ||
+                    (a.category?.title?.toLowerCase() || "").includes(q)
             );
         }
         return list;

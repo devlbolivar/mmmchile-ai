@@ -26,7 +26,15 @@ const nextConfig: NextConfig = {
         source: '/nosotros',
         destination: '/doctrina',
         permanent: true,
+      },
+      /*
+      // Standard template for addressing recurring 404s captured in GA4
+      {
+        source: '/ruta-obsoleta',
+        destination: '/nueva-ruta',
+        permanent: true,
       }
+      */
     ];
   },
 };

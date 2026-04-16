@@ -33,12 +33,14 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
             </div>
 
             <div className="flex flex-col justify-center p-8 md:p-9">
-                <span
-                    className="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold tracking-wider text-white mb-4 w-fit"
-                    style={{ background: post.category.color }}
-                >
-                    {post.category.title}
-                </span>
+                {post.category && (
+                    <span
+                        className="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold tracking-wider text-white mb-4 w-fit"
+                        style={{ background: post.category.color || "#0F2035" }}
+                    >
+                        {post.category.title}
+                    </span>
+                )}
 
                 <h2 className="font-serif text-2xl md:text-3xl text-primary leading-tight mb-3 font-semibold decoration-accent group-hover:underline">
                     {post.title}

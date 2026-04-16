@@ -34,22 +34,22 @@ export default function HeroSection() {
             <CrossPattern opacity={0.03} color="white" />
 
             {/* Content */}
-            <div className="relative z-10 max-w-[800px] px-6 mt-16 md:mt-0 animate-fade-in-up">
-                <div className="inline-flex items-center gap-2 text-[13px] font-semibold tracking-[2px] uppercase text-[#D4A843] mb-6">
-                    <span className="w-[30px] h-[1px] bg-[#D4A843] opacity-60"></span>
+            <div className="relative z-10 max-w-[800px] px-6 mt-4 sm:mt-8 md:mt-0 animate-fade-in-up">
+                <div className="inline-flex items-center gap-2 text-[12px] sm:text-[13px] font-semibold tracking-[2px] uppercase text-[#D4A843] mb-4 sm:mb-6">
+                    <span className="w-[20px] sm:w-[30px] h-[1px] bg-[#D4A843] opacity-60"></span>
                     MMM Chile
-                    <span className="w-[30px] h-[1px] bg-[#D4A843] opacity-60"></span>
+                    <span className="w-[20px] sm:w-[30px] h-[1px] bg-[#D4A843] opacity-60"></span>
                 </div>
 
-                <h1 className="font-serif text-[clamp(36px,6vw,64px)] text-white leading-[1.15] mb-5 font-normal">
+                <h1 className="font-serif text-[clamp(32px,6vw,64px)] text-white leading-[1.15] mb-3 sm:mb-5 font-normal">
                     ¿Buscas algo más<br />en la vida?
                 </h1>
 
-                <p className="text-[clamp(16px,2.2vw,20px)] text-white/80 max-w-[560px] mx-auto mb-10 leading-[1.7] font-light">
+                <p className="text-[clamp(15px,2.2vw,20px)] text-white/80 max-w-[560px] mx-auto mb-6 sm:mb-10 leading-[1.6] font-light">
                     Miles de personas en Chile han encontrado esperanza, paz y propósito. Tú también puedes.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
                     <CTAButton 
                         href="/conoce-a-jesus" 
                         variant="primary" 

@@ -7,6 +7,7 @@ import { GET_ALL_CHURCHES_QUERY } from "@/lib/sanity/queries";
 import type { ChurchListItem } from "@/lib/types/church";
 
 const TestimoniesPreview = dynamic(() => import('../components/home/TestimoniesPreview'));
+const WhyBelieveSection = dynamic(() => import('../components/home/WhyBelieveSection'));
 const BlogPreview = dynamic(() => import('../components/home/BlogPreview'));
 const ChurchFinderPreview = dynamic(() => import('../components/home/ChurchFinderPreview'));
 const LiveStreamBanner = dynamic(() => import('../components/home/LiveStreamBanner'));
@@ -45,6 +46,7 @@ export default async function Home() {
       <HeroSection />
       <IntentRouter />
       <TestimoniesPreview />
+      <WhyBelieveSection />
       <BlogPreview />
       <ChurchFinderPreview churches={churches} />
       <LiveStreamBanner />

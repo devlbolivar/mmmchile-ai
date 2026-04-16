@@ -27,7 +27,7 @@ export default function BlogSidebar({ popularPosts }: BlogSidebarProps) {
                                     {post.title}
                                 </div>
                                 <div className="text-[11px] text-muted-foreground mt-1">
-                                    {post.category.title}
+                                    {post.category?.title || "General"}
                                 </div>
                             </div>
                         </Link>
