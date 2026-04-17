@@ -1,33 +1,41 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link2 } from "lucide-react";
 
 interface ShareButtonsProps {
     title: string;
+    url?: string;
 }
 
-export default function ShareButtons({ title }: ShareButtonsProps) {
+export default function ShareButtons({ title, url: propUrl }: ShareButtonsProps) {
     const [copied, setCopied] = useState(false);
+    const [currentUrl, setCurrentUrl] = useState("");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setCurrentUrl(propUrl || window.location.href);
+        }
+    }, [propUrl]);
 
     const handleCopy = () => {
-        if (typeof window !== "undefined") {
-            navigator.clipboard?.writeText(window.location.href);
+        if (currentUrl) {
+            navigator.clipboard?.writeText(currentUrl);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         }
     };
 
     const shareWA = () => {
-        if (typeof window !== "undefined") {
-            const url = `https://wa.me/?text=${encodeURIComponent("Lee este artículo: " + title + " → " + window.location.href)}`;
+        if (currentUrl) {
+            const url = `https://wa.me/?text=${encodeURIComponent("Lee este artículo: " + title + " → " + currentUrl)}`;
             window.open(url, "_blank");
         }
     };
 
     const shareFB = () => {
-        if (typeof window !== "undefined") {
-            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+        if (currentUrl) {
+            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
             window.open(url, "_blank");
         }
     };

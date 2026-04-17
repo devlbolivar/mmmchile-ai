@@ -35,7 +35,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         };
     }
 
-    const ogImageUrl = `${BASE_URL}/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category?.title || 'Blog')}`;
+    const ogImageUrl = post.coverImage 
+        ? urlForImage(post.coverImage).width(1200).height(630).fit('crop').url()
+        : `${BASE_URL}/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category?.title || 'Blog')}`;
 
     return {
         title: `${post.title} | MMM Chile`,
@@ -43,6 +45,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         openGraph: {
             title: post.title,
             description: post.excerpt,
+            url: `${BASE_URL}/blog/${post.slug}`,
             type: 'article',
             publishedTime: post.publishedAt,
             authors: [post.author?.name || 'MMM Chile'],
@@ -75,6 +78,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         related = categoryPosts.filter((p: BlogPost) => p._id !== post._id).slice(0, 3);
     }
 
+    const ogImageUrl = post.coverImage 
+        ? urlForImage(post.coverImage).width(1200).height(630).fit('crop').url()
+        : `${BASE_URL}/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category?.title || 'Blog')}`;
+
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Article',
@@ -86,7 +93,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             '@type': 'Person',
             name: post.author?.name ?? 'MMM Chile',
         },
-        image: `${BASE_URL}/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category?.title || 'Blog')}`,
+        image: ogImageUrl,
         publisher: {
             '@type': 'Organization',
             name: 'Movimiento Misionero Mundial Chile',
@@ -145,11 +152,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {/* HEADER */}
                 <ArticleHeader post={post} />
 
-                {/* SHARE */}
-                <ShareButtons title={post.title} />
+                {/* SHARE TOP */}
+                <ShareButtons title={post.title} url={`${BASE_URL}/blog/${post.slug}`} />
 
                 {/* BODY */}
                 <ArticleBody post={post} />
+
+                {/* SHARE BOTTOM */}
+                <div className="mt-8 mb-4">
+                    <h3 className="text-center text-sm font-semibold text-muted-foreground mb-4">¿Te bendijo este artículo? ¡Compártelo!</h3>
+                    <ShareButtons title={post.title} url={`${BASE_URL}/blog/${post.slug}`} />
+                </div>
 
                 {/* CTA (Contextual based on category) */}
                 <ArticleCTA categoryName={post.category?.title || 'General'} />
