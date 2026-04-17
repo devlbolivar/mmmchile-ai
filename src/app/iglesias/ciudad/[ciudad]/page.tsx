@@ -41,10 +41,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (cityChurches.length === 0) return {};
     const cityName = cityChurches[0].city;
     return {
-        title: `Iglesia Cristiana en ${cityName} | MMM Chile`,
+        title: `Encuentra tu Iglesia Cristiana en ${cityName} | MMM Chile`,
         description: `Encuentra iglesias del Movimiento Misionero Mundial en ${cityName}, Chile. Horarios de culto, dirección y contacto de cada congregación.`,
         openGraph: {
-            title: `Iglesia Cristiana en ${cityName} | MMM Chile`,
+            title: `Encuentra tu Iglesia Cristiana en ${cityName} | MMM Chile`,
             description: `Congregaciones del Movimiento Misionero Mundial en ${cityName}, Chile.`,
             url: `https://mmmchile.cl/iglesias/ciudad/${ciudad}`,
         },
@@ -63,7 +63,7 @@ export default async function CiudadPage({ params }: Props) {
 
     const jsonLd = cityChurches.map((church) => ({
         "@context": "https://schema.org",
-        "@type": ["Church", "LocalBusiness"],
+        "@type": ["ReligiousOrganization", "LocalBusiness"],
         name: church.name,
         description: `Congregación del Movimiento Misionero Mundial en ${cityName}, Chile.`,
         address: {

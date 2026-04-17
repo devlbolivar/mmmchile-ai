@@ -6,12 +6,12 @@ import RadioFunnel from '@/components/radio/RadioFunnel';
 
 /* ── SEO ── */
 export const metadata: Metadata = {
-    title: 'Radio Bethel Chile | Radio Cristiana en Vivo 24/7',
+    title: 'Radio Cristiana en Vivo 24/7 — MMM Chile',
     description:
         'Escucha Radio Bethel Chile en vivo. Música cristiana, predicaciones y devocionales las 24 horas del día.',
     alternates: { canonical: '/radio' },
     openGraph: {
-        title: 'Radio Bethel Chile | Radio Cristiana en Vivo 24/7',
+        title: 'Radio Cristiana en Vivo 24/7 — MMM Chile',
         description:
             'Escucha Radio Bethel Chile en vivo. Música cristiana, predicaciones y devocionales las 24 horas del día.',
         type: 'website',
@@ -20,8 +20,25 @@ export const metadata: Metadata = {
 
 /* ── Page ── */
 export default function RadioPage() {
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": ["RadioStation", "BroadcastService"],
+        "name": "Radio Bethel Chile",
+        "url": "https://mmmchile.cl/radio",
+        "description": "Radio cristiana transmitiendo en vivo las 24 horas del día. Música, predicaciones e himnos.",
+        "broadcastDisplayName": "Radio Bethel Chile",
+        "parentOrganization": {
+            "@type": "Organization",
+            "name": "Movimiento Misionero Mundial Chile"
+        }
+    };
+
     return (
         <main>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             {/* ===== HERO / PLAYER ===== */}
             <section
                 style={{

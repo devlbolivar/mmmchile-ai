@@ -8,7 +8,7 @@ import { Heart, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/shared/Breadcrumb'
 
 export const metadata: Metadata = {
-    title: 'Doctrina Cristiana | Creencias de Fe | MMM Chile',
+    title: 'Nuestra Doctrina: Creencias del Movimiento Misionero Mundial',
     description: 'Conoce los fundamentos bíblicos de nuestra fe cristiana. Doctrina evangélica pentecostal basada en la Santa Biblia.',
     alternates: {
         canonical: 'https://mmmchile.cl/doctrina',

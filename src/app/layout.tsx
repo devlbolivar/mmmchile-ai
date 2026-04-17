@@ -48,8 +48,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "MMM Chile",
+    "url": "https://mmmchile.cl",
+    "logo": "https://mmmchile.cl/logo.png",
+    "sameAs": [
+      "https://web.facebook.com/MMMCHILEORG/",
+      "https://www.instagram.com/chile_mmm/",
+      "https://www.youtube.com/@KoinoniaMMMChileOficial"
+    ]
+  };
+
   return (
     <html lang="es-CL" className="scroll-smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${playfair.variable} ${karla.variable} ${jetbrainsMono.variable} antialiased font-sans overflow-x-hidden`}>
         <RadioProviderWrapper>
           <Header />

@@ -97,6 +97,13 @@ export default function Header() {
             {/* Mobile dropdown */}
             {mobileMenuOpen && (
                 <div className="lg:hidden fixed top-[56px] left-0 right-0 z-[99] bg-[#0F2035]/97 backdrop-blur-md px-6 py-5 flex flex-col gap-3">
+                    <Link
+                        href="/"
+                        className="text-white/85 no-underline text-[16px] py-2 border-b border-white/5 flex items-center gap-2 font-medium"
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        Inicio
+                    </Link>
                     {navLinks.map((link, i) => (
                         <Link
                             key={i}

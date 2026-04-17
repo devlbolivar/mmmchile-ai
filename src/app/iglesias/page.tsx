@@ -5,7 +5,7 @@ import ChurchClient from "./ChurchClient";
 import type { ChurchListItem } from "@/lib/types/church";
 
 export const metadata: Metadata = {
-    title: "Iglesias | MMM Chile",
+    title: "Encuentra tu Iglesia Cristiana en Chile | MMM",
     description: "Encuentra tu iglesia más cercana. Más de 30 congregaciones en todo Chile te esperan con los brazos abiertos.",
     alternates: {
         canonical: '/iglesias',

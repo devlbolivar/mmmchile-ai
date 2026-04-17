@@ -25,7 +25,7 @@ export default function GospelShare() {
                 </span>
 
                 <a
-                    href="https://api.whatsapp.com/send?text=Acabo%20de%20leer%20algo%20que%20cambi%C3%B3%20mi%20perspectiva.%20Te%20invito%20a%20leerlo%3A%20https%3A%2F%2Fwww.mmmchile.cl%2Fconoce-a-jesus"
+                    href="https://api.whatsapp.com/send?text=Acabo%20de%20leer%20algo%20que%20cambi%C3%B3%20mi%20perspectiva.%20Te%20invito%20a%20leerlo%3A%0A%0Ahttps%3A%2F%2Fwww.mmmchile.cl%2Fconoce-a-jesus"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 py-2.5 px-5 rounded-lg border-none bg-[#25D366] text-white font-sans text-[14px] font-semibold transition-transform hover:-translate-y-0.5"

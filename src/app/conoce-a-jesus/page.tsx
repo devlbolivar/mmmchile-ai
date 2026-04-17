@@ -69,9 +69,43 @@ export default function GospelPage() {
             verseRef: "2 Corintios 5:17",
         },
     ];
+    const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+            {
+                '@type': 'Question',
+                name: "¿Necesito ir a una iglesia?",
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: "Ir a una iglesia no es un requisito para iniciar una relación con Dios, pero sí es una parte hermosa del camino. La iglesia es una comunidad donde encontrarás apoyo, enseñanza y amistades que te acompañarán en tu crecimiento. Cuando estés listo, te ayudamos a encontrar una cerca de ti."
+                }
+            },
+            {
+                '@type': 'Question',
+                name: "¿Qué pasa después de esta oración?",
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: "Hacer esta oración es un primer paso hermoso, pero es solo el comienzo. A partir de aquí, puedes empezar a leer la Biblia (te recomendamos el Evangelio de Juan), hablar con Dios todos los días como hablarías con un amigo, y conectarte con una comunidad de fe. No estás solo en esto — queremos caminar contigo."
+                }
+            },
+            {
+                '@type': 'Question',
+                name: "¿Puedo hablar con alguien?",
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: "¡Por supuesto! Tenemos personas preparadas y dispuestas a escucharte, responder tus preguntas y acompañarte. Puedes escribirnos por WhatsApp o dejarnos tus datos en el formulario, y nos comunicaremos contigo de forma confidencial."
+                }
+            }
+        ]
+    };
 
     return (
         <main className="min-h-screen font-sans text-[#2C2C2C] bg-white">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
             <ProgressDots />
             <GospelHero />
 

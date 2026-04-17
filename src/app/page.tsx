@@ -14,35 +14,20 @@ const LiveStreamBanner = dynamic(() => import('../components/home/LiveStreamBann
 const WhatsappCTA = dynamic(() => import('../components/home/WhatsappCTA'));
 
 export const metadata: Metadata = {
-  title: "MMM Chile - Plataforma Evangelística Digital",
+  title: "MMM Chile | Iglesias Cristianas en Chile",
   description: "Conoce a Jesús, encuentra una iglesia, y fortalece tu fe.",
   alternates: {
     canonical: '/',
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "MMM Chile",
-  "url": "https://mmmchile.cl",
-  "logo": "https://mmmchile.cl/logo.png",
-  "sameAs": [
-    "https://web.facebook.com/MMMCHILEORG/",
-    "https://www.instagram.com/chile_mmm/",
-    "https://www.youtube.com/@KoinoniaMMMChileOficial"
-  ]
-};
+
 
 export default async function Home() {
   const churches = await sanityFetch<ChurchListItem[]>({ query: GET_ALL_CHURCHES_QUERY });
 
   return (
     <main className="flex min-h-screen flex-col">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <HeroSection />
       <IntentRouter />
       <TestimoniesPreview />

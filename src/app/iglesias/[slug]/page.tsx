@@ -83,7 +83,7 @@ export default async function ChurchSlugPage({ params }: Props) {
 
     const jsonLd = {
         "@context": "https://schema.org",
-        "@type": ["Church", "LocalBusiness"],
+        "@type": ["ReligiousOrganization", "LocalBusiness"],
         name: church.name,
         description: `Congregación del Movimiento Misionero Mundial en ${church.city}, Chile.`,
         address: {
