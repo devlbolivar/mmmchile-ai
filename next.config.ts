@@ -27,6 +27,17 @@ const nextConfig: NextConfig = {
         destination: '/doctrina',
         permanent: true,
       },
+      {
+        source: '/oficiales-internacionales',
+        destination: '/doctrina',
+        permanent: true, // 308
+      },
+      // Cubre también posibles variantes con trailing slash o paths hijos
+      {
+        source: '/oficiales-internacionales/:path*',
+        destination: '/doctrina',
+        permanent: true,
+      },
       /*
       // Standard template for addressing recurring 404s captured in GA4
       {
