@@ -28,12 +28,30 @@ export default function ShareButtons({ title, url: propUrl }: ShareButtonsProps)
         }
     };
 
+    const handleNativeShare = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+        // En móviles, navigator.share es mucho más confiable que los links directos que rompen los intents nativos de las apps.
+        if (typeof navigator !== "undefined" && navigator.share && /Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+            e.preventDefault();
+            try {
+                await navigator.share({
+                    title: title,
+                    text: `Lee este artículo: ${title}`,
+                    url: activeUrl,
+                });
+            } catch (err) {
+                console.log("User cancelled share or it failed.", err);
+            }
+        } else if (!activeUrl) {
+            e.preventDefault();
+        }
+    };
+
     const fbShareUrl = activeUrl 
         ? `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(activeUrl)}` 
         : '#';
         
     const waShareUrl = activeUrl
-        ? `https://wa.me/?text=${encodeURIComponent(`Lee este artículo: ${title}\n\n${activeUrl}`)}`
+        ? `https://api.whatsapp.com/send?text=${encodeURIComponent(`Lee este artículo: ${title}\n\n${activeUrl}`)}`
         : '#';
 
     return (
@@ -42,7 +60,7 @@ export default function ShareButtons({ title, url: propUrl }: ShareButtonsProps)
                 href={waShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(e) => !activeUrl && e.preventDefault()}
+                onClick={handleNativeShare}
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold hover:-translate-y-[1px] transition-all bg-[#25D366]/10 text-[#1a9e4a]"
             >
                 WhatsApp
@@ -51,7 +69,7 @@ export default function ShareButtons({ title, url: propUrl }: ShareButtonsProps)
                 href={fbShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(e) => !activeUrl && e.preventDefault()}
+                onClick={handleNativeShare}
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold hover:-translate-y-[1px] transition-all bg-[#1877F2]/10 text-[#1877F2]"
             >
                 Facebook
