@@ -59,8 +59,10 @@ export default function ShareButtons({ title, url: propUrl }: ShareButtonsProps)
             const intentUrl = `intent://www.facebook.com/dialog/share?app_id=${fbAppId ?? ''}&href=${encodeURIComponent(activeUrl)}#Intent;package=com.facebook.katana;scheme=https;S.browser_fallback_url=${encodeURIComponent(fbWebUrl)};end`;
             window.location.href = intentUrl;
         } else if (/iPhone|iPad|iPod/i.test(ua)) {
-            // iOS: location.href activa Universal Links más confiablemente que window.open
-            window.location.href = fbWebUrl;
+            // share_to_feed pasa link+nombre explícitamente; si la app no está, cae al browser
+            const fbDeepLink = `fb://share_to_feed?link=${encodeURIComponent(activeUrl)}&name=${encodeURIComponent(title)}`;
+            window.location.href = fbDeepLink;
+            setTimeout(() => { window.location.href = fbWebUrl; }, 1500);
         } else {
             window.open(fbWebUrl, '_blank', 'width=600,height=400');
         }
