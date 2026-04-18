@@ -156,7 +156,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <ArticleHeader post={post} />
 
                 {/* SHARE TOP */}
-                <ShareButtons title={post.title} url={`${BASE_URL}/blog/${post.slug}`} />
+                <ShareButtons title={post.title} description={post.excerpt} url={`${BASE_URL}/blog/${post.slug}`} />
 
                 {/* BODY */}
                 <ArticleBody post={post} />
@@ -164,7 +164,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {/* SHARE BOTTOM */}
                 <div className="mt-8 mb-4">
                     <h3 className="text-center text-sm font-semibold text-muted-foreground mb-4">¿Te bendijo este artículo? ¡Compártelo!</h3>
-                    <ShareButtons title={post.title} url={`${BASE_URL}/blog/${post.slug}`} />
+                    <ShareButtons title={post.title} description={post.excerpt} url={`${BASE_URL}/blog/${post.slug}`} />
                 </div>
 
                 {/* CTA (Contextual based on category) */}
