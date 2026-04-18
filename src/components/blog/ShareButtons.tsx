@@ -53,20 +53,16 @@ export default function ShareButtons({ title, url: propUrl }: ShareButtonsProps)
         if (!activeUrl) return;
 
         const ua = navigator.userAgent;
-        const isMobile = /Mobi|Android|iPhone|iPad/i.test(ua);
-
-        if (!isMobile) {
-            window.open(fbWebUrl, '_blank', 'width=600,height=400');
-            return;
-        }
 
         if (/Android/i.test(ua)) {
+            // Intent URL: abre app si está instalada, si no va al browser
             const intentUrl = `intent://www.facebook.com/dialog/share?app_id=${fbAppId ?? ''}&href=${encodeURIComponent(activeUrl)}#Intent;package=com.facebook.katana;scheme=https;S.browser_fallback_url=${encodeURIComponent(fbWebUrl)};end`;
             window.location.href = intentUrl;
+        } else if (/iPhone|iPad|iPod/i.test(ua)) {
+            // iOS: location.href activa Universal Links más confiablemente que window.open
+            window.location.href = fbWebUrl;
         } else {
-            // iOS: intenta app, si no responde en 1.2s abre browser
-            window.location.href = `fb://share?u=${encodeURIComponent(activeUrl)}`;
-            setTimeout(() => { window.open(fbWebUrl, '_blank'); }, 1200);
+            window.open(fbWebUrl, '_blank', 'width=600,height=400');
         }
     };
         
