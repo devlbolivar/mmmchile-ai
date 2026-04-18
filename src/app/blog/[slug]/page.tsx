@@ -62,9 +62,6 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         alternates: {
             canonical: `/blog/${post.slug}`,
         },
-        other: {
-            'fb:app_id': process.env.NEXT_PUBLIC_FACEBOOK_APP_ID ?? '',
-        },
     };
 }
 
@@ -118,6 +115,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
     return (
         <article className="min-h-screen bg-[#F8F6F0]">
+            <meta property="fb:app_id" content={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID ?? ''} />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
