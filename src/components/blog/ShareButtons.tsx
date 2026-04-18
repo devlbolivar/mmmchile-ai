@@ -48,21 +48,18 @@ export default function ShareButtons({ title, url: propUrl }: ShareButtonsProps)
             : `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(activeUrl)}`
         : '#';
 
-    const handleFacebookShare = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const handleFacebookShare = async (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         if (!activeUrl) return;
 
-        const ua = navigator.userAgent;
+        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
-        if (/Android/i.test(ua)) {
-            // Intent URL: abre app si está instalada, si no va al browser
-            const intentUrl = `intent://www.facebook.com/dialog/share?app_id=${fbAppId ?? ''}&href=${encodeURIComponent(activeUrl)}#Intent;package=com.facebook.katana;scheme=https;S.browser_fallback_url=${encodeURIComponent(fbWebUrl)};end`;
-            window.location.href = intentUrl;
-        } else if (/iPhone|iPad|iPod/i.test(ua)) {
-            // share_to_feed pasa link+nombre explícitamente; si la app no está, cae al browser
-            const fbDeepLink = `fb://share_to_feed?link=${encodeURIComponent(activeUrl)}&name=${encodeURIComponent(title)}`;
-            window.location.href = fbDeepLink;
-            setTimeout(() => { window.location.href = fbWebUrl; }, 1500);
+        if (isMobile && navigator.share) {
+            try {
+                await navigator.share({ title, url: activeUrl });
+            } catch {
+                // usuario canceló
+            }
         } else {
             window.open(fbWebUrl, '_blank', 'width=600,height=400');
         }
