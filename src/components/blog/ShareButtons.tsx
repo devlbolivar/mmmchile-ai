@@ -46,8 +46,11 @@ export default function ShareButtons({ title, url: propUrl }: ShareButtonsProps)
         }
     };
 
-    const fbShareUrl = activeUrl 
-        ? `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(activeUrl)}` 
+    const fbAppId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
+    const fbShareUrl = activeUrl
+        ? fbAppId
+            ? `https://www.facebook.com/dialog/share?app_id=${fbAppId}&href=${encodeURIComponent(activeUrl)}&display=popup`
+            : `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(activeUrl)}`
         : '#';
         
     const waShareUrl = activeUrl
