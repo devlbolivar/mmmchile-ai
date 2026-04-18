@@ -39,12 +39,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         ? urlForImage(post.coverImage).width(1200).height(630).fit('crop').url()
         : `${BASE_URL}/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category?.title || 'Blog')}`;
 
+    const description = post.excerpt || `Lee este artículo en el blog de MMM Chile: ${post.title}`;
+
     return {
         title: `${post.title} | MMM Chile`,
-        description: post.excerpt,
+        description,
         openGraph: {
             title: post.title,
-            description: post.excerpt,
+            description,
             url: `${BASE_URL}/blog/${post.slug}`,
             type: 'article',
             publishedTime: post.publishedAt,
@@ -54,11 +56,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         twitter: {
             card: 'summary_large_image',
             title: post.title,
-            description: post.excerpt,
+            description,
             images: [ogImageUrl],
         },
         alternates: {
             canonical: `/blog/${post.slug}`,
+        },
+        other: {
+            'fb:app_id': process.env.NEXT_PUBLIC_FACEBOOK_APP_ID ?? '',
         },
     };
 }

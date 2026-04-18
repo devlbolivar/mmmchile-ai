@@ -1,5 +1,7 @@
 import { BlogPost } from "@/lib/mock-data/blog";
 import { Clock } from "lucide-react";
+import Image from "next/image";
+import { urlForImage } from "@/lib/sanity/image";
 
 interface ArticleHeaderProps {
     post: BlogPost;
@@ -22,9 +24,21 @@ export default function ArticleHeader({ post }: ArticleHeaderProps) {
             </h1>
 
             <div className="flex items-center justify-center gap-4 flex-wrap text-[13px] text-muted-foreground mb-3">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-extrabold bg-primary shrink-0">
-                    {post.author?.name?.split(" ").map(n => n[0]).join("").substring(0, 2)}
-                </div>
+                {post.author?.photo ? (
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 border border-border">
+                        <Image
+                            src={urlForImage(post.author.photo).url()}
+                            alt={post.author.name || "Foto del autor"}
+                            fill
+                            className="object-cover"
+                            sizes="40px"
+                        />
+                    </div>
+                ) : (
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-extrabold bg-primary shrink-0">
+                        {post.author?.name?.split(" ").map(n => n[0]).join("").substring(0, 2)}
+                    </div>
+                )}
                 <span className="font-bold text-foreground">{post.author?.name}</span>
                 <span className="w-[3px] h-[3px] rounded-full bg-muted-foreground/30" />
                 <span>
