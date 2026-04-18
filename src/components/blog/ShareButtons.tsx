@@ -69,7 +69,6 @@ export default function ShareButtons({ title, url: propUrl }: ShareButtonsProps)
                 href={fbShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={handleNativeShare}
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold hover:-translate-y-[1px] transition-all bg-[#1877F2]/10 text-[#1877F2]"
             >
                 Facebook
