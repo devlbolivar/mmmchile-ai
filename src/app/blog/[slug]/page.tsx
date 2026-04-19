@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     return {
         title: `${post.title} | MMM Chile`,
         description,
+        ...(post.seoKeywords && post.seoKeywords.length > 0 && { keywords: post.seoKeywords }),
         openGraph: {
             title: post.title,
             description,
