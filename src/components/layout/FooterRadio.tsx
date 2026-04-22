@@ -44,7 +44,7 @@ export default function FooterRadio() {
             </button>
             <div>
                 <p className="text-white text-[13px] font-semibold flex items-center gap-1.5">
-                    <RadioIcon /> Radio Armonía
+                    <RadioIcon /> Radio Bethel Chile
                 </p>
                 <p className="text-[12px] opacity-70">
                     {isLoading ? "Conectando..." : isPlaying ? "Escuchando ahora..." : "Radio 24/7"}
