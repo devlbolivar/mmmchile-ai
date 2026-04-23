@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase";
 import { PrayerWallList } from "./PrayerWallList";
 
 export const revalidate = 60; // Refresh occasionally for new prayers
@@ -26,37 +26,28 @@ function getRelativeTime(dateString: string) {
 }
 
 export async function PrayerWall() {
-    const { data: prayers, error } = await supabase
+    const { data: prayers, error } = await supabaseAdmin
         .from("prayer_requests")
-        .select("id, name, request, created_at")
+        .select("id, name, is_anonymous, request, pray_count, created_at")
         .eq("is_public", true)
+        .eq("approved", true)
         .order("created_at", { ascending: false })
-        .limit(50); // Get latest 50 to avoid loading too many
+        .limit(50);
 
     if (error) {
         console.error("Error fetching prayer requests:", error);
     }
 
-    const colors = ["#F0F4F8", "#FDF6EA", "#FFFFFF", "#F4F0F8"]; // card A, B, C, D
+    const colors = ["#F0F4F8", "#FDF6EA", "#FFFFFF", "#F4F0F8"];
 
-    const getSeededRandom = (str: string) => {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            hash = str.charCodeAt(i) + ((hash << 5) - hash);
-        }
-        return Math.abs(hash);
-    };
-
-    const formattedPrayers = prayers?.map((p, i) => {
-        return {
-            id: p.id,
-            name: p.name || "Anónimo",
-            text: p.request,
-            date: getRelativeTime(p.created_at),
-            prayCount: (getSeededRandom(p.id) % 50) + 10, // Mock initial pray count representing previous prayers for now
-            color: colors[i % colors.length]
-        };
-    }) || [];
+    const formattedPrayers = prayers?.map((p, i) => ({
+        id: p.id,
+        name: p.is_anonymous ? "Anónimo" : (p.name || "Anónimo"),
+        text: p.request,
+        date: getRelativeTime(p.created_at),
+        prayCount: p.pray_count ?? 0,
+        color: colors[i % colors.length],
+    })) ?? [];
 
     return (
         <div className="w-full relative">

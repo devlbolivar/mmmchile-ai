@@ -21,8 +21,10 @@ export function PrayerForm() {
     // Form local state
     const [nombre, setNombre] = useState("");
     const [peticion, setPeticion] = useState("");
-    const [contacto, setContacto] = useState("");
+    const [contactMethod, setContactMethod] = useState<"email" | "whatsapp" | null>(null);
+    const [contactValue, setContactValue] = useState("");
     const [showWall, setShowWall] = useState(false);
+    const [wallDisplayName, setWallDisplayName] = useState<"anonymous" | "named">("anonymous");
     const [wantContact, setWantContact] = useState(false);
     const [turnstileToken, setTurnstileToken] = useState("");
     const [website, setWebsite] = useState(""); // honeypot
@@ -51,9 +53,12 @@ export function PrayerForm() {
         const formData = new FormData();
         formData.append("nombre", nombre);
         formData.append("peticion", peticion);
+        const contacto = contactMethod && contactValue.trim()
+            ? `${contactMethod === "whatsapp" ? "WhatsApp" : "Email"}: ${contactValue.trim()}`
+            : "";
         formData.append("contacto", contacto);
         formData.append("showWall", showWall ? "true" : "false");
-        formData.append("showWall", showWall ? "true" : "false");
+        formData.append("wallAnonymous", (wallDisplayName === "anonymous") ? "true" : "false");
         formData.append("wantContact", wantContact ? "true" : "false");
         formData.append("turnstileToken", turnstileToken);
 
@@ -71,11 +76,36 @@ export function PrayerForm() {
     const resetForm = () => {
         setNombre("");
         setPeticion("");
-        setContacto("");
+        setContactMethod(null);
+        setContactValue("");
         setShowWall(false);
+        setWallDisplayName("anonymous");
         setWantContact(false);
         setView("form");
         setErrorMsg(null);
+    };
+
+    const handleNombreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setNombre(val);
+        if (!val.trim()) setWallDisplayName("anonymous");
+    };
+
+    const toggleShowWall = () => {
+        if (isPending) return;
+        const next = !showWall;
+        setShowWall(next);
+        if (!next) setWallDisplayName("anonymous");
+    };
+
+    const toggleWantContact = () => {
+        if (isPending) return;
+        const next = !wantContact;
+        setWantContact(next);
+        if (!next) {
+            setContactMethod(null);
+            setContactValue("");
+        }
     };
 
     return (
@@ -121,7 +151,7 @@ export function PrayerForm() {
                                 type="text"
                                 placeholder="Puedes ser anónimo"
                                 value={nombre}
-                                onChange={(e) => setNombre(e.target.value)}
+                                onChange={handleNombreChange}
                                 disabled={isPending}
                                 aria-describedby="nombre-help"
                                 className="w-full px-4 py-3 border-2 border-border rounded-xl text-[15px] bg-cream text-gray-800 outline-none transition-all duration-300 focus:border-accent focus:bg-white focus:ring-[3px] focus:ring-accent/10 placeholder:text-[#BEB6AE] disabled:opacity-60"
@@ -146,62 +176,149 @@ export function PrayerForm() {
                         </div>
 
                         <div>
-                            <label htmlFor="prayer-contacto" className="block text-[13px] font-bold text-muted mb-1.5 tracking-wide">
-                                ¿Cómo te contactamos? <span className="font-normal text-light italic">(opcional)</span>
-                            </label>
-                            <input
-                                id="prayer-contacto"
-                                type="text"
-                                placeholder="Email o WhatsApp, para darte seguimiento"
-                                value={contacto}
-                                onChange={(e) => setContacto(e.target.value)}
-                                disabled={isPending}
-                                className="w-full px-4 py-3 border-2 border-border rounded-xl text-[15px] bg-cream text-gray-800 outline-none transition-all duration-300 focus:border-accent focus:bg-white focus:ring-[3px] focus:ring-accent/10 placeholder:text-[#BEB6AE] disabled:opacity-60"
-                            />
+                            <div
+                                role="checkbox"
+                                aria-checked={showWall}
+                                aria-label="Publicar petición en el muro de oración"
+                                tabIndex={0}
+                                className="flex items-start gap-3 py-2 cursor-pointer group"
+                                onClick={toggleShowWall}
+                                onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggleShowWall(); } }}
+                            >
+                                <div
+                                    className={`w-[22px] h-[22px] rounded-md border-2 shrink-0 flex items-center justify-center transition-all duration-200 mt-[1px] ${showWall
+                                        ? "bg-accent border-accent text-primary-dark"
+                                        : "bg-cream border-border text-transparent group-hover:border-accent/50"
+                                        }`}
+                                >
+                                    <CheckIco />
+                                </div>
+                                <span className="text-[14px] text-gray-800 leading-snug select-none">
+                                    Quiero que mi petición aparezca en el muro de oración
+                                </span>
+                            </div>
+
+                            {showWall && (
+                                <div className="mt-2 ml-[34px] animate-[fadeUp_0.25s_ease-out]">
+                                    {nombre.trim() ? (
+                                        <div className="flex gap-2" role="radiogroup" aria-label="Cómo aparecer en el muro">
+                                            <button
+                                                type="button"
+                                                role="radio"
+                                                aria-checked={wallDisplayName === "anonymous"}
+                                                disabled={isPending}
+                                                onClick={() => setWallDisplayName("anonymous")}
+                                                className={`flex-1 py-2 px-4 rounded-lg border-2 text-[13px] font-bold transition-all duration-200 ${wallDisplayName === "anonymous"
+                                                    ? "border-accent bg-accent/10 text-primary"
+                                                    : "border-border bg-cream text-muted hover:border-accent/50"
+                                                    } disabled:opacity-60`}
+                                            >
+                                                Anónimo
+                                            </button>
+                                            <button
+                                                type="button"
+                                                role="radio"
+                                                aria-checked={wallDisplayName === "named"}
+                                                disabled={isPending}
+                                                onClick={() => setWallDisplayName("named")}
+                                                className={`flex-1 py-2 px-4 rounded-lg border-2 text-[13px] font-bold transition-all duration-200 truncate ${wallDisplayName === "named"
+                                                    ? "border-accent bg-accent/10 text-primary"
+                                                    : "border-border bg-cream text-muted hover:border-accent/50"
+                                                    } disabled:opacity-60`}
+                                            >
+                                                {nombre.trim()}
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <p className="text-[13px] text-muted">
+                                            Aparecerá como <span className="font-semibold text-gray-700">Anónimo</span>
+                                        </p>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
-                        <div
-                            role="checkbox"
-                            aria-checked={showWall}
-                            aria-label="Publicar petición de forma anónima en el muro de oración"
-                            tabIndex={0}
-                            className="flex items-start gap-3 py-2 cursor-pointer group"
-                            onClick={() => { if (!isPending) setShowWall(!showWall); }}
-                            onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (!isPending) setShowWall(!showWall); } }}
-                        >
+                        <div>
                             <div
-                                className={`w-[22px] h-[22px] rounded-md border-2 shrink-0 flex items-center justify-center transition-all duration-200 mt-[1px] ${showWall
-                                    ? "bg-accent border-accent text-primary-dark"
-                                    : "bg-cream border-border text-transparent group-hover:border-accent/50"
-                                    }`}
+                                role="checkbox"
+                                aria-checked={wantContact}
+                                aria-label="Solicitar que alguien me contacte para conversar"
+                                tabIndex={0}
+                                className="flex items-start gap-3 py-2 cursor-pointer group"
+                                onClick={toggleWantContact}
+                                onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggleWantContact(); } }}
                             >
-                                <CheckIco />
+                                <div
+                                    className={`w-[22px] h-[22px] rounded-md border-2 shrink-0 flex items-center justify-center transition-all duration-200 mt-[1px] ${wantContact
+                                        ? "bg-accent border-accent text-primary-dark"
+                                        : "bg-cream border-border text-transparent group-hover:border-accent/50"
+                                        }`}
+                                >
+                                    <CheckIco />
+                                </div>
+                                <span className="text-[14px] text-gray-800 leading-snug select-none">
+                                    Me gustaría que alguien me contacte para conversar
+                                </span>
                             </div>
-                            <span className="text-[14px] text-gray-800 leading-snug select-none">
-                                Quiero que mi petición aparezca en el muro de oración (anónimamente)
-                            </span>
-                        </div>
 
-                        <div
-                            role="checkbox"
-                            aria-checked={wantContact}
-                            aria-label="Solicitar que alguien me contacte para conversar"
-                            tabIndex={0}
-                            className="flex items-start gap-3 py-2 cursor-pointer group"
-                            onClick={() => { if (!isPending) setWantContact(!wantContact); }}
-                            onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (!isPending) setWantContact(!wantContact); } }}
-                        >
-                            <div
-                                className={`w-[22px] h-[22px] rounded-md border-2 shrink-0 flex items-center justify-center transition-all duration-200 mt-[1px] ${wantContact
-                                    ? "bg-accent border-accent text-primary-dark"
-                                    : "bg-cream border-border text-transparent group-hover:border-accent/50"
-                                    }`}
-                            >
-                                <CheckIco />
-                            </div>
-                            <span className="text-[14px] text-gray-800 leading-snug select-none">
-                                Me gustaría que alguien me contacte para conversar
-                            </span>
+                            {wantContact && (
+                                <div className="mt-3 ml-[34px] space-y-3 animate-[fadeUp_0.25s_ease-out]">
+                                    <div className="flex gap-2" role="radiogroup" aria-label="Método de contacto preferido">
+                                        <button
+                                            type="button"
+                                            role="radio"
+                                            aria-checked={contactMethod === "email"}
+                                            disabled={isPending}
+                                            onClick={() => { setContactMethod("email"); setContactValue(""); }}
+                                            className={`flex-1 py-2 px-4 rounded-lg border-2 text-[13px] font-bold transition-all duration-200 ${contactMethod === "email"
+                                                ? "border-accent bg-accent/10 text-primary"
+                                                : "border-border bg-cream text-muted hover:border-accent/50"
+                                                } disabled:opacity-60`}
+                                        >
+                                            Email
+                                        </button>
+                                        <button
+                                            type="button"
+                                            role="radio"
+                                            aria-checked={contactMethod === "whatsapp"}
+                                            disabled={isPending}
+                                            onClick={() => { setContactMethod("whatsapp"); setContactValue(""); }}
+                                            className={`flex-1 py-2 px-4 rounded-lg border-2 text-[13px] font-bold transition-all duration-200 ${contactMethod === "whatsapp"
+                                                ? "border-accent bg-accent/10 text-primary"
+                                                : "border-border bg-cream text-muted hover:border-accent/50"
+                                                } disabled:opacity-60`}
+                                        >
+                                            WhatsApp
+                                        </button>
+                                    </div>
+
+                                    {contactMethod === "email" && (
+                                        <input
+                                            type="email"
+                                            placeholder="tu@correo.com"
+                                            value={contactValue}
+                                            onChange={(e) => setContactValue(e.target.value)}
+                                            disabled={isPending}
+                                            autoComplete="email"
+                                            aria-label="Tu correo electrónico"
+                                            className="w-full px-4 py-3 border-2 border-border rounded-xl text-[15px] bg-cream text-gray-800 outline-none transition-all duration-300 focus:border-accent focus:bg-white focus:ring-[3px] focus:ring-accent/10 placeholder:text-[#BEB6AE] disabled:opacity-60 animate-[fadeUp_0.2s_ease-out]"
+                                        />
+                                    )}
+
+                                    {contactMethod === "whatsapp" && (
+                                        <input
+                                            type="tel"
+                                            placeholder="+56 9 1234 5678"
+                                            value={contactValue}
+                                            onChange={(e) => setContactValue(e.target.value)}
+                                            disabled={isPending}
+                                            autoComplete="tel"
+                                            aria-label="Tu número de WhatsApp"
+                                            className="w-full px-4 py-3 border-2 border-border rounded-xl text-[15px] bg-cream text-gray-800 outline-none transition-all duration-300 focus:border-accent focus:bg-white focus:ring-[3px] focus:ring-accent/10 placeholder:text-[#BEB6AE] disabled:opacity-60 animate-[fadeUp_0.2s_ease-out]"
+                                        />
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         <div className="pt-2">

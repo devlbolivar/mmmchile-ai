@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { sendPrayerNotification } from "@/lib/resend";
 import { verifyTurnstileToken } from "@/lib/turnstile";
@@ -12,6 +12,7 @@ const prayerSchema = z.object({
   peticion: z.string().min(1, "La petición es obligatoria"),
   contacto: z.string().nullable().optional(),
   showWall: z.boolean().default(false),
+  wallAnonymous: z.boolean().default(true),
   wantContact: z.boolean().default(false),
 });
 
@@ -28,6 +29,7 @@ export async function submitPrayer(formData: FormData) {
       peticion: formData.get("peticion")?.toString() || "",
       contacto: formData.get("contacto")?.toString() || "",
       showWall: formData.get("showWall") === "true" || formData.get("showWall") === "on" || formData.get("showWall") === "1",
+      wallAnonymous: formData.get("wallAnonymous") !== "false",
       wantContact: formData.get("wantContact") === "true" || formData.get("wantContact") === "on" || formData.get("wantContact") === "1",
       turnstileToken: formData.get("turnstileToken")?.toString() || "",
     };
@@ -44,14 +46,15 @@ export async function submitPrayer(formData: FormData) {
 
     const validatedData = validationResult.data;
 
-    const isAnonymous = !validatedData.nombre || validatedData.nombre.trim() === "";
+    const isAnonymous = validatedData.wallAnonymous || !validatedData.nombre || validatedData.nombre.trim() === "";
 
-    const { error } = await supabase.from("prayer_requests").insert({
+    const { error } = await supabaseAdmin.from("prayer_requests").insert({
       name: validatedData.nombre?.trim() || "Anónimo",
       request: validatedData.peticion.trim(),
       contact: validatedData.contacto?.trim() || null,
       is_public: validatedData.showWall,
       is_anonymous: isAnonymous,
+      approved: false,
       status: validatedData.wantContact ? "needs_contact" : "pending",
     });
 

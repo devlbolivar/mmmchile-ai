@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { incrementPrayCount } from "@/app/oracion/actions/incrementPrayCount";
+
+const LS_KEY = "mmm_prayed";
 
 export type Prayer = {
     id: string | number;
@@ -16,13 +19,24 @@ export function PrayerWallList({ initialPrayers }: { initialPrayers: Prayer[] })
     const [wallFilter, setWallFilter] = useState<"recientes" | "oradas">("recientes");
     const [wallCount, setWallCount] = useState(9);
 
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem(LS_KEY);
+            if (stored) setPrayedIds(new Set(JSON.parse(stored)));
+        } catch {}
+    }, []);
+
     const handlePray = useCallback((id: string | number) => {
         setPrayedIds((prev) => {
+            if (prev.has(id)) return prev;
             const next = new Set(prev);
-            if (next.has(id)) next.delete(id);
-            else next.add(id);
+            next.add(id);
+            try {
+                localStorage.setItem(LS_KEY, JSON.stringify([...next]));
+            } catch {}
             return next;
         });
+        incrementPrayCount(id as string).catch(() => {});
     }, []);
 
     const sortedPrayers = useMemo(() => {
@@ -156,28 +170,25 @@ function PrayerCard({
             <div className="flex items-center justify-between">
                 <time className="text-[12px] text-light">{prayer.date}</time>
                 <button
-                    onClick={() => onPray(prayer.id)}
-                    aria-label={hasPrayed ? `Dejar de orar por ${prayer.name}. ${displayCount} personas orando` : `Orar por ${prayer.name}. ${displayCount} personas orando`}
+                    onClick={() => { if (!hasPrayed) onPray(prayer.id); }}
+                    aria-label={hasPrayed ? `Ya oraste por esta petición. ${displayCount} personas han orado` : `Orar por esta petición. ${displayCount} personas han orado`}
                     aria-pressed={hasPrayed}
-                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full border-2 text-[12px] font-bold cursor-pointer
+                    disabled={hasPrayed}
+                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full border-2 text-[12px] font-bold
             transition-all duration-300 ease-out
-            active:scale-95
             ${hasPrayed
-                            ? "border-accent text-accent bg-accent/10 shadow-[0_2px_8px_rgba(212,168,67,0.15)]"
-                            : "bg-white text-muted border-border hover:border-accent hover:text-accent hover:bg-accent/5 hover:shadow-sm"
+                            ? "border-accent text-accent bg-accent/10 shadow-[0_2px_8px_rgba(212,168,67,0.15)] cursor-default"
+                            : "bg-white text-muted border-border hover:border-accent hover:text-accent hover:bg-accent/5 hover:shadow-sm cursor-pointer active:scale-95"
                         }`}
                 >
                     <span
-                        className={`text-[14px] transition-transform duration-300 ease-out ${hasPrayed ? "scale-125" : "group-hover:scale-110"}`}
+                        className={`text-[14px] transition-transform duration-300 ease-out ${hasPrayed ? "scale-125" : ""}`}
                         aria-hidden="true"
                     >
                         🙏
                     </span>
-                    <span>Estoy orando</span>
-                    <span
-                        className={`font-extrabold transition-all duration-300 ${hasPrayed ? "text-accent scale-110" : "text-accent"
-                            }`}
-                    >
+                    <span>{hasPrayed ? "Oré por esto" : "Orar"}</span>
+                    <span className="font-extrabold text-accent">
                         {displayCount}
                     </span>
                 </button>
