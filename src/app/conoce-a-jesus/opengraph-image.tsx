@@ -56,8 +56,8 @@ export default async function Image() {
                     style={{
                         position: 'absolute',
                         top: '48px',
-                        left: '72px',
-                        width: '1056px',
+                        left: '100px',
+                        width: '1000px',
                         height: '2px',
                         background: '#D4A843',
                         display: 'flex',
@@ -69,8 +69,8 @@ export default async function Image() {
                     style={{
                         position: 'absolute',
                         bottom: '48px',
-                        left: '72px',
-                        width: '1056px',
+                        left: '100px',
+                        width: '1000px',
                         height: '2px',
                         background: '#D4A843',
                         display: 'flex',
@@ -90,7 +90,7 @@ export default async function Image() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '16px',
-                        padding: '0 96px',
+                        padding: '0 120px',
                     }}
                 >
                     {/* Logo */}

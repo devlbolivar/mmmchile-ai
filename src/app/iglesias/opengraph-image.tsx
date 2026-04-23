@@ -78,7 +78,7 @@ export default async function Image() {
                     style={{
                         position: 'absolute',
                         top: '44px',
-                        left: '64px',
+                        left: '100px',
                         width: '160px',
                         height: '99px',
                         objectFit: 'contain',
@@ -97,7 +97,7 @@ export default async function Image() {
                         flexDirection: 'column',
                         alignItems: 'flex-start',
                         justifyContent: 'flex-end',
-                        padding: '64px',
+                        padding: '64px 100px',
                     }}
                 >
                     {/* Badge */}
@@ -153,7 +153,7 @@ export default async function Image() {
                     style={{
                         position: 'absolute',
                         bottom: '24px',
-                        right: '64px',
+                        right: '100px',
                         color: 'rgba(255,255,255,0.30)',
                         fontSize: '15px',
                         fontFamily: 'sans-serif',

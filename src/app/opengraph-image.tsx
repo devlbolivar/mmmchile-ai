@@ -99,7 +99,7 @@ export default async function Image() {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        padding: '52px 72px 64px',
+                        padding: '52px 100px 64px',
                     }}
                 >
                     {/* Logo arriba */}
@@ -178,7 +178,7 @@ export default async function Image() {
                     style={{
                         position: 'absolute',
                         bottom: '22px',
-                        right: '72px',
+                        right: '100px',
                         color: 'rgba(255,255,255,0.28)',
                         fontSize: '15px',
                         fontFamily: 'sans-serif',
