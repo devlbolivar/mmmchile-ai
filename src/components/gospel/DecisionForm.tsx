@@ -27,12 +27,28 @@ export default function DecisionForm() {
         setFormData(prev => ({ ...prev, [field]: val }));
     };
 
+    const isValidContact = (val: string) => {
+        const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phone = /^[\d\s\+\-\(\)]{7,15}$/;
+        return email.test(val.trim()) || phone.test(val.trim());
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrorMsg("");
 
         if (!formData.nombre.trim()) {
             setErrorMsg("Por favor, ingresa tu nombre.");
+            return;
+        }
+
+        if (contactToggle && !formData.contacto.trim()) {
+            setErrorMsg("Por favor, ingresa tu WhatsApp o email para poder contactarte.");
+            return;
+        }
+
+        if (formData.contacto.trim() && !isValidContact(formData.contacto)) {
+            setErrorMsg("Por favor, ingresa un email o número de teléfono válido.");
             return;
         }
 
@@ -145,9 +161,30 @@ export default function DecisionForm() {
                                     />
                                 </div>
 
+                                <div className="flex items-center justify-between py-3.5 border-b border-[#EDE9E0]">
+                                    <span className="text-[15px] text-[#2C2C2C]">¿Te gustaría que te contactemos?</span>
+                                    <div
+                                        role="switch"
+                                        aria-checked={contactToggle}
+                                        aria-label="Permitir contacto"
+                                        tabIndex={0}
+                                        className="relative w-12 h-[26px] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#D4A843] rounded-full"
+                                        onClick={() => setContactToggle(!contactToggle)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === " " || e.key === "Enter") {
+                                                e.preventDefault();
+                                                setContactToggle(!contactToggle);
+                                            }
+                                        }}
+                                    >
+                                        <div className={`w-full h-full rounded-full transition-colors duration-300 ${contactToggle ? "bg-[#D4A843]" : "bg-[#D1CCC4]"}`} />
+                                        <div className={`absolute top-[3px] left-[3px] w-5 h-5 rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.15)] transition-transform duration-300 ${contactToggle ? "translate-x-[22px]" : "translate-x-0"}`} />
+                                    </div>
+                                </div>
+
                                 <div>
                                     <label htmlFor="contacto" className="block text-[13px] font-semibold text-gray-500 mb-1.5 tracking-[0.3px]">
-                                        WhatsApp o Email
+                                        WhatsApp o Email{contactToggle && <span className="text-red-500 ml-1">*</span>}
                                     </label>
                                     <input
                                         id="contacto"
@@ -157,6 +194,9 @@ export default function DecisionForm() {
                                         onChange={e => handleInput("contacto", e.target.value)}
                                         className="w-full p-3.5 border-[1.5px] border-[#E0DCD4] rounded-xl text-[15px] font-sans bg-[#F8F6F0] text-[#2C2C2C] outline-none transition-colors focus:border-[#D4A843] focus:ring-2 focus:ring-[#D4A843]/20"
                                     />
+                                    {contactToggle && (
+                                        <p className="mt-1.5 text-[12px] text-gray-400">Lo usaremos solo para comunicarnos contigo.</p>
+                                    )}
                                 </div>
 
                                 <div>
@@ -179,27 +219,6 @@ export default function DecisionForm() {
                                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between py-3.5 border-b border-[#EDE9E0]">
-                                    <span className="text-[15px] text-[#2C2C2C]">¿Te gustaría que te contactemos?</span>
-                                    <div
-                                        role="switch"
-                                        aria-checked={contactToggle}
-                                        aria-label="Permitir contacto"
-                                        tabIndex={0}
-                                        className="relative w-12 h-[26px] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#D4A843] rounded-full"
-                                        onClick={() => setContactToggle(!contactToggle)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === " " || e.key === "Enter") {
-                                                e.preventDefault();
-                                                setContactToggle(!contactToggle);
-                                            }
-                                        }}
-                                    >
-                                        <div className={`w-full h-full rounded-full transition-colors duration-300 ${contactToggle ? "bg-[#D4A843]" : "bg-[#D1CCC4]"}`} />
-                                        <div className={`absolute top-[3px] left-[3px] w-5 h-5 rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.15)] transition-transform duration-300 ${contactToggle ? "translate-x-[22px]" : "translate-x-0"}`} />
                                     </div>
                                 </div>
 
@@ -249,7 +268,7 @@ export default function DecisionForm() {
                                             Enviando información...
                                         </>
                                     ) : (
-                                        "Enviar mis datos"
+                                        "Dar el primer paso"
                                     )}
                                 </button>
 
