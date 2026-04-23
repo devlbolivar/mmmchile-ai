@@ -17,9 +17,23 @@ export const metadata: Metadata = {
         title: "Peticiones de Oración | MMM Chile",
         description: "Comparte tu necesidad y nuestro equipo de intercesión orará por ti esta semana. Dios te escucha y nosotros también.",
         url: "https://mmmchile.cl/oracion",
-        siteName: "MMM Chile",
+        siteName: "Movimiento Misionero Mundial Chile",
         locale: "es_CL",
         type: "website",
+        images: [
+            {
+                url: "https://mmmchile.cl/oracion/opengraph-image",
+                width: 1200,
+                height: 630,
+                alt: "Muro de Oración — Movimiento Misionero Mundial Chile",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Peticiones de Oración | MMM Chile",
+        description: "Comparte tu necesidad y nuestro equipo de intercesión orará por ti esta semana. Dios te escucha y nosotros también.",
+        images: ["https://mmmchile.cl/oracion/opengraph-image"],
     },
 };
 

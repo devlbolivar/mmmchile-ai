@@ -11,10 +11,37 @@ import { HandsLight, BrokenVessel, CrossLight, SunriseIcon } from '@/components/
 import Breadcrumb from '@/components/shared/Breadcrumb';
 
 export const metadata: Metadata = {
-    title: "Conoce a Jesús | El Camino a la Vida Eterna",
-    description: "Descubre el amor de Dios y cómo iniciar una relación personal con Jesucristo hoy mismo.",
+    title: "Conoce a Jesús: ¿Cómo Tener una Relación con Dios? | MMM Chile",
+    description: "¿Sientes un vacío que nada llena? Descubre el amor de Dios y cómo iniciar una relación personal con Jesucristo hoy mismo. Guía paso a paso en español.",
+    keywords: [
+        "conocer a Jesús", "relación con Dios", "cómo ser cristiano",
+        "fe cristiana Chile", "evangelio", "vida eterna", "salvación",
+        "qué significa creer en Dios",
+    ],
     alternates: {
-        canonical: '/conoce-a-jesus',
+        canonical: 'https://mmmchile.cl/conoce-a-jesus',
+    },
+    openGraph: {
+        title: "Conoce a Jesús: ¿Cómo Tener una Relación con Dios?",
+        description: "¿Sientes que algo falta? Descubre el amor de Dios y da el primer paso hacia una vida con propósito y paz.",
+        url: 'https://mmmchile.cl/conoce-a-jesus',
+        siteName: 'Movimiento Misionero Mundial Chile',
+        images: [
+            {
+                url: 'https://mmmchile.cl/conoce-a-jesus/opengraph-image',
+                width: 1200,
+                height: 630,
+                alt: 'Conoce a Jesús — Movimiento Misionero Mundial Chile',
+            },
+        ],
+        locale: 'es_CL',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: "Conoce a Jesús: ¿Cómo Tener una Relación con Dios?",
+        description: "¿Sientes que algo falta? Descubre el amor de Dios y da el primer paso hacia una vida con propósito y paz.",
+        images: ['https://mmmchile.cl/conoce-a-jesus/opengraph-image'],
     },
 };
 
@@ -69,6 +96,31 @@ export default function GospelPage() {
             verseRef: "2 Corintios 5:17",
         },
     ];
+    const webPageSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: "Conoce a Jesús: ¿Cómo Tener una Relación con Dios?",
+        description: "¿Sientes un vacío que nada llena? Descubre el amor de Dios y cómo iniciar una relación personal con Jesucristo hoy mismo.",
+        url: 'https://mmmchile.cl/conoce-a-jesus',
+        inLanguage: 'es-CL',
+        publisher: {
+            '@type': 'Organization',
+            name: 'Movimiento Misionero Mundial Chile',
+            url: 'https://mmmchile.cl',
+            logo: {
+                '@type': 'ImageObject',
+                url: 'https://mmmchile.cl/logo.png',
+            },
+        },
+        breadcrumb: {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://mmmchile.cl' },
+                { '@type': 'ListItem', position: 2, name: 'Conoce a Jesús', item: 'https://mmmchile.cl/conoce-a-jesus' },
+            ],
+        },
+    };
+
     const faqSchema = {
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
@@ -102,6 +154,10 @@ export default function GospelPage() {
 
     return (
         <main className="min-h-screen font-sans text-[#2C2C2C] bg-white">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+            />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
