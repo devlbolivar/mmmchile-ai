@@ -5,6 +5,8 @@ import { VerseCards } from "@/components/prayer/VerseCards";
 import { PrayerWall } from "@/components/prayer/PrayerWall";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 
+export const revalidate = 30;
+
 export const metadata: Metadata = {
     title: "Petición de Oración | MMM Chile",
     description: "Déjanos tu petición de oración. Nuestro equipo de intercesión estará clamando a Dios por tu necesidad.",

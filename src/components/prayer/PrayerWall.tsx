@@ -1,8 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabase";
 import { PrayerWallList } from "./PrayerWallList";
 
-export const revalidate = 60; // Refresh occasionally for new prayers
-
 function getRelativeTime(dateString: string) {
     const date = new Date(dateString);
     const now = new Date();
