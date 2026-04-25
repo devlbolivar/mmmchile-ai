@@ -1,4 +1,4 @@
-# MMM Chile — Plataforma Evangelística Digital
+# MMM Chile — Plataforma Evangelística Digital.
 
 ## Contexto del Proyecto
 Sitio web del Movimiento Misionero Mundial en Chile (mmmchile.cl).
