@@ -13,7 +13,6 @@ import ChurchDetail from "@/components/church/ChurchDetail";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { trackEvent } from '@/lib/analytics';
 
-// Dynamic import for Leaflet (client-only)
 const ChurchMap = dynamic(() => import("@/components/church/ChurchMap"), {
     ssr: false,
     loading: () => (
@@ -23,7 +22,7 @@ const ChurchMap = dynamic(() => import("@/components/church/ChurchMap"), {
     ),
 });
 
-const WA_GENERAL = "Hola, busco una iglesia cerca de mi ubicación";
+const WA_GENERAL = "Hola, me gustaría encontrar una iglesia cerca de mi ubicación";
 
 interface ChurchClientProps {
     initialChurches: ChurchListItem[];
