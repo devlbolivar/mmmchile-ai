@@ -23,7 +23,7 @@ export default function GeolocationPrompt({ userLocation, onLocationChange }: Ge
         setLoading(true);
         try {
             const coords = await getCurrentPosition();
-            trackEvent('usar_ubicacion', { source: 'geolocation_prompt' });
+            trackEvent('usar_ubicacion', { from: 'iglesias' });
             onLocationChange(coords);
         } catch {
             // Fallback: Santiago

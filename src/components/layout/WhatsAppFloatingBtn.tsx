@@ -1,6 +1,7 @@
 'use client';
 
 import { useRadio } from '@/components/radio/RadioContext';
+import { trackEvent } from '@/lib/analytics';
 
 export default function WhatsAppFloatingBtn() {
     const radio = useRadio();
@@ -17,6 +18,7 @@ export default function WhatsAppFloatingBtn() {
             href="https://wa.me/56975587223"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackEvent('click_whatsapp', { from: 'floating_btn' })}
             style={{ bottom, transition: 'bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1)' }}
             className="fixed right-6 z-50 flex items-center justify-center w-[60px] h-[60px] rounded-full bg-[#25D366] text-white shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-[transform,box-shadow] duration-300 hover:scale-110 hover:shadow-[0_6px_28px_rgba(37,211,102,0.5)]"
             aria-label="Contactar por WhatsApp"

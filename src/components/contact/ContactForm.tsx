@@ -102,11 +102,11 @@ export default function ContactForm() {
         setErrorMsg(null);
         formData.append("source_page", sourcePage);
         formData.append("turnstileToken", turnstileToken);
-        trackEvent("contact_form_submit", { subject: selectedSubject });
 
         startTransition(async () => {
             const result = await submitContact(formData);
             if (result.success) {
+                trackEvent("contact_form_submit", { subject: selectedSubject });
                 setStatus("success");
             } else {
                 setStatus("error");

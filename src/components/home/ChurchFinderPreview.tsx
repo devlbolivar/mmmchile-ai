@@ -92,7 +92,7 @@ export default function ChurchFinderPreview({ churches }: { churches?: ChurchLis
                             <button 
                                 onClick={() => {
                                     if (searchCity.trim()) {
-                                        trackEvent('buscar_iglesia', { search_term: searchCity, source: 'home_preview' });
+                                        trackEvent('buscar_iglesia', { search_term: searchCity, from: 'home_preview' });
                                     }
                                 }}
                                 aria-label="Buscar" className="p-[14px_18px] bg-[#D4A843] border-none cursor-pointer flex items-center text-[#0F2035] transition-colors hover:bg-[#E8C976]"
@@ -106,7 +106,7 @@ export default function ChurchFinderPreview({ churches }: { churches?: ChurchLis
                                 <Link 
                                     key={c._id || i} 
                                     href={c.slug ? `/iglesias/${c.slug}` : "/iglesias"}
-                                    onClick={() => trackEvent('ver_detalle_iglesia', { church_id: c._id, church_name: c.name, source: 'home_preview' })}
+                                    onClick={() => trackEvent('ver_detalle_iglesia', { church_id: c._id, church_name: c.name, from: 'home_preview' })}
                                     className="block bg-white/5 border border-white/10 rounded-[10px] p-4 transition-colors duration-300 hover:bg-white/10"
                                 >
                                     <h4 className="text-white text-[15px] font-semibold mb-1">{c.name}</h4>

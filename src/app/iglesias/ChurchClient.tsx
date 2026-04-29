@@ -37,6 +37,15 @@ export default function ChurchClient({ initialChurches }: ChurchClientProps) {
     const [mobileView, setMobileView] = useState<"lista" | "mapa">("lista");
     const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
+    // Track text searches with 1s debounce (only when there's actual text)
+    useEffect(() => {
+        if (!search.trim()) return;
+        const timer = setTimeout(() => {
+            trackEvent('buscar_iglesia', { search_term: search.trim(), zone, from: 'text_search' });
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, [search, zone]);
+
     // Filter + sort churches
     const filtered = useMemo(() => {
         let list = [...initialChurches] as (ChurchListItem & { distance?: number })[];
@@ -124,7 +133,7 @@ export default function ChurchClient({ initialChurches }: ChurchClientProps) {
                             onSearchChange={setSearch}
                             onZoneChange={(val) => {
                                 setZone(val);
-                                trackEvent('buscar_iglesia', { search_term: '', zone: val, source: 'church_client' });
+                                trackEvent('buscar_iglesia', { search_term: '', zone: val, from: 'zone_filter' });
                             }}
                             resultCount={filtered.length}
                             hasLocation={!!userLocation}
@@ -227,6 +236,7 @@ export default function ChurchClient({ initialChurches }: ChurchClientProps) {
                         href={`https://wa.me/56912345600?text=${encodeURIComponent(WA_GENERAL)}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => trackEvent('click_whatsapp', { from: 'iglesias_cta' })}
                         className="inline-flex items-center gap-2 px-7 py-3.5 rounded-[10px] text-[15px] font-bold
                        bg-[#25D366] text-white no-underline hover:bg-[#1ea952] hover:-translate-y-0.5
                        transition-all"

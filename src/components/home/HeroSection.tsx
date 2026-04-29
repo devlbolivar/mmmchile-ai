@@ -62,7 +62,7 @@ export default function HeroSection() {
                         href="/iglesias" 
                         variant="outline" 
                         className="w-full sm:w-auto"
-                        onClick={() => trackEvent('click_home_iglesias', { source: 'hero' })}
+                        onClick={() => trackEvent('click_home_iglesias', { from: 'hero' })}
                     >
                         Encuentra una Iglesia Cerca de Ti
                     </CTAButton>

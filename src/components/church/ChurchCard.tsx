@@ -23,7 +23,7 @@ export default function ChurchCard({ church, isSelected, onSelect, onDetail }: C
     return (
         <div
             onClick={() => {
-                trackEvent('ver_detalle_iglesia', { church_id: church._id, church_name: church.name, source: 'church_list' });
+                trackEvent('ver_detalle_iglesia', { church_id: church._id, church_name: church.name, from: 'church_list' });
                 onSelect(church._id);
             }}
             className={`
