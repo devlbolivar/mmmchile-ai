@@ -127,7 +127,7 @@ export default async function ChurchSlugPage({ params }: Props) {
 
                 {/* Cover: photo if available, map as fallback */}
                 <div className="max-w-4xl mx-auto px-6 pt-4">
-                    <div className="h-[280px] md:h-[360px] rounded-2xl overflow-hidden shadow-sm relative">
+                    <div className="h-[280px] md:h-[360px] rounded-2xl overflow-hidden shadow-sm relative isolate">
                         {church.photos && church.photos.length > 0 ? (
                             <Image
                                 src={urlForImage(church.photos[0]).width(1200).height(720).url()}
