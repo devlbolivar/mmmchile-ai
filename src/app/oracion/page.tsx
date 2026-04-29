@@ -45,34 +45,9 @@ const ArrowIco = ({ s = 14 }: { s?: number }) => (
 );
 
 const HandsPraying = () => (
-    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" className="opacity-85 mx-auto">
-        <circle cx="40" cy="40" r="36" fill="url(#prayGlow)" />
-        <path d="M40 15 Q44 22 44 28 Q44 33 40 35 Q36 33 36 28 Q36 22 40 15Z" fill="var(--color-accent)" className="opacity-60" />
-        <path d="M40 18 Q42.5 23 42.5 27 Q42.5 31 40 32.5 Q37.5 31 37.5 27 Q37.5 23 40 18Z" fill="var(--color-accent)" className="opacity-90" />
-        <ellipse cx="40" cy="27" rx="2" ry="3" fill="#FFF5E0" className="opacity-70" />
-        <rect x="37" y="35" width="6" height="20" rx="2" fill="rgba(255,255,255,0.35)" stroke="var(--color-accent)" strokeWidth="0.8" className="opacity-50" />
-        {[0, 1, 2, 3, 4, 5].map((i) => {
-            const a = (i * Math.PI) / 3 - Math.PI / 2;
-            return (
-                <line
-                    key={i}
-                    x1={40 + Math.cos(a) * 8}
-                    y1={26 + Math.sin(a) * 8}
-                    x2={40 + Math.cos(a) * 16}
-                    y2={26 + Math.sin(a) * 16}
-                    stroke="var(--color-accent)"
-                    strokeWidth="0.6"
-                    className="opacity-25"
-                />
-            );
-        })}
-        <defs>
-            <radialGradient id="prayGlow">
-                <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.12" />
-                <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
-            </radialGradient>
-        </defs>
-    </svg>
+    <div className="w-20 h-20 mx-auto rounded-full bg-accent/10 flex items-center justify-center shadow-[0_0_40px_rgba(212,168,67,0.15)]">
+        <span className="text-[40px] leading-none" aria-hidden="true">🙏</span>
+    </div>
 );
 
 export default function OracionPage() {
@@ -115,48 +90,70 @@ export default function OracionPage() {
                 <p className="text-[clamp(15px,2vw,17px)] text-muted max-w-[480px] mx-auto leading-relaxed relative z-10">
                     Comparte tu necesidad y nuestro equipo de intercesión orará por ti esta semana.
                 </p>
+                <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 relative z-10">
+                    <Link href="#formulario" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-accent text-primary-dark text-[15px] font-extrabold shadow-[0_4px_16px_rgba(212,168,67,0.3)] hover:bg-accent-light hover:-translate-y-0.5 transition-all duration-200">
+                        Pide oración <ArrowIco />
+                    </Link>
+                    <Link href="#muro-oracion" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-white/70 border border-border text-primary text-[15px] font-bold hover:border-accent hover:-translate-y-0.5 transition-all duration-200">
+                        Ver el muro 🙏
+                    </Link>
+                </div>
             </section>
 
-            {/* MAIN CONTENT: FORM + SIDEBAR */}
-            <main className="max-w-[1100px] mx-auto px-6 pb-[60px] pt-10 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-[1fr_340px] gap-8 md:gap-10 items-start" aria-label="Formulario y recursos de oración">
-
-                {/* FORM LEFT */}
-                <PrayerForm />
-
-                {/* SIDEBAR RIGHT */}
-                <aside className="flex flex-col gap-6 lg:sticky lg:top-20 md:grid md:grid-cols-2 lg:flex" aria-label="Recursos y enlaces de fe">
-                    <div className="md:col-span-2 lg:col-none">
-                        <VerseCards />
-                    </div>
-
-                    <Link href="/conoce-a-jesus" className="block bg-white rounded-2xl p-6 border border-border border-l-4 border-l-accent transition-all duration-300 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-accent hover:-translate-y-0.5 hover:shadow-[0_6px_24px_rgba(0,0,0,0.05)] bg-gradient-to-br from-accent/5 to-white group" aria-label="¿Quieres conocer al Dios que escucha tus oraciones? Haz clic para conocer a Jesús">
-                        <h3 className="font-serif text-[17px] text-primary font-medium mb-1.5">
-                            ¿Quieres conocer al Dios que escucha tus oraciones?
-                        </h3>
-                        <p className="text-[13px] text-muted leading-relaxed mb-3">
-                            Hay alguien que te ama profundamente y quiere tener una relación contigo.
-                        </p>
-                        <span className="inline-flex items-center gap-[5px] text-[13px] font-bold text-accent group-hover:gap-2.5 transition-all">
-                            Conoce a Jesús <ArrowIco s={12} />
-                        </span>
-                    </Link>
-
-                    <Link href="/iglesias" className="block bg-white rounded-2xl p-6 border border-border transition-all duration-300 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-accent hover:-translate-y-0.5 hover:shadow-[0_6px_24px_rgba(0,0,0,0.05)] group" aria-label="¿Buscas una comunidad que ore contigo? Encuentra una iglesia cercana">
-                        <h3 className="font-serif text-[17px] text-primary font-medium mb-1.5">
-                            ¿Buscas una comunidad que ore contigo?
-                        </h3>
-                        <p className="text-[13px] text-muted leading-relaxed mb-3">
-                            Encuentra una iglesia cercana donde serás recibido como familia.
-                        </p>
-                        <span className="inline-flex items-center gap-[5px] text-[13px] font-bold text-accent group-hover:gap-2.5 transition-all">
-                            Encontrar iglesia <ArrowIco s={12} />
-                        </span>
-                    </Link>
-                </aside>
-            </main>
-
-            {/* PRAYER WALL SERVER COMPONENT */}
+            {/* PRAYER WALL — primero para generar prueba social */}
             <PrayerWall />
+
+            {/* FORM SECTION */}
+            <div id="formulario" className="scroll-mt-20 bg-gradient-to-b from-[#F5EFE3] to-[#FDF8F0]">
+                <div className="max-w-[1100px] mx-auto px-6 pt-2 pb-2">
+                    <div className="h-[1px] bg-gradient-to-r from-transparent via-border to-transparent opacity-60" />
+                </div>
+                <main className="max-w-[1100px] mx-auto px-6 pb-[60px] pt-10 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8 md:gap-10 items-start" aria-label="Formulario y recursos de oración">
+
+                    {/* FORM LEFT */}
+                    <PrayerForm />
+
+                    {/* SIDEBAR RIGHT */}
+                    <aside className="flex flex-col gap-6 lg:sticky lg:top-20 md:grid md:grid-cols-2 lg:flex" aria-label="Recursos y enlaces de fe">
+                        <div className="md:col-span-2 lg:col-span-1">
+                            <VerseCards />
+                        </div>
+
+                        <Link href="/conoce-a-jesus" className="block bg-white rounded-2xl p-6 border border-border border-l-4 border-l-accent transition-all duration-300 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-accent hover:-translate-y-0.5 hover:shadow-[0_6px_24px_rgba(0,0,0,0.05)] bg-gradient-to-br from-accent/5 to-white group" aria-label="¿Quieres conocer al Dios que escucha tus oraciones? Haz clic para conocer a Jesús">
+                            <h3 className="font-serif text-[17px] text-primary font-medium mb-1.5">
+                                ¿Quieres conocer al Dios que escucha tus oraciones?
+                            </h3>
+                            <p className="text-[13px] text-muted leading-relaxed mb-3">
+                                Hay alguien que te ama profundamente y quiere tener una relación contigo.
+                            </p>
+                            <span className="inline-flex items-center gap-[5px] text-[13px] font-bold text-accent group-hover:gap-2.5 transition-all">
+                                Conoce a Jesús <ArrowIco s={12} />
+                            </span>
+                        </Link>
+
+                        <Link href="/iglesias" className="block bg-white rounded-2xl p-6 border border-border transition-all duration-300 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-accent hover:-translate-y-0.5 hover:shadow-[0_6px_24px_rgba(0,0,0,0.05)] group" aria-label="¿Buscas una comunidad que ore contigo? Encuentra una iglesia cercana">
+                            <h3 className="font-serif text-[17px] text-primary font-medium mb-1.5">
+                                ¿Buscas una comunidad que ore contigo?
+                            </h3>
+                            <p className="text-[13px] text-muted leading-relaxed mb-3">
+                                Encuentra una iglesia cercana donde serás recibido como familia.
+                            </p>
+                            <span className="inline-flex items-center gap-[5px] text-[13px] font-bold text-accent group-hover:gap-2.5 transition-all">
+                                Encontrar iglesia <ArrowIco s={12} />
+                            </span>
+                        </Link>
+                    </aside>
+                </main>
+            </div>
+
+            {/* FAB MOBILE — ancla al formulario */}
+            <Link
+                href="#formulario"
+                className="fixed bottom-6 left-5 z-50 lg:hidden inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-accent text-primary-dark text-[14px] font-extrabold shadow-[0_4px_24px_rgba(212,168,67,0.45)] hover:bg-accent-light active:scale-95 transition-all duration-200"
+                aria-label="Ir al formulario de petición de oración"
+            >
+                🙏 Pide oración
+            </Link>
 
             {/* BOTTOM CTA */}
             <section className="py-12 px-6 text-center relative bg-gradient-to-br from-accent-pale to-[#F0DDB8] overflow-hidden mt-auto" aria-label="Invitación a conocer a Jesús">

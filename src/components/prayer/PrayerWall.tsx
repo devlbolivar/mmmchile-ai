@@ -48,7 +48,7 @@ export async function PrayerWall() {
     })) ?? [];
 
     return (
-        <div className="w-full relative">
+        <div id="muro-oracion" className="w-full relative scroll-mt-20">
             {/* Decorative Divider */}
             <div className="max-w-[1100px] mx-auto px-6 py-10">
                 <div className="h-[1px] bg-gradient-to-r from-transparent via-border via-50% to-transparent opacity-60 flex justify-center">

@@ -17,6 +17,7 @@ export function PrayerForm() {
     const [isPending, startTransition] = useTransition();
     const [view, setView] = useState<FormView>("form");
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [submittedShowWall, setSubmittedShowWall] = useState(false);
 
     // Form local state
     const [nombre, setNombre] = useState("");
@@ -49,6 +50,7 @@ export function PrayerForm() {
         }
 
         setErrorMsg(null);
+        setSubmittedShowWall(showWall);
 
         const formData = new FormData();
         formData.append("nombre", nombre);
@@ -118,7 +120,7 @@ export function PrayerForm() {
                 <div className="bg-white rounded-[20px] p-8 md:p-9 border border-border shadow-[0_8px_40px_rgba(30,58,95,0.04)]">
                     <h2 className="font-serif text-[24px] text-primary mb-1.5 font-medium">Tu Petición de Oración</h2>
                     <p className="text-[14px] text-muted mb-7 leading-relaxed">
-                        Cuéntanos qué está pasando en tu vida. Todo lo que compartas es tratado con cariño y confidencialidad.
+                        Te invitamos a dejar tu petición en este espacio. Ya sea una prueba difícil, un proceso de restauración o una acción de gracias, aquí levantamos una oración.
                     </p>
 
                     {errorMsg && (
@@ -384,6 +386,11 @@ export function PrayerForm() {
                         Estamos orando por ti 🙏<br /><br />
                         Nuestro equipo de intercesión recibirá tu petición y orará por ti esta semana. No estás solo en esto — Dios te escucha y nosotros también.
                     </p>
+                    {submittedShowWall && (
+                        <div className="mt-5 mx-auto max-w-[340px] bg-accent/10 border border-accent/30 rounded-xl px-5 py-3.5 text-[13px] text-primary leading-relaxed">
+                            Tu petición será revisada por nuestro equipo antes de aparecer en el muro de oración.
+                        </div>
+                    )}
                     <button
                         onClick={resetForm}
                         aria-label="Enviar otra petición de oración"

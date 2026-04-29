@@ -21,7 +21,7 @@ export default function Header() {
         { name: "Iglesias", href: "/iglesias" },
         { name: "Blog", href: "/blog" },
         { name: "Doctrina", href: "/doctrina" },
-        { name: "Oración", href: "/oracion" },
+        { name: "Muro de Oración", href: "/oracion" },
         { name: "Radio", href: "/radio" },
     ];
 
