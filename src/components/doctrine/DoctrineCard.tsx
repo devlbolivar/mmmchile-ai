@@ -1,20 +1,22 @@
 'use client'
 
-import { useState } from 'react'
 import * as LucideIcons from 'lucide-react'
 import { DoctrinePoint } from '@/lib/data/doctrine'
 import BibleVerse from '../shared/BibleVerse'
 
-export default function DoctrineCard({ doctrine }: { doctrine: DoctrinePoint }) {
-    const [isExpanded, setIsExpanded] = useState(false)
-    const Icon = (LucideIcons as unknown as Record<string, React.ElementType>)[doctrine.icon] || LucideIcons.HelpCircle
+interface DoctrineCardProps {
+    doctrine: DoctrinePoint
+    isExpanded: boolean
+    onToggle: () => void
+}
 
-    const toggleExpand = () => setIsExpanded(!isExpanded)
+export default function DoctrineCard({ doctrine, isExpanded, onToggle }: DoctrineCardProps) {
+    const Icon = (LucideIcons as unknown as Record<string, React.ElementType>)[doctrine.icon] || LucideIcons.HelpCircle
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
-            toggleExpand()
+            onToggle()
         }
     }
 
@@ -25,7 +27,7 @@ export default function DoctrineCard({ doctrine }: { doctrine: DoctrinePoint }) 
         >
             <div
                 className="p-5 md:p-6 flex items-start gap-4 cursor-pointer hover:bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-[#D4A843] focus:ring-inset transition-colors"
-                onClick={toggleExpand}
+                onClick={onToggle}
                 onKeyDown={handleKeyDown}
                 tabIndex={0}
                 role="button"

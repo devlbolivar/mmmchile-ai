@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { doctrinePoints } from '@/lib/data/doctrine'
 import DoctrineHero from '@/components/doctrine/DoctrineHero'
-import DoctrineCard from '@/components/doctrine/DoctrineCard'
+import DoctrineList from '@/components/doctrine/DoctrineList'
 import DoctrineNavigation from '@/components/doctrine/DoctrineNavigation'
 import CTAButton from '@/components/shared/CTAButton'
 import { Heart, MapPin } from 'lucide-react'
@@ -56,9 +56,7 @@ export default function DoctrinePage() {
 
                             {/* Main Content Area */}
                             <div className="flex-1 w-full max-w-3xl">
-                                {doctrinePoints.map((doctrine) => (
-                                    <DoctrineCard key={doctrine.id} doctrine={doctrine} />
-                                ))}
+                                <DoctrineList doctrines={doctrinePoints} />
 
                                 {/* Embedded CTA Section */}
                                 <section className="mt-20 pt-16 border-t border-gray-200/60 pb-8">
