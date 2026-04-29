@@ -3,35 +3,51 @@ import { ArrowRight } from "lucide-react";
 
 interface ArticleCTAProps {
     categoryName: string;
+    callToAction?: string;
 }
 
-export default function ArticleCTA({ categoryName }: ArticleCTAProps) {
-    const ctaMap: Record<string, { title: string; desc: string; btn: string; href: string; bgClass: string }> = {
-        "Preguntas de Vida": {
-            title: "¿Quieres saber más sobre Jesús?",
-            desc: "Esta podría ser la decisión más importante de tu vida.",
-            btn: "Conoce a Jesús",
-            href: "/conoce-a-jesus",
-            bgClass: "bg-gradient-to-br from-accent/5 to-primary/5"
-        },
-        "Testimonios": {
-            title: "¿Tienes un testimonio?",
-            desc: "Tu historia puede inspirar a alguien más. Compártela con nosotros.",
-            btn: "Compartir mi testimonio",
-            href: "/testimonios",
-            bgClass: "bg-gradient-to-br from-red-600/5 to-primary/5"
-        },
-        "Vida Cristiana": {
-            title: "Encuentra una iglesia para crecer",
-            desc: "La fe crece mejor en comunidad. Hay una iglesia esperándote cerca de ti.",
-            btn: "Buscar iglesia",
-            href: "/iglesias",
-            bgClass: "bg-gradient-to-br from-emerald-600/5 to-primary/5"
-        },
+type CTAOption = { title: string; desc: string; btn: string; href: string; bgClass: string };
 
-    };
+const CTA_BY_VALUE: Record<string, CTAOption> = {
+    "conoce-a-jesus": {
+        title: "¿Quieres saber más sobre Jesús?",
+        desc: "Esta podría ser la decisión más importante de tu vida.",
+        btn: "Conoce a Jesús",
+        href: "/conoce-a-jesus",
+        bgClass: "bg-gradient-to-br from-accent/5 to-primary/5"
+    },
+    "oracion": {
+        title: "¿Tienes una necesidad de oración?",
+        desc: "No estás solo. Nuestro equipo de intercesión orará por ti esta semana.",
+        btn: "Pedir oración",
+        href: "/oracion",
+        bgClass: "bg-gradient-to-br from-accent/5 to-primary/5"
+    },
+    "iglesias": {
+        title: "Encuentra una iglesia para crecer",
+        desc: "La fe crece mejor en comunidad. Hay una iglesia esperándote cerca de ti.",
+        btn: "Buscar iglesia",
+        href: "/iglesias",
+        bgClass: "bg-gradient-to-br from-emerald-600/5 to-primary/5"
+    },
+};
 
-    const cta = ctaMap[categoryName] || ctaMap["Preguntas de Vida"];
+const CTA_BY_CATEGORY: Record<string, CTAOption> = {
+    "Preguntas de Vida": CTA_BY_VALUE["conoce-a-jesus"],
+    "Testimonios": {
+        title: "¿Tienes un testimonio?",
+        desc: "Tu historia puede inspirar a alguien más. Compártela con nosotros.",
+        btn: "Compartir mi testimonio",
+        href: "/testimonios",
+        bgClass: "bg-gradient-to-br from-red-600/5 to-primary/5"
+    },
+    "Vida Cristiana": CTA_BY_VALUE["iglesias"],
+};
+
+export default function ArticleCTA({ categoryName, callToAction }: ArticleCTAProps) {
+    const cta = (callToAction && CTA_BY_VALUE[callToAction])
+        || CTA_BY_CATEGORY[categoryName]
+        || CTA_BY_VALUE["conoce-a-jesus"];
 
     return (
         <div className={`max-w-[700px] mx-auto my-8 p-8 text-center rounded-2xl border border-border relative overflow-hidden ${cta.bgClass}`}>

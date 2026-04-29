@@ -168,8 +168,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <ShareButtons title={post.title} description={post.excerpt} url={`${BASE_URL}/blog/${post.slug}`} />
                 </div>
 
-                {/* CTA (Contextual based on category) */}
-                <ArticleCTA categoryName={post.category?.title || 'General'} />
+                {/* CTA — prioriza el valor elegido en Sanity, fallback por categoría */}
+                <ArticleCTA categoryName={post.category?.title || 'General'} callToAction={post.callToAction} />
 
                 {/* WhatsApp Interaction Box */}
                 <div className="max-w-[700px] mx-auto mb-12 px-6">
