@@ -59,6 +59,7 @@ export interface ChurchListItem {
     whatsapp?: string;
     pastorName?: string;
     serviceSchedule?: ServiceSchedule[];
+    photos?: SanityImageRef[];
     extraEmail?: string;
     image?: string;
 }

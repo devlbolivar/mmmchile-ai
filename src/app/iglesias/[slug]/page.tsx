@@ -2,11 +2,13 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import SingleChurchMapWrapper from "@/components/church/SingleChurchMapWrapper";
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Navigation, MessageCircle, Clock } from "lucide-react";
 import { sanityFetch } from "@/lib/sanity/client";
 import { GET_CHURCH_BY_SLUG_QUERY, GET_ALL_CHURCH_SLUGS_QUERY } from "@/lib/sanity/queries";
 import type { Church } from "@/lib/types/church";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import { urlForImage } from "@/lib/sanity/image";
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -54,8 +56,7 @@ function dayToSchemaOrg(day: string): string {
     return `https://schema.org/${map[day] ?? day}`;
 }
 
-const WA_MESSAGE = "Hola, busco una iglesia cerca de mi ubicación.";
-const VISIT_MESSAGE = "Hola, me gustaría contactar a la congregación para una visita.";
+const WA_MESSAGE = "Hola, me gustaría contactar a la congregación para una visita.";
 
 export default async function ChurchSlugPage({ params }: Props) {
     const { slug } = await params;
@@ -68,9 +69,6 @@ export default async function ChurchSlugPage({ params }: Props) {
 
     const waUrl = church.whatsapp
         ? `https://wa.me/${church.whatsapp.replace(/\+/g, "")}?text=${encodeURIComponent(WA_MESSAGE)}`
-        : null;
-    const visitUrl = church.whatsapp
-        ? `https://wa.me/${church.whatsapp.replace(/\+/g, "")}?text=${encodeURIComponent(VISIT_MESSAGE)}`
         : null;
     const mapsUrl =
         church.latitude != null && church.longitude != null
@@ -122,18 +120,50 @@ export default async function ChurchSlugPage({ params }: Props) {
                     <Breadcrumb
                         items={[
                             { label: 'Iglesias', href: '/iglesias' },
-                            { label: church.city, href: `/iglesias/ciudad/${church.city.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}` },
                             { label: church.name },
                         ]}
                     />
                 </div>
 
-                {/* Map */}
+                {/* Cover: photo if available, map as fallback */}
                 <div className="max-w-4xl mx-auto px-6 pt-4">
                     <div className="h-[280px] md:h-[360px] rounded-2xl overflow-hidden shadow-sm relative">
-                        <SingleChurchMapWrapper church={church} />
+                        {church.photos && church.photos.length > 0 ? (
+                            <Image
+                                src={urlForImage(church.photos[0]).width(1200).height(720).url()}
+                                alt={church.name}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 100vw, 896px"
+                                priority
+                            />
+                        ) : (
+                            <SingleChurchMapWrapper church={church} />
+                        )}
                     </div>
                 </div>
+
+                {/* Photo gallery strip — only if photos exist */}
+                {church.photos && church.photos.length > 0 && (
+                    <div className="max-w-4xl mx-auto px-6 pt-4">
+                        <div className="flex gap-3 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                            {church.photos.map((photo, i) => (
+                                <div
+                                    key={i}
+                                    className="shrink-0 w-[200px] h-[130px] md:w-[240px] md:h-[155px] rounded-xl overflow-hidden relative"
+                                >
+                                    <Image
+                                        src={urlForImage(photo).width(480).height(310).url()}
+                                        alt={`${church.name} — foto ${i + 1}`}
+                                        fill
+                                        className="object-cover hover:scale-105 transition-transform duration-300"
+                                        sizes="240px"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Content */}
                 <div className="max-w-4xl mx-auto px-6 py-8 grid md:grid-cols-[1fr_300px] gap-8">
@@ -243,17 +273,17 @@ export default async function ChurchSlugPage({ params }: Props) {
                                     <MessageCircle size={18} /> Contactar por WhatsApp
                                 </a>
                             )}
-                            {visitUrl && (
+                            {mapsUrl && (
                                 <a
-                                    href={visitUrl}
+                                    href={mapsUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center justify-center gap-2 w-full py-3.5 rounded-[10px]
-                                               text-[15px] font-bold bg-[#D4A843] text-[#0F2035] no-underline
-                                               hover:bg-[#e8c760] transition-colors
-                                               shadow-[0_4px_16px_rgba(212,168,67,0.2)]"
+                                               text-[15px] font-bold bg-[#1E3A5F] text-white no-underline
+                                               hover:bg-[#2a5280] transition-colors
+                                               shadow-[0_4px_16px_rgba(30,58,95,0.2)]"
                                 >
-                                    Quiero visitar este domingo
+                                    <Navigation size={18} /> Cómo llegar
                                 </a>
                             )}
                             <div className="mt-4 pt-4 border-t border-[#E8E4DC] text-center">

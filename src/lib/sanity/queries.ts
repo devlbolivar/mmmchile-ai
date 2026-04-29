@@ -150,7 +150,9 @@ export const GET_ALL_CHURCHES_QUERY = defineQuery(`
       whatsapp,
       extraEmail,
       image,
-      pastorName
+      pastorName,
+      serviceSchedule,
+      photos
 }
 `);
 
