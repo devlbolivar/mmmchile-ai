@@ -88,7 +88,7 @@ export default function OracionPage() {
                     No Estás Solo.<br />Estamos Orando por Ti.
                 </h1>
                 <p className="text-[clamp(15px,2vw,17px)] text-muted max-w-[480px] mx-auto leading-relaxed relative z-10">
-                    Comparte tu necesidad y nuestro equipo de intercesión orará por ti esta semana.
+                    Comparte tu necesidad y nuestro equipo de intercesión orará por ti.
                 </p>
                 <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 relative z-10">
                     <Link href="#formulario" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-accent text-primary-dark text-[15px] font-extrabold shadow-[0_4px_16px_rgba(212,168,67,0.3)] hover:bg-accent-light hover:-translate-y-0.5 transition-all duration-200">
@@ -145,15 +145,6 @@ export default function OracionPage() {
                     </aside>
                 </main>
             </div>
-
-            {/* FAB MOBILE — ancla al formulario */}
-            <Link
-                href="#formulario"
-                className="fixed bottom-6 left-5 z-50 lg:hidden inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-accent text-primary-dark text-[14px] font-extrabold shadow-[0_4px_24px_rgba(212,168,67,0.45)] hover:bg-accent-light active:scale-95 transition-all duration-200"
-                aria-label="Ir al formulario de petición de oración"
-            >
-                🙏 Pide oración
-            </Link>
 
             {/* BOTTOM CTA */}
             <section className="py-12 px-6 text-center relative bg-gradient-to-br from-accent-pale to-[#F0DDB8] overflow-hidden mt-auto" aria-label="Invitación a conocer a Jesús">
