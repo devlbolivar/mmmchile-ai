@@ -155,16 +155,26 @@ export default function RadioSchedule() {
         }
     }, [activeTab, currentDayGroup]);
 
-    // Auto-scroll to now playing
+    // Scroll within the list container only — never moves the page
+    const scrollToNow = () => {
+        if (!scrollRef.current || nowIndex < 0) return;
+        const rows = scrollRef.current.querySelectorAll("[data-row]");
+        const row = rows[nowIndex] as HTMLElement | undefined;
+        if (!row) return;
+        const container = scrollRef.current;
+        container.scrollTo({
+            top: row.offsetTop - container.clientHeight / 2 + row.offsetHeight / 2,
+            behavior: "smooth",
+        });
+    };
+
+    // On tab change, if the now-playing program is visible, center it in the list
     useEffect(() => {
-        if (nowIndex > 0 && scrollRef.current) {
-            const rows = scrollRef.current.querySelectorAll("[data-row]");
-            if (rows[nowIndex]) {
-                setTimeout(() => {
-                    rows[nowIndex].scrollIntoView({ behavior: "smooth", block: "center" });
-                }, 500);
-            }
+        if (nowIndex > 0) {
+            setTimeout(scrollToNow, 150);
         }
+        // scrollToNow is stable — safe to omit from deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nowIndex, activeTab]);
 
     const tabs = Object.entries(schedule) as [keyof typeof schedule, DaySchedule][];
@@ -210,6 +220,42 @@ export default function RadioSchedule() {
                         Lo que suena en RBC
                     </h2>
                 </div>
+
+                {/* ── Now Playing Banner ── */}
+                {nowIndex >= 0 && activeTab === currentDayGroup && (
+                    <div
+                        className="flex items-center justify-between gap-3 mb-[20px] px-[16px] py-[13px] rounded-[14px] border"
+                        style={{
+                            background: "rgba(212,168,67,0.06)",
+                            borderColor: "rgba(212,168,67,0.18)",
+                        }}
+                    >
+                        <div className="flex items-center gap-[10px] min-w-0">
+                            <span
+                                className="w-[8px] h-[8px] rounded-full flex-shrink-0 bg-[#D4A843] shadow-[0_0_10px_rgba(212,168,67,0.5)]"
+                                style={{ animation: "nowPulse 2s ease-in-out infinite" }}
+                            />
+                            <div className="min-w-0">
+                                <span className="block text-[10px] font-mono tracking-[2px] uppercase text-[#D4A843]/60 leading-none mb-[4px]">
+                                    Ahora
+                                </span>
+                                <span className="block text-[14px] font-serif text-[#F8F6F0] leading-tight truncate">
+                                    {activeData.programs[nowIndex].name}
+                                </span>
+                            </div>
+                        </div>
+                        <button
+                            onClick={scrollToNow}
+                            className="flex-shrink-0 flex items-center gap-[6px] text-[11px] font-mono tracking-[1px] text-[#D4A843]/70 hover:text-[#D4A843] transition-colors duration-200 cursor-pointer bg-transparent border-none px-0 py-0"
+                            aria-label="Ver programa actual en la lista"
+                        >
+                            Ver
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M12 5v14M5 12l7 7 7-7" />
+                            </svg>
+                        </button>
+                    </div>
+                )}
 
                 {/* ── Tab Selector ── */}
                 <div
