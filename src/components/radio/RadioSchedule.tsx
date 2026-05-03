@@ -222,7 +222,7 @@ export default function RadioSchedule() {
                 </div>
 
                 {/* ── Now Playing Banner ── */}
-                {nowIndex >= 0 && activeTab === currentDayGroup && (
+                {nowIndex >= 0 && nowIndex < activeData.programs.length && activeTab === currentDayGroup && (
                     <div
                         className="flex items-center justify-between gap-3 mb-[20px] px-[16px] py-[13px] rounded-[14px] border"
                         style={{
