@@ -888,17 +888,25 @@ export function getNextService(
 
     const dayOrder = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const now = new Date();
-    const todayIdx = now.getDay(); // 0=Sunday
+    const todayIdx = now.getDay();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    let best: { day: string; time: string } | undefined;
+    let bestDelta = Infinity;
 
     for (const s of services) {
         const sIdx = dayOrder.indexOf(s.day);
-        if (sIdx > todayIdx) return s;
-        if (sIdx === todayIdx) {
-            const [h, m] = s.time.split(':').map(Number);
-            if (h * 60 + m > currentMinutes) return s;
+        if (sIdx === -1) continue;
+        const [h, m] = s.time.split(':').map(Number);
+        const serviceWeekMinutes = sIdx * 24 * 60 + h * 60 + m;
+        const nowWeekMinutes = todayIdx * 24 * 60 + currentMinutes;
+        let delta = serviceWeekMinutes - nowWeekMinutes;
+        if (delta <= 0) delta += 7 * 24 * 60;
+        if (delta < bestDelta) {
+            bestDelta = delta;
+            best = s;
         }
     }
 
-    return services[0]; // wrap around to first
+    return best;
 }
