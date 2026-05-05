@@ -26,12 +26,15 @@ Sitio web del **Movimiento Misionero Mundial en Chile** ([mmmchile.cl](https://m
 | `/blog` | Motor SEO, artículos evangelísticos (Sanity) |
 | `/blog/[slug]` | Artículo individual |
 | `/iglesias` | Mapa interactivo + fichas por iglesia |
-| `/oracion` | Peticiones de oración + muro público |
+| `/oracion` | Peticiones de oración + muro público (Supabase) |
 | `/testimonios` | Historias de vida transformada |
 | `/en-vivo` | Transmisión en vivo de cultos |
 | `/radio` | Radio online |
+| `/conectate` | Página de conexión / membresía |
 | `/contacto` | Formulario de contacto |
 | `/doctrina` | Declaración de fe |
+| `/privacidad` | Política de privacidad |
+| `/terminos` | Términos y condiciones |
 | `/studio` | Sanity Studio (admin CMS) |
 
 ## Principio del Embudo
@@ -115,19 +118,42 @@ npm run lint     # Linting con ESLint
 ```
 src/
 ├── app/                  # App Router — rutas y pages
-│   ├── api/              # API routes
+│   ├── api/              # API routes (og images)
 │   ├── blog/             # Blog (Sanity)
 │   ├── conoce-a-jesus/
+│   ├── conectate/
+│   ├── contacto/
+│   ├── doctrina/
+│   ├── en-vivo/
 │   ├── iglesias/
 │   ├── oracion/
-│   ├── testimonios/
-│   ├── en-vivo/
+│   ├── privacidad/
 │   ├── radio/
 │   ├── studio/           # Sanity Studio embebido
-│   └── ...
+│   ├── terminos/
+│   └── testimonios/
 ├── components/           # Componentes reutilizables
-├── lib/                  # Clientes (Sanity, Supabase, Resend)
-└── types/                # Tipos TypeScript
+│   ├── blog/
+│   ├── church/
+│   ├── contact/
+│   ├── doctrine/
+│   ├── gospel/
+│   ├── home/
+│   ├── layout/
+│   ├── live/
+│   ├── prayer/
+│   ├── radio/
+│   ├── shared/
+│   └── testimony/
+├── lib/                  # Clientes y utilidades
+│   ├── data/
+│   ├── sanity/
+│   ├── supabase.ts
+│   ├── resend.ts
+│   ├── turnstile.ts
+│   └── utils/
+└── sanity/
+    └── schemaTypes/      # Schemas de Sanity
 docs/
 └── designs/              # Artifacts de diseño de referencia (.jsx + screenshots)
 supabase/
