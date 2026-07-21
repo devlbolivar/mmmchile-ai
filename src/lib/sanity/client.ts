@@ -20,7 +20,7 @@ export async function sanityFetch<QueryResponse>({
     
     return client.fetch<QueryResponse>(query, params, {
         next: {
-            revalidate: isDevelopment ? 0 : 3600, // No cache in dev, 1 hour in production
+            revalidate: isDevelopment ? 0 : 60, // No cache in dev, 1 minute in production
             tags,
         },
     });
