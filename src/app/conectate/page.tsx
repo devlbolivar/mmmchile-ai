@@ -46,7 +46,7 @@ const DATA: Section[] = [
         featured: true,
       },
       {
-        title: 'Radio MMM Chile',
+        title: 'Radio Bethel Chile',
         handle: 'Escucha en vivo',
         url: 'https://mmmchile.cl/radio',
         icon: 'radio',
