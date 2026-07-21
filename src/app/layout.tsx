@@ -40,6 +40,13 @@ export const metadata: Metadata = {
   },
 };
 
+// Vercel sets VERCEL_ENV to "production" | "preview" | "development" on every
+// deploy; preview deploys and local dev share the same NEXT_PUBLIC_GA_MEASUREMENT_ID,
+// so without this check they'd fire real events into the production GA4 property.
+const isProductionDeploy = process.env.VERCEL_ENV
+  ? process.env.VERCEL_ENV === "production"
+  : process.env.NODE_ENV === "production";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -72,7 +79,7 @@ export default function RootLayout({
             {children}
           </ConditionalLayout>
         </RadioProviderWrapper>
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+        {isProductionDeploy && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
         )}
       </body>

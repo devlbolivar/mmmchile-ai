@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
 
 const HeartIcon = () => (
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -26,9 +29,9 @@ const ArrowRight = ({ size = 16 }) => (
 
 export default function IntentRouter() {
     const cards = [
-        { icon: <HeartIcon />, title: "Paz interior", desc: "Descubre cómo encontrar verdadera paz en medio del ruido y las preocupaciones", link: "/conoce-a-jesus" },
-        { icon: <PeopleIcon />, title: "Comunidad", desc: "Encuentra una familia de fe cerca de ti donde pertenecer y crecer", link: "/iglesias" },
-        { icon: <PrayIcon />, title: "Necesito oración", desc: "Comparte tu necesidad — hay personas reales que orarán por ti", link: "/oracion" },
+        { icon: <HeartIcon />, title: "Paz interior", desc: "Descubre cómo encontrar verdadera paz en medio del ruido y las preocupaciones", link: "/conoce-a-jesus", intent: "paz_interior" },
+        { icon: <PeopleIcon />, title: "Comunidad", desc: "Encuentra una familia de fe cerca de ti donde pertenecer y crecer", link: "/iglesias", intent: "comunidad" },
+        { icon: <PrayIcon />, title: "Necesito oración", desc: "Comparte tu necesidad — hay personas reales que orarán por ti", link: "/oracion", intent: "oracion" },
     ];
 
     return (
@@ -45,7 +48,12 @@ export default function IntentRouter() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {cards.map((card, i) => (
-                        <Link href={card.link} key={i} className="group block">
+                        <Link
+                            href={card.link}
+                            key={i}
+                            className="group block"
+                            onClick={() => trackEvent('click_intent_router', { intent: card.intent, destination: card.link })}
+                        >
                             <div className="bg-white rounded-[16px] p-9 border-2 border-[#E8E4DC] h-full transition-all duration-300 ease-in-out relative overflow-hidden hover:-translate-y-2 hover:shadow-[0_12px_40px_rgba(30,58,95,0.15)] hover:border-[#D4A843]">
                                 {/* Top Border Indicator */}
                                 <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#D4A843] scale-x-0 origin-left transition-transform duration-350 group-hover:scale-x-100" />

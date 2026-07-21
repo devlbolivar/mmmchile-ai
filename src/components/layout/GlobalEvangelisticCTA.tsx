@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
 
 export default function GlobalEvangelisticCTA() {
     return (
@@ -16,9 +17,10 @@ export default function GlobalEvangelisticCTA() {
                     </p>
                 </div>
                 <div className="shrink-0 w-full sm:w-auto">
-                    <Link 
-                        href="/conoce-a-jesus" 
+                    <Link
+                        href="/conoce-a-jesus"
                         className="flex items-center justify-center gap-2 bg-[#D4A843] text-[#0F2035] px-8 py-3.5 rounded-lg font-bold font-sans text-[15px] transition-all shadow-[0_4px_16px_rgba(212,168,67,0.2)] hover:bg-[#E8C976] hover:-translate-y-0.5 hover:shadow-[0_6px_24px_rgba(212,168,67,0.3)] w-full"
+                        onClick={() => trackEvent('click_global_evangelistic_cta')}
                     >
                         Conocer a Jesús
                     </Link>
