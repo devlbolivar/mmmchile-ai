@@ -15,8 +15,8 @@ export default function ImageGallery({ images }: { images: RetreatImage[] }) {
                     <Image
                         src={image.src}
                         alt={image.alt}
-                        width={1600}
-                        height={900}
+                        width={image.width}
+                        height={image.height}
                         className="w-full h-auto"
                     />
                 </a>
