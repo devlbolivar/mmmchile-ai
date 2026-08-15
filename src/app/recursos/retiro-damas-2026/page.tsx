@@ -23,14 +23,14 @@ export const metadata: Metadata = {
 export default function RetiroDamasRecursosPage() {
     return (
         <div className="min-h-screen bg-[#F8F6F0] pb-16">
-            <div className="w-full overflow-hidden bg-[#0F2035] flex justify-center px-6 py-8">
+            <div className="relative w-full aspect-[2.1/1] overflow-hidden bg-[#0F2035]">
                 <Image
                     src="/lema-retiro-2026.png"
                     alt={`Lema del retiro: ${retiroDamasInfo.lema}`}
-                    width={900}
-                    height={1111}
+                    fill
                     priority
-                    className="w-full max-w-sm h-auto"
+                    sizes="100vw"
+                    className="object-cover object-[center_46%]"
                 />
             </div>
 
