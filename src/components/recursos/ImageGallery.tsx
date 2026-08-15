@@ -3,17 +3,23 @@ import type { RetreatImage } from '@/lib/data/retiro-damas-2026'
 
 export default function ImageGallery({ images }: { images: RetreatImage[] }) {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-6">
             {images.map((image) => (
-                <div key={image.id} className="overflow-hidden rounded-xl border border-[#1E3A5F]/10 bg-white shadow-sm">
+                <a
+                    key={image.id}
+                    href={image.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block overflow-hidden rounded-xl border border-[#1E3A5F]/10 bg-white shadow-sm"
+                >
                     <Image
                         src={image.src}
                         alt={image.alt}
-                        width={800}
-                        height={800}
+                        width={1600}
+                        height={900}
                         className="w-full h-auto"
                     />
-                </div>
+                </a>
             ))}
         </div>
     )
