@@ -3,12 +3,12 @@ import Image from 'next/image'
 import { HeartHandshake } from 'lucide-react'
 import Breadcrumb from '@/components/shared/Breadcrumb'
 import CTAButton from '@/components/shared/CTAButton'
-import ResourceCard from '@/components/recursos/ResourceCard'
-import { retiroDamasInfo, retiroDamasResources } from '@/lib/data/retiro-damas-2026'
+import ImageGallery from '@/components/recursos/ImageGallery'
+import { retiroDamasInfo, retiroDamasImages } from '@/lib/data/retiro-damas-2026'
 
 export const metadata: Metadata = {
     title: 'Recursos del Retiro de Damas 2026 | MMM Chile',
-    description: `Materiales y recursos del retiro "${retiroDamasInfo.lema}": guías de estudio, prédicas, cancionero y más.`,
+    description: `Fotos y material gráfico del retiro "${retiroDamasInfo.lema}".`,
     alternates: {
         canonical: `https://mmmchile.cl/recursos/${retiroDamasInfo.slug}`,
     },
@@ -48,15 +48,10 @@ export default function RetiroDamasRecursosPage() {
                     Recursos del Retiro de Damas
                 </h1>
                 <p className="text-[#6B7280] text-lg mb-10 max-w-2xl">
-                    Aquí encontrarás los materiales usados durante &ldquo;{retiroDamasInfo.lema}&rdquo;
-                    para que puedas seguir edificándote en casa.
+                    Fotos y material gráfico de &ldquo;{retiroDamasInfo.lema}&rdquo;.
                 </p>
 
-                <div className="space-y-4">
-                    {retiroDamasResources.map((resource) => (
-                        <ResourceCard key={resource.id} resource={resource} />
-                    ))}
-                </div>
+                <ImageGallery images={retiroDamasImages} />
 
                 <section className="mt-16 pt-10 border-t border-[#1E3A5F]/10 text-center">
                     <h2 className="font-serif text-2xl text-[#1E3A5F] mb-4">
