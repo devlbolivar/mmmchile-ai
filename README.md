@@ -33,6 +33,7 @@ Sitio web del **Movimiento Misionero Mundial en Chile** ([mmmchile.cl](https://m
 | `/conectate` | Página de conexión / membresía |
 | `/contacto` | Formulario de contacto |
 | `/doctrina` | Declaración de fe |
+| `/recursos/retiro-damas-2026` | Materiales del Retiro de Damas 2026 (acceso vía QR) |
 | `/privacidad` | Política de privacidad |
 | `/terminos` | Términos y condiciones |
 | `/studio` | Sanity Studio (admin CMS) |
