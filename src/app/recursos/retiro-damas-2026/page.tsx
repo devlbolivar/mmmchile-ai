@@ -16,21 +16,21 @@ export const metadata: Metadata = {
         title: 'Recursos del Retiro de Damas 2026',
         description: retiroDamasInfo.lema,
         url: `https://mmmchile.cl/recursos/${retiroDamasInfo.slug}`,
-        images: ['/lema.png'],
+        images: ['/lema-retiro-2026.png'],
     },
 }
 
 export default function RetiroDamasRecursosPage() {
     return (
         <div className="min-h-screen bg-[#F8F6F0] pb-16">
-            <div className="relative w-full overflow-hidden bg-[#0F2035]">
+            <div className="relative w-full aspect-[2.1/1] overflow-hidden bg-[#0F2035]">
                 <Image
-                    src="/lema.png"
+                    src="/lema-retiro-2026.png"
                     alt={`Lema del retiro: ${retiroDamasInfo.lema}`}
-                    width={1024}
-                    height={476}
+                    fill
                     priority
-                    className="w-full h-auto"
+                    sizes="100vw"
+                    className="object-cover object-[center_46%]"
                 />
             </div>
 
