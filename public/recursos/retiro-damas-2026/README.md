@@ -1,8 +1,6 @@
-Coloca aquí los archivos reales del retiro (PDFs, audios, etc.) y actualiza
-`fileUrl` en `src/lib/data/retiro-damas-2026.ts` para cada recurso, por ejemplo:
+Coloca aquí las imágenes del retiro y agrégalas a `retiroDamasImages` en
+`src/lib/data/retiro-damas-2026.ts`, por ejemplo:
 
 ```ts
-fileUrl: '/recursos/retiro-damas-2026/guia-estudio.pdf'
+{ id: 'foto-1', src: '/recursos/retiro-damas-2026/foto-1.jpg', alt: 'Descripción de la foto' }
 ```
-
-Mientras un recurso no tenga `fileUrl`, la página lo muestra como "Próximamente".

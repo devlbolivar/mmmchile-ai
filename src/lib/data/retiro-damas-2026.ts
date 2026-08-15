@@ -1,10 +1,8 @@
-export interface RetreatResource {
+export interface RetreatImage {
   id: string
-  title: string
-  description: string
-  type: 'pdf' | 'audio' | 'video' | 'image'
-  /** Ruta relativa dentro de /public/recursos/retiro-damas-2026/. Vacío = aún no cargado. */
-  fileUrl?: string
+  /** Ruta relativa dentro de /public/recursos/retiro-damas-2026/ */
+  src: string
+  alt: string
 }
 
 export const retiroDamasInfo = {
@@ -15,30 +13,10 @@ export const retiroDamasInfo = {
   organiza: 'Ministerio de Familia — MMM · Retiro Chile Damas',
 }
 
-export const retiroDamasResources: RetreatResource[] = [
+export const retiroDamasImages: RetreatImage[] = [
   {
-    id: 'guia-estudio',
-    title: 'Guía de estudio del retiro',
-    description: 'Material de apoyo con las bases bíblicas trabajadas en cada sesión.',
-    type: 'pdf',
-  },
-  {
-    id: 'predicas-audio',
-    title: 'Prédicas en audio',
-    description: 'Grabaciones de las enseñanzas compartidas durante el retiro.',
-    type: 'audio',
-  },
-  {
-    id: 'cancionero',
-    title: 'Cancionero de alabanza',
-    description: 'Letras de los cánticos usados en los tiempos de adoración.',
-    type: 'pdf',
-  },
-  {
-    id: 'material-grafico',
-    title: 'Material gráfico del retiro',
-    description: 'Logo y lema oficial para compartir en redes sociales.',
-    type: 'image',
-    fileUrl: '/lema.png',
+    id: 'lema',
+    src: '/lema.png',
+    alt: 'Lema del Retiro de Damas 2026: Mujeres Sanadas para Edificar Desde el Corazón',
   },
 ]
