@@ -44,7 +44,7 @@ export function RadioProvider({ children }: { children: ReactNode }) {
     const [isMinimized, setIsMinimized] = useState(false);
 
     const streamUrl =
-        process.env.NEXT_PUBLIC_RADIO_STREAM_URL ?? 'https://radio.mmmchile.cl/stream';
+        process.env.NEXT_PUBLIC_RADIO_STREAM_URL ?? 'https://s48.radiolize.com/radio/8000/radio.mp3';
 
     const play = useCallback(() => {
         if (!audioRef.current) return;
