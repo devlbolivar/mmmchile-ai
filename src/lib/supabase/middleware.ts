@@ -57,7 +57,7 @@ export async function updateSession(request: NextRequest) {
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("approved")
+      .select("approved, role")
       .eq("id", user.id)
       .single();
 
@@ -70,6 +70,10 @@ export async function updateSession(request: NextRequest) {
     }
 
     if (isPendingRoute) {
+      return NextResponse.redirect(new URL("/visitas", request.url));
+    }
+
+    if (pathname.startsWith("/visitas/admin") && profile?.role !== "admin") {
       return NextResponse.redirect(new URL("/visitas", request.url));
     }
   }
