@@ -1,5 +1,7 @@
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { createSessionClient } from "@/lib/supabase/server";
+import { getVisitasSession } from "@/lib/supabase/visitas-session";
 import { HouseholdForm } from "@/components/admin/HouseholdForm";
 
 export const metadata: Metadata = {
@@ -8,6 +10,11 @@ export const metadata: Metadata = {
 };
 
 export default async function NuevaFamiliaPage() {
+    const { profile } = await getVisitasSession();
+    if (profile?.role !== "admin") {
+        redirect("/visitas");
+    }
+
     const supabase = await createSessionClient();
     const { data: teamMembers } = await supabase
         .from("profiles")

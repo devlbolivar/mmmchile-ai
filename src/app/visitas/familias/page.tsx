@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { createSessionClient } from "@/lib/supabase/server";
+import { getVisitasSession } from "@/lib/supabase/visitas-session";
 import type { Category } from "@/app/visitas/familias/actions";
 
 export const metadata: Metadata = {
@@ -24,6 +26,11 @@ type HouseholdListRow = {
 };
 
 export default async function VisitasFamiliasPage() {
+    const { profile } = await getVisitasSession();
+    if (profile?.role !== "admin") {
+        redirect("/visitas");
+    }
+
     const supabase = await createSessionClient();
 
     const { data: households } = await supabase
@@ -59,6 +66,7 @@ export default async function VisitasFamiliasPage() {
                                     <th className="px-4 py-3">Comuna</th>
                                     <th className="px-4 py-3">Asignado a</th>
                                     <th className="px-4 py-3">Visitas</th>
+                                    <th className="px-4 py-3" />
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,7 +74,7 @@ export default async function VisitasFamiliasPage() {
                                     <tr key={h.id} className="border-t border-border hover:bg-warm-bg">
                                         <td className="px-4 py-3">
                                             <Link
-                                                href={`/visitas/familias/${h.id}/editar`}
+                                                href={`/visitas/familias/${h.id}`}
                                                 className="font-medium text-primary hover:underline"
                                             >
                                                 {h.label}
@@ -81,6 +89,14 @@ export default async function VisitasFamiliasPage() {
                                         </td>
                                         <td className="px-4 py-3 text-gray-700">
                                             {h.visits?.[0]?.count ?? 0}
+                                        </td>
+                                        <td className="px-4 py-3 text-right">
+                                            <Link
+                                                href={`/visitas/familias/${h.id}/editar`}
+                                                className="text-sm text-muted hover:text-primary hover:underline"
+                                            >
+                                                Editar
+                                            </Link>
                                         </td>
                                     </tr>
                                 ))}

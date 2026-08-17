@@ -1,6 +1,7 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createSessionClient } from "@/lib/supabase/server";
+import { getVisitasSession } from "@/lib/supabase/visitas-session";
 import { HouseholdForm } from "@/components/admin/HouseholdForm";
 
 export const metadata: Metadata = {
@@ -14,6 +15,12 @@ export default async function EditarFamiliaPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
+
+    const { profile } = await getVisitasSession();
+    if (profile?.role !== "admin") {
+        redirect("/visitas");
+    }
+
     const supabase = await createSessionClient();
 
     const [{ data: household }, { data: members }, { data: teamMembers }] = await Promise.all([

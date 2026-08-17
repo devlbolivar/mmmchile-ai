@@ -73,8 +73,15 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(new URL("/visitas", request.url));
     }
 
-    const isAdminOnlyRoute =
-      pathname.startsWith("/visitas/admin") || pathname.startsWith("/visitas/familias");
+    // /visitas/familias/[id] (the detail + visit log page) is shared with
+    // team_members for their assigned households, scoped by RLS. Only the
+    // list, create, and edit screens are admin-only.
+    const isFamiliasAdminOnly =
+      pathname === "/visitas/familias" ||
+      pathname === "/visitas/familias/nueva" ||
+      /^\/visitas\/familias\/[^/]+\/editar$/.test(pathname);
+
+    const isAdminOnlyRoute = pathname.startsWith("/visitas/admin") || isFamiliasAdminOnly;
 
     if (isAdminOnlyRoute && profile?.role !== "admin") {
       return NextResponse.redirect(new URL("/visitas", request.url));
