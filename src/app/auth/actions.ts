@@ -12,12 +12,12 @@ export async function signInWithGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${siteUrl}/auth/callback`,
+      redirectTo: `${siteUrl}/auth/callback?next=/visitas`,
     },
   });
 
   if (error || !data.url) {
-    redirect("/admin/login?error=auth");
+    redirect("/visitas/login?error=auth");
   }
 
   redirect(data.url);

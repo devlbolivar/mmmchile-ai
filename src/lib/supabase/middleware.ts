@@ -41,5 +41,38 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL("/admin/oraciones", request.url));
   }
 
+  if (pathname.startsWith("/visitas")) {
+    const isLoginRoute = pathname === "/visitas/login";
+    const isPendingRoute = pathname === "/visitas/pending";
+
+    if (!user) {
+      return isLoginRoute
+        ? response
+        : NextResponse.redirect(new URL("/visitas/login", request.url));
+    }
+
+    if (isLoginRoute) {
+      return NextResponse.redirect(new URL("/visitas", request.url));
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("approved")
+      .eq("id", user.id)
+      .single();
+
+    const approved = profile?.approved ?? false;
+
+    if (!approved) {
+      return isPendingRoute
+        ? response
+        : NextResponse.redirect(new URL("/visitas/pending", request.url));
+    }
+
+    if (isPendingRoute) {
+      return NextResponse.redirect(new URL("/visitas", request.url));
+    }
+  }
+
   return response;
 }

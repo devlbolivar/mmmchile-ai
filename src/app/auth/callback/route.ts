@@ -16,5 +16,5 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/admin/login?error=auth`);
+  return NextResponse.redirect(`${origin}/visitas/login?error=auth`);
 }
