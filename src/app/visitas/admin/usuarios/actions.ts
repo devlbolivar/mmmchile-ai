@@ -2,17 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { createSessionClient } from "@/lib/supabase/server";
-import { getVisitasSession } from "@/lib/supabase/visitas-session";
+import { requireAdmin } from "@/lib/supabase/require-admin";
 
 type Role = "admin" | "team_member";
-
-async function requireAdmin() {
-    const { profile } = await getVisitasSession();
-    if (profile?.role !== "admin") {
-        return { success: false as const, error: "No autorizado." };
-    }
-    return null;
-}
 
 export async function approveUser(userId: string, role: Role) {
     const authError = await requireAdmin();

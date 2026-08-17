@@ -73,7 +73,10 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(new URL("/visitas", request.url));
     }
 
-    if (pathname.startsWith("/visitas/admin") && profile?.role !== "admin") {
+    const isAdminOnlyRoute =
+      pathname.startsWith("/visitas/admin") || pathname.startsWith("/visitas/familias");
+
+    if (isAdminOnlyRoute && profile?.role !== "admin") {
       return NextResponse.redirect(new URL("/visitas", request.url));
     }
   }
