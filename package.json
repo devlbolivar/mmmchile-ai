@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:seguimiento": "node --test tests/seguimiento-roles.test.mjs"
+    "test:seguimiento": "node --test tests/seguimiento-*.test.mjs"
   },
   "dependencies": {
     "@marsidev/react-turnstile": "^1.4.2",
