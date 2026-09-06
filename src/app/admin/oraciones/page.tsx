@@ -1,3 +1,4 @@
+import { requirePrayerAdmin } from "@/lib/supabase/prayer-admin";
 import { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/supabase";
 import { PendingPrayerList } from "@/components/admin/PendingPrayerList";
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminOracionesPage() {
+    await requirePrayerAdmin();
     const { data: prayers, error } = await supabaseAdmin
         .from("prayer_requests")
         .select("id, name, is_anonymous, request, contact, created_at")

@@ -168,3 +168,7 @@ Los diseños están en `docs/designs/` como artifacts React (`.jsx`) y screensho
 ## Despliegue
 
 El proyecto se despliega automáticamente en **Vercel** desde la rama `main`.
+
+## Seguimiento de nuevas vidas
+
+Integración preparada en `/seguimiento`: acceso por correo y contraseña, roles de supervisor y visitador, fichas, asignaciones, historial e invitaciones. Ver [activación y alcance](docs/seguimiento-activation.md) antes de desplegar. La migración remota está pendiente de aprobación; no mezclar esta rama antes de completar el permiso del moderador existente.

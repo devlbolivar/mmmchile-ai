@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Karla, JetBrains_Mono } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import ConditionalAnalytics from "@/components/layout/ConditionalAnalytics";
 import "./globals.css";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import RadioProviderWrapper from "@/components/radio/RadioProviderWrapper";
@@ -80,7 +80,7 @@ export default function RootLayout({
           </ConditionalLayout>
         </RadioProviderWrapper>
         {isProductionDeploy && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+          <ConditionalAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
         )}
       </body>
     </html>
