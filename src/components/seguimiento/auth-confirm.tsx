@@ -1,4 +1,5 @@
 'use client';
+import BusyLabel from './busy-label';
 import {useEffect,useRef,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {createBrowserSupabaseClient} from '@/lib/supabase/browser';
@@ -21,5 +22,5 @@ export default function FollowupAuthConfirm(){
  }catch{setError('El enlace venció o ya fue utilizado. Solicita uno nuevo.');}}
  void confirm();
  },[router]);
- return <main className="mx-auto max-w-lg px-6 py-24"><h1 className="text-2xl font-bold text-primary">Confirmando tu acceso</h1>{error?<><ErrorNotice message={error}/><a className={secondary} href="/seguimiento/login">Volver al acceso</a></>:<p className="mt-4 text-slate-500">Un momento, estamos verificando el enlace…</p>}</main>;
+ return <main className="mx-auto max-w-lg px-6 py-24"><h1 className="text-2xl font-bold text-primary">Confirmando tu acceso</h1>{error?<><ErrorNotice message={error}/><a className={secondary} href="/seguimiento/login">Volver al acceso</a></>:<div className="mt-4 text-slate-500"><BusyLabel>Verificando el enlace…</BusyLabel></div>}</main>;
 }
