@@ -1,7 +1,7 @@
 import { z } from 'zod';
 export const kinds = ['Nuevo creyente', 'Acompañamiento'] as const;
 // Preserve stored values while showing clearer language in the interface.
-export const kindLabel = (kind: string) => kind === 'Acompañamiento' ? 'Hermano/a por visitar' : kind;
+export const kindLabel = (kind: string) => kind === 'Acompañamiento' ? 'Creyente' : kind;
 export function localPhone(value: string) {
  const compact=value.trim().replace(/[\s()-]/g,'');
  return /^(?:\+56|56)\d{9}$/.test(compact)?compact.slice(-9):compact;

@@ -21,7 +21,7 @@ test('Chilean phone round trip preserves number and does not duplicate prefix',(
  for(const value of ['+56','123','9819166580','+58981916658','98191665a'])assert.equal(phoneSchema.safeParse(value).success,false);
 });
 test('legacy stored reason has new label',()=>{
- assert.equal(kindLabel('Acompañamiento'),'Hermano/a por visitar');
+ assert.equal(kindLabel('Acompañamiento'),'Creyente');
  assert.equal(kindLabel('Nuevo creyente'),'Nuevo creyente');
 });
 test('invitation errors distinguish actionable causes without leaking raw messages',()=>{
