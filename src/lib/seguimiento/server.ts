@@ -20,7 +20,7 @@ export async function followupSession(){
  if(error||!user)throw new FollowupError('Inicia sesión para continuar.',401);
  const {error:inviteError}=await db.rpc('ac_accept_invitation');
  if(inviteError)throw new FollowupError('No se pudo verificar tu acceso. Inténtalo de nuevo.',503);
- const {data:member,error:memberError}=await db.from('ac_members').select('id,name,email,role,active').eq('id',user.id).maybeSingle();
+ const {data:member,error:memberError}=await db.from('ac_members').select('id,name,email,role,active,visit_category').eq('id',user.id).maybeSingle();
  if(memberError)throw new FollowupError('No se pudo verificar tu acceso. Inténtalo de nuevo.',503);
  if(!member?.active)throw new FollowupError('Tu cuenta no tiene acceso activo al seguimiento. Contacta al supervisor.',403);
  return {db,user,member:member as Member};
