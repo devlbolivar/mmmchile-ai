@@ -1,23 +1,13 @@
 "use server";
 
+import { requirePrayerAdmin } from "@/lib/supabase/prayer-admin";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createSessionClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
-async function requireAdminSession() {
-  const supabase = await createSessionClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/admin/login");
-  }
-}
-
 export async function approvePrayer(id: string) {
-  await requireAdminSession();
+  await requirePrayerAdmin();
 
   const { error } = await supabaseAdmin
     .from("prayer_requests")
@@ -34,7 +24,7 @@ export async function approvePrayer(id: string) {
 }
 
 export async function rejectPrayer(id: string) {
-  await requireAdminSession();
+  await requirePrayerAdmin();
 
   const { error } = await supabaseAdmin
     .from("prayer_requests")
