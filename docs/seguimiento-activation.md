@@ -33,7 +33,11 @@ Esta integración vive en el Next.js existente y reutiliza sus clientes de Supab
 8. Revisar los datos del prototipo D1 antes de migrarlos: conservar fechas y notas; mapear autoría y responsables a cuentas verificadas. No se ha hecho esa transferencia. Las tablas del proyecto anterior tampoco se leen desde esta integración.
 9. Integrar la rama mediante PR y verificar despliegue en Vercel. Confirmar rama productiva real: GitHub usa `master` como rama predeterminada, aunque el README anterior menciona `main`.
 
-`SEGUIMIENTO_APP_URL` es opcional para un origen distinto del dominio productivo. En preview, configurar ese origen explícitamente y autorizarlo en Supabase. No se confía en un `Host` recibido para construir enlaces de correo.
+`SEGUIMIENTO_APP_URL` es opcional fuera de preview. En `VERCEL_ENV=preview`, recuperación e invitaciones conservan el origen de la petición únicamente si coincide exactamente con `VERCEL_URL` o `VERCEL_BRANCH_URL`. Esto mantiene la cookie PKCE en el mismo dominio y evita volver accidentalmente a producción. No se aceptan hosts arbitrarios ni comodines.
+
+Antes de pedir un correo nuevo, agregar a Supabase la URL exacta del preview utilizado más `/seguimiento/auth/confirm`, sin query ni fragmento y sin eliminar las URLs existentes. Solicitar el correo y abrirlo en el mismo navegador/perfil, desde el mismo dominio del preview; no reutilizar correos anteriores. No cambiar las plantillas globales ni desactivar la protección de Vercel.
+
+Prueba de regresión del destino: `node --test tests/seguimiento-origin.test.mjs`.
 
 ## Flujo
 

@@ -2,7 +2,7 @@
 import {z} from 'zod';
 import {redirect} from 'next/navigation';
 import {createSessionClient} from '@/lib/supabase/server';
-import {followupOrigin} from '@/lib/seguimiento/server';
+import {followupOrigin,errorMessage} from '@/lib/seguimiento/server';
 export async function followupLogin(input:{email:string;password:string}){
  const p=z.object({email:z.email(),password:z.string().min(1).max(128)}).safeParse(input);if(!p.success)return {error:'Revisa tu correo y contraseña.'};
  const db=await createSessionClient();const {error}=await db.auth.signInWithPassword(p.data);
@@ -11,7 +11,8 @@ export async function followupLogin(input:{email:string;password:string}){
 }
 export async function followupRecover(email:string){
  if(!z.email().safeParse(email).success)return {error:'Ingresa un correo válido.'};const db=await createSessionClient();
- const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:followupOrigin()+'/seguimiento/auth/confirm'});
+ let origin:string;try{origin=await followupOrigin();}catch(error){return errorMessage(error);}
+ const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:origin+'/seguimiento/auth/confirm'});
  if(error)return {error:'No se pudo solicitar el correo. Espera unos minutos e inténtalo de nuevo.'};
  return {ok:true,message:'Si el correo está registrado, recibirás un enlace para definir una nueva contraseña.'};
 }

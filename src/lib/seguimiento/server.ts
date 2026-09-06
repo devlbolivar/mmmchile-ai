@@ -2,12 +2,12 @@ import 'server-only';
 import { createClient } from '@supabase/supabase-js';
 import { createSessionClient } from '@/lib/supabase/server';
 import type { Member } from './records';
+import { headers } from 'next/headers';
+import { resolveFollowupOrigin } from './origin';
 export class FollowupError extends Error {constructor(message:string,public status=400){super(message);}}
-export function followupOrigin(){
- const value=process.env.SEGUIMIENTO_APP_URL||'https://mmmchile.cl';
- const url=new URL(value);
- if(url.protocol!=='https:'&&url.hostname!=='localhost')throw new FollowupError('La configuración de acceso no es válida.',503);
- return url.origin;
+export async function followupOrigin(){
+ try { return resolveFollowupOrigin(process.env,(await headers()).get('origin')); }
+ catch { throw new FollowupError('Abre el acceso desde la URL de Vercel del preview o contacta al supervisor para revisar la configuración.',503); }
 }
 export function inviteClient(){
  const secret=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;

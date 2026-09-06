@@ -44,8 +44,9 @@ export async function inviteFollowupMember(input:unknown){
  try{const {db,member}=await followupSession();if(member.role!=='supervisor')throw new FollowupError('Solo el supervisor puede invitar integrantes.',403);
  const value=z.object({name:z.string().trim().min(2).max(120),email:z.email().max(254).transform(v=>v.toLowerCase()),role:z.enum(['supervisor','visitador'])}).safeParse(input);
  if(!value.success)throw new FollowupError('Revisa el nombre, correo y rol.');const p=value.data;const admin=inviteClient();
+ const origin=await followupOrigin();
  const {error}=await db.rpc('ac_prepare_invitation',{p_email:p.email,p_name:p.name,p_role:p.role});if(error)throw new FollowupError('No se pudo preparar el acceso. Comprueba si ya pertenece al equipo.');
- const {error:mailError}=await admin.auth.admin.inviteUserByEmail(p.email,{redirectTo:followupOrigin()+'/seguimiento/auth/confirm'});
+ const {error:mailError}=await admin.auth.admin.inviteUserByEmail(p.email,{redirectTo:origin+'/seguimiento/auth/confirm'});
  if(mailError)throw new FollowupError('El acceso quedó pendiente, pero no se pudo enviar el correo. Si ya tiene cuenta, puede iniciar sesión o recuperar su contraseña. Puedes cancelar este acceso desde Equipo.');
  return {ok:true};
  }catch(error){return errorMessage(error);}
