@@ -23,6 +23,7 @@ test('migration preserves legacy records and enforces classification through aut
  await rpc('ac_record_visit',[JSON.stringify({personId:legacy,date:'2026-01-01',visitor:'Supervisor',result:'Realizada',notes:'Historial conservado'})]);
  await db.exec('reset role');
  await migrate('20260906212656_classify_followup_assignments.sql');
+ await migrate('20260914143213_add_followup_group_leaders.sql');
  await as(supervisor);
  let row=(await db.query('select * from public.ac_people where id=$1',[legacy])).rows[0];
  assert.equal(row.age_group,null);assert.equal(row.sex,null);assert.equal(row.assigned_to,visitor);

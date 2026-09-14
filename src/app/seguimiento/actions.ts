@@ -2,7 +2,7 @@
 import {invitationError} from '@/lib/seguimiento/invitation-error';
 import {z} from 'zod';
 import type {SupabaseClient} from '@supabase/supabase-js';
-import {personSchema,visitSchema,visitCategories,type Person,type Visit,type DirectoryEntry} from '@/lib/seguimiento/records';
+import {personSchema,visitSchema,memberAccessSchema,type Person,type Visit,type DirectoryEntry} from '@/lib/seguimiento/records';
 import {followupSession,FollowupError,inviteClient,followupOrigin,errorMessage} from '@/lib/seguimiento/server';
 async function readAll<T>(db:SupabaseClient,table:'ac_people'|'ac_visits'){
  const rows:T[]=[];
@@ -26,7 +26,7 @@ export async function saveFollowupPerson(id:string|null,input:unknown){
  try{const {db}=await followupSession();const p=personSchema.safeParse(input);if(!p.success)throw new FollowupError(p.error.issues[0].message);
  if(id&&!z.uuid().safeParse(id).success)throw new FollowupError('Ficha inválida.');
  const {error}=await db.rpc('ac_save_person',{p_id:id,p_data:p.data});
- if(error)throw new FollowupError(error.message==='invalid_assignee'?'El responsable debe estar activo y pertenecer al grupo y sexo seleccionados. Solicita al supervisor revisar la asignación.':error.code==='42501'?'No tienes permiso para cambiar la ficha o su responsable.':'No se pudo guardar. Revisa los datos y el responsable.');return {ok:true};
+ if(error)throw new FollowupError(error.message==='classification_change_requires_supervisor'?'Solo el supervisor puede cambiar el grupo o sexo de una ficha.':error.message==='invalid_assignee'?'El responsable debe estar activo y pertenecer al grupo y sexo seleccionados. Solicita al supervisor revisar la asignación.':error.code==='42501'?'No tienes permiso para editar esta ficha o asignar este responsable.':'No se pudo guardar. Revisa los datos y el responsable.');return {ok:true};
  }catch(error){return errorMessage(error);}
 }
 export async function saveFollowupVisit(input:unknown){
@@ -37,16 +37,16 @@ export async function saveFollowupVisit(input:unknown){
 }
 export async function getFollowupTeam(){
  try{const {db,member}=await followupSession();if(member.role!=='supervisor')throw new FollowupError('Solo el supervisor puede gestionar el equipo.',403);
- const [m,i]=await Promise.all([db.from('ac_members').select('id,name,email,role,active,visit_category').order('name'),db.from('ac_invitations').select('email,name,role,visit_category').order('created_at',{ascending:false})]);
+ const [m,i]=await Promise.all([db.from('ac_members').select('id,name,email,role,active,visit_category,leadership_group').order('name'),db.from('ac_invitations').select('email,name,role,visit_category,leadership_group').order('created_at',{ascending:false})]);
  if(m.error||i.error)throw new FollowupError('No se pudo cargar el equipo.');return {members:m.data,invitations:i.data};
  }catch(error){return errorMessage(error);}
 }
 export async function inviteFollowupMember(input:unknown){
  try{const {db,member}=await followupSession();if(member.role!=='supervisor')throw new FollowupError('Solo el supervisor puede invitar integrantes.',403);
- const value=z.object({name:z.string().trim().min(2).max(120),email:z.email().max(254).transform(v=>v.toLowerCase()),role:z.enum(['supervisor','visitador']),category:z.enum(visitCategories).nullable()}).safeParse(input);
- if(!value.success)throw new FollowupError('Revisa el nombre, correo y rol.');const p=value.data;const admin=inviteClient();
+ const value=memberAccessSchema.safeExtend({name:z.string().trim().min(2).max(120),email:z.email().max(254).transform(v=>v.toLowerCase())}).safeParse(input);
+ if(!value.success)throw new FollowupError('Revisa el nombre, correo, rol y grupo de liderazgo.');const p=value.data;const admin=inviteClient();
  const origin=await followupOrigin();
- const {error}=await db.rpc('ac_prepare_classified_invitation',{p_email:p.email,p_name:p.name,p_role:p.role,p_category:p.category});if(error)throw new FollowupError('No se pudo preparar el acceso. Comprueba si ya pertenece al equipo.');
+ const {error}=await db.rpc('ac_prepare_team_invitation',{p_email:p.email,p_name:p.name,p_role:p.role,p_category:p.category,p_leadership_group:p.leadershipGroup});if(error)throw new FollowupError('No se pudo preparar el acceso. Comprueba si ya pertenece al equipo.');
  const {error:mailError}=await admin.auth.admin.inviteUserByEmail(p.email,{redirectTo:origin+'/seguimiento/auth/confirm'});
  if(mailError){
   console.error('followup_invitation_failed',{code:mailError.code,status:mailError.status});
@@ -57,8 +57,8 @@ export async function inviteFollowupMember(input:unknown){
 }
 export async function updateFollowupMember(input:unknown){
  try{const {db,member}=await followupSession();if(member.role!=='supervisor')throw new FollowupError('No tienes permiso.',403);
- const p=z.object({id:z.uuid(),role:z.enum(['supervisor','visitador']),active:z.boolean(),category:z.enum(visitCategories).nullable()}).safeParse(input);if(!p.success)throw new FollowupError('Datos inválidos.');
- const {data,error}=await db.rpc('ac_update_member_assignment',{p_id:p.data.id,p_role:p.data.role,p_active:p.data.active,p_category:p.data.category});if(error)throw new FollowupError('No se pudo cambiar el acceso. No puedes modificar tu propio rol ni desactivar tu cuenta.');return {ok:true,unassignedCount:Number(data??0)};
+ const p=memberAccessSchema.safeExtend({id:z.uuid(),active:z.boolean()}).safeParse(input);if(!p.success)throw new FollowupError('Datos inválidos.');
+ const {data,error}=await db.rpc('ac_update_team_member',{p_id:p.data.id,p_role:p.data.role,p_active:p.data.active,p_category:p.data.category,p_leadership_group:p.data.leadershipGroup});if(error)throw new FollowupError('No se pudo cambiar el acceso. No puedes modificar tu propio rol ni desactivar tu cuenta.');return {ok:true,unassignedCount:Number(data??0)};
  }catch(error){return errorMessage(error);}
 }
 export async function cancelFollowupInvitation(email:string){

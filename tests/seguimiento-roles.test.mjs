@@ -12,6 +12,7 @@ test('RLS and RPCs enforce invitation, role, ownership, reassignment and deactiv
  grant usage on schema auth,public to authenticated,anon;grant execute on function auth.uid() to authenticated,anon;`);
  await db.exec(await readFile(new URL('../supabase/migrations/20260906003209_add_church_followup.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../supabase/migrations/20260906212656_classify_followup_assignments.sql',import.meta.url),'utf8'));
+ await db.exec(await readFile(new URL('../supabase/migrations/20260914143213_add_followup_group_leaders.sql',import.meta.url),'utf8'));
  const supervisor='10000000-0000-4000-8000-000000000001',a='10000000-0000-4000-8000-000000000002',b='10000000-0000-4000-8000-000000000003',outsider='10000000-0000-4000-8000-000000000004';
  await db.query(`insert into auth.users values ($1,'supervisor@example.test',now()),($2,'a@example.test',now()),($3,'b@example.test',now()),($4,'outside@example.test',now())`,[supervisor,a,b,outsider]);
  await db.query(`insert into public.ac_members(id,name,email,role) values ($1,'Supervisor','supervisor@example.test','supervisor'),($2,'Visitador A','a@example.test','visitador'),($3,'Visitador B','b@example.test','visitador')`,[supervisor,a,b]);
