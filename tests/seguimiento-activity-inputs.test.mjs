@@ -51,7 +51,7 @@ test('logout is recorded only after successful signOut; failed password login cr
  const order=[];let signoutError=null,loginError={status:400};
  const identity={actor:'verified',session:'session'};
  const db={auth:{
-  signInWithPassword:async()=>({error:loginError}),
+  signInWithPassword:async()=>({data:{user:{id:'verified'}},error:loginError}),
   signOut:async()=>{order.push('signOut');return {error:signoutError};},
  }};
  const actions=load('../src/app/seguimiento/login/actions.ts',{

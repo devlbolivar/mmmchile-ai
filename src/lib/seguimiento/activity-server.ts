@@ -3,16 +3,20 @@ import {createClient,type SupabaseClient} from '@supabase/supabase-js';
 import {z} from 'zod';
 
 type AccessIdentity={actor:string;session:string};
-export async function readAccessIdentity(db:SupabaseClient):Promise<AccessIdentity|null>{
+export async function readAccessIdentity(db:SupabaseClient,verifiedActor?:string):Promise<AccessIdentity|null>{
  try{
   // getUser verifies the token with Auth; getSession alone must not establish identity.
-  const {data:{user},error}=await db.auth.getUser();
-  if(error||!user)return null;
+  let actor=verifiedActor;
+  if(!actor){
+   const {data:{user},error}=await db.auth.getUser();
+   if(error||!user)return null;
+   actor=user.id;
+  }
   const {data:{session},error:sessionError}=await db.auth.getSession();
   if(sessionError||!session)return null;
   const payload=JSON.parse(Buffer.from(session.access_token.split('.')[1],'base64url').toString('utf8'));
-  if(payload.sub!==user.id||!z.uuid().safeParse(payload.session_id).success)return null;
-  return {actor:user.id,session:payload.session_id};
+  if(payload.sub!==actor||!z.uuid().safeParse(payload.session_id).success)return null;
+  return {actor,session:payload.session_id};
  }catch{return null;}
 }
 
@@ -33,8 +37,8 @@ async function writeServerActivity(args:{p_actor:string;p_action:string;p_sessio
 export async function recordAccess(identity:AccessIdentity|null,action:'access.login'|'access.logout'){
  if(identity)await writeServerActivity({p_actor:identity.actor,p_action:action,p_session:identity.session});
 }
-export async function recordSessionAccess(db:SupabaseClient){
- await recordAccess(await readAccessIdentity(db),'access.login');
+export async function recordSessionAccess(db:SupabaseClient,verifiedActor?:string){
+ await recordAccess(await readAccessIdentity(db,verifiedActor),'access.login');
 }
 export async function recordInvitationDelivery(actor:string,email:string,sent:boolean){
  await writeServerActivity({p_actor:actor,p_action:sent?'invitation.mail_sent':'invitation.mail_failed',p_email:email});

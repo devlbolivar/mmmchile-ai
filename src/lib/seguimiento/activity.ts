@@ -54,5 +54,5 @@ export function activityDetail(event:ActivityEvent){
  return parts.join('. ');
 }
 export function activityDate(value:string){
- return new Intl.DateTimeFormat('es-CL',{timeZone:'America/Santiago',dateStyle:'medium',timeStyle:'short'}).format(new Date(value));
+ return new Intl.DateTimeFormat('es-CL',{timeZone:'America/Santiago',dateStyle:'medium',timeStyle:'short',hourCycle:'h23'}).format(new Date(value));
 }

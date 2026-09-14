@@ -6,9 +6,9 @@ import {createSessionClient} from '@/lib/supabase/server';
 import {followupOrigin,errorMessage} from '@/lib/seguimiento/server';
 export async function followupLogin(input:{email:string;password:string}){
  const p=z.object({email:z.email(),password:z.string().min(1).max(128)}).safeParse(input);if(!p.success)return {error:'Revisa tu correo y contraseña.'};
- const db=await createSessionClient();const {error}=await db.auth.signInWithPassword(p.data);
+ const db=await createSessionClient();const {data:{user},error}=await db.auth.signInWithPassword(p.data);
  if(error)return {error:error.status===429?'Demasiados intentos. Espera unos minutos.':'Correo o contraseña incorrectos.'};
- await recordSessionAccess(db);
+ await recordSessionAccess(db,user?.id);
  return {ok:true};
 }
 export async function followupRecover(email:string){
