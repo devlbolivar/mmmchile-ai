@@ -1,4 +1,5 @@
 import 'server-only';
+import {recordSessionAccess} from './activity-server';
 import { createClient } from '@supabase/supabase-js';
 import { createSessionClient } from '@/lib/supabase/server';
 import type { Member } from './records';
@@ -23,6 +24,7 @@ export async function followupSession(){
  const {data:member,error:memberError}=await db.from('ac_members').select('id,name,email,role,active,visit_category,leadership_group').eq('id',user.id).maybeSingle();
  if(memberError)throw new FollowupError('No se pudo verificar tu acceso. Inténtalo de nuevo.',503);
  if(!member?.active)throw new FollowupError('Tu cuenta no tiene acceso activo al seguimiento. Contacta al supervisor.',403);
+ await recordSessionAccess(db,user.id);
  return {db,user,member:member as Member};
 }
 export function errorMessage(error:unknown){return {error:error instanceof FollowupError?error.message:'No se pudo completar la operación. Inténtalo de nuevo.'};}

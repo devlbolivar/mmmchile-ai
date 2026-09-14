@@ -1,12 +1,14 @@
 'use server';
+import {readAccessIdentity,recordAccess,recordSessionAccess} from '@/lib/seguimiento/activity-server';
 import {z} from 'zod';
 import {redirect} from 'next/navigation';
 import {createSessionClient} from '@/lib/supabase/server';
 import {followupOrigin,errorMessage} from '@/lib/seguimiento/server';
 export async function followupLogin(input:{email:string;password:string}){
  const p=z.object({email:z.email(),password:z.string().min(1).max(128)}).safeParse(input);if(!p.success)return {error:'Revisa tu correo y contraseña.'};
- const db=await createSessionClient();const {error}=await db.auth.signInWithPassword(p.data);
+ const db=await createSessionClient();const {data:{user},error}=await db.auth.signInWithPassword(p.data);
  if(error)return {error:error.status===429?'Demasiados intentos. Espera unos minutos.':'Correo o contraseña incorrectos.'};
+ await recordSessionAccess(db,user?.id);
  return {ok:true};
 }
 export async function followupRecover(email:string){
@@ -21,4 +23,11 @@ export async function followupPassword(password:string){
  const db=await createSessionClient();const {data:{user},error}=await db.auth.getUser();if(error||!user)return {error:'El enlace venció. Solicita uno nuevo.'};
  const {error:changed}=await db.auth.updateUser({password});if(changed)return {error:'No se pudo cambiar la contraseña. Revisa sus requisitos.'};return {ok:true};
 }
-export async function followupLogout(){const db=await createSessionClient();const {error}=await db.auth.signOut({scope:'local'});if(error)throw new Error('No se pudo cerrar sesión. Inténtalo nuevamente.');redirect('/seguimiento/login');}
+export async function followupLogout(){
+ const db=await createSessionClient();
+ const identity=await readAccessIdentity(db);
+ const {error}=await db.auth.signOut({scope:'local'});
+ if(error)throw new Error('No se pudo cerrar sesión. Inténtalo nuevamente.');
+ await recordAccess(identity,'access.logout');
+ redirect('/seguimiento/login');
+}
