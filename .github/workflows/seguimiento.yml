@@ -1,0 +1,33 @@
+name: Seguimiento
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'supabase/migrations/**'
+      - 'tests/seguimiento-*.test.mjs'
+      - 'package*.json'
+      - '.github/workflows/seguimiento.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'src/**'
+      - 'supabase/migrations/**'
+      - 'tests/seguimiento-*.test.mjs'
+      - 'package*.json'
+      - '.github/workflows/seguimiento.yml'
+permissions:
+  contents: read
+jobs:
+  permissions-and-inputs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run test:seguimiento
+      - run: npx tsc --noEmit
+      - run: npx eslint src/lib/seguimiento/records.ts src/lib/seguimiento/server.ts src/app/seguimiento/actions.ts src/components/seguimiento/record-form.tsx src/components/seguimiento/team-access-fields.tsx src/components/seguimiento/team.tsx src/components/seguimiento/workspace.tsx

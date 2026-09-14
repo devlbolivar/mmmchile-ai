@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+import {test} from 'node:test';
+import ts from 'typescript';
+const file=new URL('../src/lib/seguimiento/records.ts',import.meta.url),module={exports:{}};
+const {outputText}=ts.transpileModule(readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}});
+new Function('require','module','exports',outputText)(createRequire(file),module,module.exports);
+const {memberAccessSchema,canManageAssignment,groupFor}=module.exports;
+test('leader form validates scope independently of visiting category',()=>{
+ assert.equal(memberAccessSchema.safeParse({role:'lider',leadershipGroup:null,category:null}).success,false);
+ assert.equal(memberAccessSchema.safeParse({role:'lider',leadershipGroup:'jovenes',category:'adulto_femenino'}).success,false);
+ assert.equal(memberAccessSchema.safeParse({role:'visitador',leadershipGroup:'jovenes',category:'joven_masculino'}).success,false);
+ for(const category of [null,'joven_masculino','joven_femenino'])assert.equal(memberAccessSchema.safeParse({role:'lider',leadershipGroup:'jovenes',category}).success,true);
+ const m={active:true,role:'lider',leadership_group:'jovenes'};
+ assert.equal(canManageAssignment(m,'Joven','Masculino'),true);
+ assert.equal(canManageAssignment(m,'Joven','Femenino'),true);
+ assert.equal(canManageAssignment(m,'Adulto','Femenino'),false);
+ assert.equal(canManageAssignment(m,'',''),false);
+ assert.equal(canManageAssignment({...m,active:false},'Joven','Femenino'),false);
+ assert.equal(canManageAssignment({...m,role:'visitador'},'Joven','Femenino'),false);
+ assert.equal(canManageAssignment({...m,role:'supervisor'},'Adulto','Femenino'),true);
+ assert.equal(groupFor('Adulto','Masculino'),'hombres_adultos');
+ assert.equal(groupFor('Adulto','Femenino'),'mujeres_adultas');
+});

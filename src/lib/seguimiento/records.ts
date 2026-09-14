@@ -3,6 +3,29 @@ export const kinds = ['Nuevo creyente', 'Acompañamiento'] as const;
 export const ageGroups = ['Joven', 'Adulto'] as const;
 export const sexes = ['Masculino', 'Femenino'] as const;
 export const visitCategories = ['joven_masculino','joven_femenino','adulto_masculino','adulto_femenino'] as const;
+export const leadershipGroups = ['jovenes','hombres_adultos','mujeres_adultas'] as const;
+export type LeadershipGroup = typeof leadershipGroups[number];
+export const leadershipLabels: Record<LeadershipGroup,string> = {jovenes:'Jóvenes',hombres_adultos:'Hombres adultos',mujeres_adultas:'Mujeres adultas'};
+export const roles = ['supervisor','lider','visitador'] as const;
+export const roleLabels = {supervisor:'Supervisor',lider:'Líder de grupo',visitador:'Visitador'};
+export function groupFor(ageGroup:string|null,sex:string|null):LeadershipGroup|null {
+ if (!ageGroups.some(g=>g===ageGroup)||!sexes.some(s=>s===sex)) return null;
+ return ageGroup==='Joven'?'jovenes':sex==='Masculino'?'hombres_adultos':'mujeres_adultas';
+}
+export function categoryGroup(category:VisitCategory|null):LeadershipGroup|null {
+ if (!category) return null;
+ return category.startsWith('joven_')?'jovenes':category==='adulto_masculino'?'hombres_adultos':'mujeres_adultas';
+}
+export function canManageAssignment(member:Member,ageGroup:string,sex:string) {
+ return member.active&&(member.role==='supervisor'||(member.role==='lider'&&!!member.leadership_group&&member.leadership_group===groupFor(ageGroup,sex)));
+}
+export const memberAccessSchema=z.object({
+ role:z.enum(roles),category:z.enum(visitCategories).nullable(),leadershipGroup:z.enum(leadershipGroups).nullable(),
+}).superRefine((v,ctx)=>{
+ if(v.role==='lider'&&!v.leadershipGroup)ctx.addIssue({code:'custom',message:'Selecciona el grupo que dirigirá.'});
+ if(v.role!=='lider'&&v.leadershipGroup)ctx.addIssue({code:'custom',message:'Solo un líder puede tener grupo de liderazgo.'});
+ if(v.role==='lider'&&v.category&&categoryGroup(v.category)!==v.leadershipGroup)ctx.addIssue({code:'custom',message:'La categoría de visita debe pertenecer al grupo que dirige.'});
+});
 export type VisitCategory = typeof visitCategories[number];
 export const categoryLabels: Record<VisitCategory,string> = {joven_masculino:'Jóvenes varones',joven_femenino:'Jóvenes mujeres',adulto_masculino:'Adultos varones',adulto_femenino:'Adultas mujeres'};
 export function categoryFor(group:string|null,sex:string|null):VisitCategory|null {
@@ -42,5 +65,5 @@ export const visitSchema=z.object({
 export type Person={age_group:typeof ageGroups[number]|null;sex:typeof sexes[number]|null;assigned_to:string|null;created_by:string;id:string;name:string;phone:string;address:string;kind:typeof kinds[number];responsible:string;status:typeof statuses[number];next_date:string;consent:number;created_at:string};
 export type Visit={created_by:string;author_name:string;person_name:string;id:string;person_id:string;date:string;visitor:string;result:typeof results[number];notes:string;next_date:string;created_at:string};
 
-export type Member={id:string;name:string;email:string;role:'supervisor'|'visitador';active:boolean;visit_category:VisitCategory|null};
+export type Member={id:string;name:string;email:string;role:typeof roles[number];active:boolean;visit_category:VisitCategory|null;leadership_group:LeadershipGroup|null};
 export type DirectoryEntry={id:string;name:string;visit_category:VisitCategory|null};
