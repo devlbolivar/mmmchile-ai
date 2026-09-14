@@ -26,7 +26,7 @@ export default function FollowupActivity(){
   }catch{if(id===request.current){setError('No se pudo conectar. Inténtalo nuevamente.');setActors([]);}}
   finally{if(id===request.current)setBusy(false);}
  },[]);
- useEffect(()=>{void load(emptyFilters,null,[]);return()=>{request.current++;};},[load]);
+ useEffect(()=>{const pending=request;void load(emptyFilters,null,[]);return()=>{pending.current++;};},[load]);
  function submit(event:FormEvent<HTMLFormElement>){event.preventDefault();if(!busy)void load(filters,null,[]);}
  return <section aria-busy={busy} className="rounded-2xl border border-slate-200 bg-white">
   <header className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 p-6">
