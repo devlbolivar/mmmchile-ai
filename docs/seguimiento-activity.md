@@ -24,7 +24,9 @@ Fechas mostradas y filtradas en America/Santiago, con límites de día calculado
 
 ## Activación
 
-1. Ejecutar una sola vez `supabase/migrations/20260914170000_add_followup_activity.sql`, después de la migración de líderes.
+Aplicada en el proyecto de seguimiento el 14 de septiembre de 2026, con versión 20260914172225 registrada en el historial de Supabase. No volver a ejecutarla en ese proyecto. Los pasos siguientes sirven para otros entornos.
+
+1. Ejecutar una sola vez `supabase/migrations/20260914172225_add_followup_activity.sql`, después de la migración de líderes.
 2. Desplegar el código del PR. La migración es aditiva y compatible con el código anterior; los cambios de negocio empiezan a registrarse al aplicarla.
 3. Entrar como supervisor y abrir Actividad. Un login o una operación real posterior aparecerá en la bitácora.
 4. Confirmar que líderes y visitadores no muestran la pestaña.

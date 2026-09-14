@@ -10,7 +10,7 @@ test('activity is transactional, private, append-only and uses trusted actors',a
    create schema auth;create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);
    create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
    grant usage on schema auth,public to authenticated,anon;grant execute on function auth.uid() to authenticated,anon;`);
-  for(const file of ['20260906003209_add_church_followup.sql','20260906212656_classify_followup_assignments.sql','20260914143213_add_followup_group_leaders.sql','20260914170000_add_followup_activity.sql']){
+  for(const file of ['20260906003209_add_church_followup.sql','20260906212656_classify_followup_assignments.sql','20260914143213_add_followup_group_leaders.sql','20260914172225_add_followup_activity.sql']){
    await db.exec(await readFile(new URL('../supabase/migrations/'+file,import.meta.url),'utf8'));
   }
   const ids=Array.from({length:10},(_,i)=>'10000000-0000-4000-8000-'+String(i+1).padStart(12,'0'));
