@@ -1,4 +1,5 @@
 'use server';
+import {recordInvitationDelivery} from '@/lib/seguimiento/activity-server';
 import {invitationError} from '@/lib/seguimiento/invitation-error';
 import {z} from 'zod';
 import type {SupabaseClient} from '@supabase/supabase-js';
@@ -48,6 +49,7 @@ export async function inviteFollowupMember(input:unknown){
  const origin=await followupOrigin();
  const {error}=await db.rpc('ac_prepare_team_invitation',{p_email:p.email,p_name:p.name,p_role:p.role,p_category:p.category,p_leadership_group:p.leadershipGroup});if(error)throw new FollowupError('No se pudo preparar el acceso. Comprueba si ya pertenece al equipo.');
  const {error:mailError}=await admin.auth.admin.inviteUserByEmail(p.email,{redirectTo:origin+'/seguimiento/auth/confirm'});
+ await recordInvitationDelivery(member.id,p.email,!mailError);
  if(mailError){
   console.error('followup_invitation_failed',{code:mailError.code,status:mailError.status});
   throw new FollowupError(invitationError(mailError));
