@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import dynamic from "next/dynamic";
 import HeroSection from '../components/home/HeroSection';
+import EventBanner from '../components/home/event-banner';
 import IntentRouter from '../components/home/IntentRouter';
 import { sanityFetch } from "@/lib/sanity/client";
 import { GET_ALL_CHURCHES_QUERY } from "@/lib/sanity/queries";
@@ -111,6 +112,7 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
       />
       <HeroSection />
+      <EventBanner />
       <IntentRouter />
       <TestimoniesPreview />
       <WhyBelieveSection />
