@@ -23,7 +23,7 @@ expone metadatos y acciones play/pause/stop donde el sistema las admite.
 No hay reproducción automática ni permisos de notificación en este MVP.
 
 El stream usa la configuración existente `NEXT_PUBLIC_RADIO_STREAM_URL`; el valor
-por defecto es `https://radio.mmmchile.cl/stream`.
+por defecto es `https://s48.radiolize.com/radio/8000/radio.mp3`.
 
 ## Caché y actualizaciones
 
