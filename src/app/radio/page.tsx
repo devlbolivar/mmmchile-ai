@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
+import RadioInstall from '@/components/radio/radio-install';
 import RadioPlayer from '@/components/radio/RadioPlayer';
 import RadioInfo from '@/components/radio/RadioInfo';
 import RadioSchedule from '@/components/radio/RadioSchedule';
@@ -133,6 +135,14 @@ export default function RadioPage() {
                 </div>
             </section>
 
+            <section aria-label="Instala Radio Bethel" className="bg-[#0A0F18] px-6 py-10 text-center text-[#F8F6F0]">
+                <h2 className="mb-3 text-2xl font-serif">La radio, siempre contigo</h2>
+                <p className="mb-6 text-base text-slate-300">Escucha desde tu pantalla de inicio en iPhone y Android.</p>
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                    <RadioInstall />
+                    <Link href="/radio/app" className="inline-flex min-h-12 items-center rounded-2xl bg-[#D4A843] px-5 py-3 font-semibold text-[#0A0F18]">Abrir app de radio</Link>
+                </div>
+            </section>
             {/* ===== INFO ===== */}
             <RadioInfo />
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { type ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 import { RadioProvider } from './RadioContext';
 import FloatingRadioPlayer from './FloatingRadioPlayer';
 
@@ -9,10 +10,12 @@ import FloatingRadioPlayer from './FloatingRadioPlayer';
  * Provides RadioContext to the whole app and renders the floating player.
  */
 export default function RadioProviderWrapper({ children }: { children: ReactNode }) {
+    const pathname = usePathname();
+    const isRadioApp = pathname === '/radio/app' || pathname.startsWith('/radio/app/');
     return (
         <RadioProvider>
             {children}
-            <FloatingRadioPlayer />
+            {!isRadioApp && <FloatingRadioPlayer />}
         </RadioProvider>
     );
 }
