@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { doctrinePoints } from '@/lib/data/doctrine'
+import { doctrinePoints, doctrineSourceUrl } from '@/lib/data/doctrine'
 import DoctrineHero from '@/components/doctrine/DoctrineHero'
 import DoctrineList from '@/components/doctrine/DoctrineList'
 import DoctrineNavigation from '@/components/doctrine/DoctrineNavigation'
@@ -8,8 +8,8 @@ import { Heart, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/shared/Breadcrumb'
 
 export const metadata: Metadata = {
-    title: 'Nuestra Doctrina: Creencias del Movimiento Misionero Mundial',
-    description: 'Conoce los fundamentos bíblicos de nuestra fe cristiana. Doctrina evangélica pentecostal basada en la Santa Biblia.',
+    title: 'Declaración Doctrinal del Movimiento Misionero Mundial',
+    description: 'Conoce los 17 puntos de la declaración doctrinal oficial del Movimiento Misionero Mundial y sus referencias bíblicas.',
     alternates: {
         canonical: 'https://mmmchile.cl/doctrina',
     },
@@ -25,7 +25,7 @@ export default function DoctrinePage() {
             name: `¿Qué creen sobre ${point.title}?`,
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: point.summary + ' ' + point.fullExplanation,
+                text: point.fullExplanation,
             },
         })),
     }
@@ -43,7 +43,7 @@ export default function DoctrinePage() {
 
                     {/* Breadcrumb */}
                     <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6">
-                        <Breadcrumb items={[{ label: 'Doctrina' }]} />
+                        <Breadcrumb items={[{ label: 'Declaración Doctrinal' }]} />
                     </div>
 
                     <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
@@ -56,6 +56,12 @@ export default function DoctrinePage() {
 
                             {/* Main Content Area */}
                             <div className="flex-1 w-full max-w-3xl">
+                                <p className="text-[#6B7280] leading-relaxed mb-8">
+                                    Fuente: {' '}
+                                    <a href={doctrineSourceUrl} target="_blank" rel="noopener noreferrer" className="text-[#1E3A5F] underline underline-offset-2 hover:text-[#D4A843]">
+                                        Doctrina Bíblica del Movimiento Misionero Mundial
+                                    </a>.
+                                </p>
                                 <DoctrineList doctrines={doctrinePoints} />
 
                                 {/* Embedded CTA Section */}
