@@ -35,10 +35,10 @@ export default function Header() {
             >
                 <Link href="/" className="flex items-center gap-3 no-underline group" onClick={() => setMobileMenuOpen(false)}>
                     <Image
-                        src="/logo.png"
+                        src="/logo-mmm-3d.png"
                         alt="MMM Chile Logo"
-                        width={80}
-                        height={80}
+                        width={1024}
+                        height={664}
                         quality={100}
                         priority
                         className="h-[32px] w-auto drop-shadow-md"
