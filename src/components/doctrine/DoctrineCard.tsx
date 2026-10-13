@@ -2,7 +2,6 @@
 
 import * as LucideIcons from 'lucide-react'
 import { DoctrinePoint } from '@/lib/data/doctrine'
-import BibleVerse from '../shared/BibleVerse'
 
 interface DoctrineCardProps {
     doctrine: DoctrinePoint
@@ -46,7 +45,7 @@ export default function DoctrineCard({ doctrine, isExpanded, onToggle }: Doctrin
                             <LucideIcons.ChevronDown className="w-5 h-5 md:w-6 md:h-6" />
                         </div>
                     </div>
-                    <p className="text-[#2D2D2D] text-base md:text-lg">{doctrine.summary}</p>
+                    <p className="text-[#6B7280] text-sm md:text-base">{doctrine.bibleReferences.join(' ')}</p>
                 </div>
             </div>
 
@@ -60,19 +59,6 @@ export default function DoctrineCard({ doctrine, isExpanded, onToggle }: Doctrin
                         <p className="text-[#6B7280] leading-relaxed mb-6 mt-4">
                             {doctrine.fullExplanation}
                         </p>
-                        <BibleVerse
-                            verse={doctrine.mainVerseText}
-                            reference={doctrine.mainVerseRef}
-                            bgClass="bg-[#F8F6F0]"
-                        />
-                        <div className="mt-6 flex flex-wrap gap-2 items-center">
-                            <span className="text-sm text-[#6B7280] font-semibold mr-1">Versículos relacionados:</span>
-                            {doctrine.bibleReferences.map((ref, i) => (
-                                <span key={i} className="inline-flex items-center bg-gray-100 text-[#2D2D2D] text-xs font-medium px-2.5 py-1 rounded-full border border-gray-200">
-                                    {ref}
-                                </span>
-                            ))}
-                        </div>
                     </div>
                 </div>
             </div>

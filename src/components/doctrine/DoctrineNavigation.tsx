@@ -79,9 +79,9 @@ export default function DoctrineNavigation({ doctrines }: { doctrines: DoctrineP
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <nav aria-label="Índice doctrinal" className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-100 p-5 max-h-[calc(100dvh-8rem)] overflow-y-auto">
                 <h3 className="font-serif font-bold text-xl text-[#1E3A5F] mb-4 pb-3 border-b border-gray-100">
-                    Índice Doctrínal
+                    Índice Doctrinal
                 </h3>
                 <ul className="space-y-1">
                     {doctrines.map((doctrine) => (
