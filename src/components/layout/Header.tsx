@@ -20,7 +20,7 @@ export default function Header() {
         { name: "Conoce a Jesús", href: "/conoce-a-jesus" },
         { name: "Iglesias", href: "/iglesias" },
         { name: "Blog", href: "/blog" },
-        { name: "Doctrina", href: "/doctrina" },
+        { name: "Declaración Doctrinal", href: "/doctrina" },
         { name: "Muro de Oración", href: "/oracion" },
         { name: "Radio", href: "/radio" },
     ];
