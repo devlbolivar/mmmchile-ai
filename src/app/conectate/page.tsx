@@ -247,10 +247,10 @@ export default function ConectarePage() {
           {/* Hero */}
           <header className="ct-hero">
             <Image
-              src="/logo-mmm-3d.png"
+              src="/logo-mmm-transparent.png"
               alt="MMM Chile"
-              width={1024}
-              height={664}
+              width={724}
+              height={446}
               className="ct-logo"
               priority
             />
