@@ -10,7 +10,7 @@ export const contentType = 'image/png';
 export default async function Image() {
     const [bgData, logoData] = await Promise.all([
         readFile(path.join(process.cwd(), 'public/images/gospel_hero_bg.png')),
-        readFile(path.join(process.cwd(), 'public/logo-mmm-3d.png')),
+        readFile(path.join(process.cwd(), 'public/logo-mmm-transparent.png')),
     ]);
     const bgBase64 = `data:image/png;base64,${Buffer.from(bgData).toString('base64')}`;
     const logoSrc = `data:image/png;base64,${Buffer.from(logoData).toString('base64')}`;

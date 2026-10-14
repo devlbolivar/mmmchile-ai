@@ -57,7 +57,7 @@ export default function RootLayout({
     "@type": "Organization",
     "name": "MMM Chile",
     "url": "https://mmmchile.cl",
-    "logo": "https://mmmchile.cl/logo-mmm-3d.png",
+    "logo": "https://mmmchile.cl/logo-mmm-transparent.png",
     "sameAs": [
       "https://web.facebook.com/MMMCHILEORG/",
       "https://www.instagram.com/chile_mmm/",

@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const title = searchParams.get('title') ?? 'MMM Chile';
     const category = searchParams.get('category') ?? '';
 
-    const logoData = await readFile(path.join(process.cwd(), 'public/logo-mmm-3d.png'));
+    const logoData = await readFile(path.join(process.cwd(), 'public/logo-mmm-transparent.png'));
     const logoSrc = `data:image/png;base64,${logoData.toString('base64')}`;
 
     return new ImageResponse(

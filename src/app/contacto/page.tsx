@@ -27,7 +27,7 @@ export default function ContactPage() {
             "@type": "Organization",
             name: "Movimiento Misionero Mundial Chile",
             url: "https://mmmchile.cl",
-            logo: "https://mmmchile.cl/logo-mmm-3d.png",
+            logo: "https://mmmchile.cl/logo-mmm-transparent.png",
             telephone: "+56975587223",
             email: "secretariammmchile@gmail.com",
             address: {

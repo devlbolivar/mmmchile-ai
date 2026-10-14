@@ -103,7 +103,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             url: BASE_URL,
             logo: {
                 '@type': 'ImageObject',
-                url: `${BASE_URL}/logo-mmm-3d.png`,
+                url: `${BASE_URL}/logo-mmm-transparent.png`,
             },
         },
         mainEntityOfPage: {
