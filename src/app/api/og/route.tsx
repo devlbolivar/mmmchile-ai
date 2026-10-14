@@ -1,12 +1,17 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const title = searchParams.get('title') ?? 'MMM Chile';
     const category = searchParams.get('category') ?? '';
+
+    const logoData = await readFile(path.join(process.cwd(), 'public/logo-mmm-3d.png'));
+    const logoSrc = `data:image/png;base64,${logoData.toString('base64')}`;
 
     return new ImageResponse(
         (
@@ -60,22 +65,13 @@ export async function GET(request: NextRequest) {
                         gap: '12px',
                     }}
                 >
-                    <div
-                        style={{
-                            width: '44px',
-                            height: '44px',
-                            background: '#D4A843',
-                            borderRadius: '10px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: '#1E3A5F',
-                            fontSize: '22px',
-                            fontWeight: 'bold',
-                        }}
-                    >
-                        ✦
-                    </div>
+                    <img
+                        src={logoSrc}
+                        alt="Movimiento Misionero Mundial"
+                        width={80}
+                        height={52}
+                        style={{ objectFit: 'contain' }}
+                    />
                     <span
                         style={{
                             color: 'white',

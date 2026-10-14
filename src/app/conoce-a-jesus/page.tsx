@@ -109,7 +109,7 @@ export default function GospelPage() {
             url: 'https://mmmchile.cl',
             logo: {
                 '@type': 'ImageObject',
-                url: 'https://mmmchile.cl/logo.png',
+                url: 'https://mmmchile.cl/logo-mmm-3d.png',
             },
         },
         breadcrumb: {
