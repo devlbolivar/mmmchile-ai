@@ -1,4 +1,5 @@
 import { createClient } from 'next-sanity';
+import type { QueryParams } from '@sanity/client';
 
 export const client = createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'mj1frquo',
@@ -13,14 +14,14 @@ export async function sanityFetch<QueryResponse>({
     tags,
 }: {
     query: string;
-    params?: any;
+    params?: QueryParams;
     tags?: string[];
 }): Promise<QueryResponse> {
     const isDevelopment = process.env.NODE_ENV === 'development';
     
     return client.fetch<QueryResponse>(query, params, {
         next: {
-            revalidate: isDevelopment ? 0 : 60, // No cache in dev, 1 minute in production
+            revalidate: isDevelopment ? 0 : 3600, // Editorial content: refresh at most hourly in production
             tags,
         },
     });
