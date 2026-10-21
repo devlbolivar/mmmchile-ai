@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
+import Link from 'next/link';
+import { useSyncExternalStore } from 'react';
 import { featuredEvent } from '@/lib/data/featured-event';
 
 const expiresAt = Date.parse(featuredEvent.expiresAt);
@@ -35,68 +36,21 @@ export default function EventBanner() {
 }
 
 function EventAnnouncement() {
-  const [open, setOpen] = useState(false);
-  const dialog = useRef<HTMLDialogElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const headingId = useId();
-  const dialogTitleId = useId();
-  const close = useCallback(() => setOpen(false), []);
-
-  useEffect(() => {
-    if (!open) return;
-    const element = dialog.current;
-    const triggerElement = trigger.current;
-    const previousOverflow = document.body.style.overflow;
-    element?.showModal();
-    document.body.style.overflow = 'hidden';
-    return () => {
-      element?.close();
-      document.body.style.overflow = previousOverflow;
-      triggerElement?.focus({ preventScroll: true });
-    };
-  }, [open]);
-
   return (
-    <section aria-labelledby={headingId} className="bg-[#F8F6F0] px-6 py-10 sm:py-14">
-      <div className="mx-auto max-w-[1120px]">
-        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="mb-1 text-sm font-semibold text-[#1E3A5F]">{featuredEvent.subtitle}</p>
-            <h2 id={headingId} className="font-serif text-3xl text-[#1E3A5F] sm:text-4xl">{featuredEvent.title}</h2>
-          </div>
-          <time dateTime={featuredEvent.date} className="text-base font-semibold text-[#1E3A5F]">{featuredEvent.dateLabel}</time>
+    <section aria-labelledby="convention-heading" className="bg-[#E8F3EC] px-6 py-12 sm:py-16">
+      <div className="mx-auto grid max-w-[1120px] items-center gap-8 md:grid-cols-2">
+        <Link href={featuredEvent.path} className="overflow-hidden rounded-2xl shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4">
+          <Image src={featuredEvent.image} alt={featuredEvent.imageAlt} width={1920} height={1080} sizes="(max-width: 768px) 100vw, 560px" className="h-auto w-full transition-transform hover:scale-[1.02]" />
+        </Link>
+        <div className="text-[#1E3A5F]">
+          <p className="mb-3 text-sm font-bold uppercase tracking-widest">{featuredEvent.subtitle}</p>
+          <h2 id="convention-heading" className="font-serif text-3xl sm:text-4xl">{featuredEvent.title}</h2>
+          <p className="mt-4 text-lg font-semibold">{featuredEvent.dateLabel}</p>
+          <p className="mt-2">{featuredEvent.venue} · {featuredEvent.address}</p>
+          <p className="mt-4 font-bold">Entrada libre</p>
+          <Link href={featuredEvent.path} className="mt-6 inline-flex min-h-12 items-center rounded-full bg-[#1E3A5F] px-6 py-3 font-semibold text-white hover:bg-[#0F2035] focus-visible:outline-2 focus-visible:outline-offset-4">Ver invitación y detalles →</Link>
         </div>
-        <button
-          ref={trigger}
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-haspopup="dialog"
-          aria-label="Ampliar afiche de Conciencia Misionera"
-          className="group block w-full cursor-zoom-in overflow-hidden rounded-2xl bg-[#0F2035] text-left shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1E3A5F]"
-        >
-          <Image src={featuredEvent.image} alt={featuredEvent.imageAlt} width={1536} height={625} sizes="(max-width: 1168px) calc(100vw - 48px), 1120px" className="h-auto w-full" />
-          <span className="flex min-h-11 items-center justify-center px-4 py-2 text-sm font-semibold text-[#E8C976] group-hover:underline">Ampliar imagen</span>
-        </button>
       </div>
-      {open && (
-        <dialog
-          ref={dialog}
-          aria-labelledby={dialogTitleId}
-          onCancel={close}
-          onClose={close}
-          onClick={(event) => { if (event.target === event.currentTarget) close(); }}
-          className="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-[1600px] overflow-y-auto rounded-2xl bg-[#0F2035] p-4 text-white shadow-xl backdrop:bg-black/80 sm:p-6"
-        >
-          <div className="mb-4 flex items-center justify-between gap-4">
-            <h3 id={dialogTitleId} className="font-serif text-xl sm:text-2xl">{featuredEvent.title}</h3>
-            <button type="button" onClick={close} aria-label="Cerrar imagen ampliada" className="min-h-11 shrink-0 cursor-pointer rounded-lg border border-white/30 px-4 text-base hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Cerrar</button>
-          </div>
-          <p className="mb-3 text-sm text-white/80 sm:hidden">Desliza la imagen hacia los lados para ver el afiche completo.</p>
-          <div tabIndex={0} role="region" aria-label="Afiche ampliado, desplazamiento horizontal" className="overflow-x-auto rounded-lg focus-visible:outline-2 focus-visible:outline-white">
-            <Image src={featuredEvent.image} alt={featuredEvent.imageAlt} width={1536} height={625} sizes="1536px" quality={100} className="h-auto w-full min-w-[900px]" />
-          </div>
-        </dialog>
-      )}
     </section>
   );
 }

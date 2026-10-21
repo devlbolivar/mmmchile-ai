@@ -5,6 +5,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://mmmchile.cl';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticRoutes: MetadataRoute.Sitemap = [
         {
+            url: `${BASE_URL}/eventos/convencion-nacional-2026`,
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        },
+        {
             url: `${BASE_URL}/`,
             lastModified: new Date(),
             changeFrequency: 'daily',
