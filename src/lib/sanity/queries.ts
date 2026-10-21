@@ -4,6 +4,7 @@ import { defineQuery } from 'next-sanity';
 export const GET_ALL_POSTS_QUERY = defineQuery(`
   * [_type == "blogPost"] | order(publishedAt desc) {
     _id,
+    _updatedAt,
     title,
     "slug": slug.current,
     excerpt,

@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase";
-import { revalidatePath } from "next/cache";
 import { sendPrayerNotification } from "@/lib/resend";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -72,9 +71,7 @@ export async function submitPrayer(formData: FormData) {
       isPublic: validatedData.showWall,
     }).catch((err) => console.error("Email notification failed:", err));
 
-    if (validatedData.showWall) {
-      revalidatePath("/oracion");
-    }
+    // Pending requests are not visible on the wall. Moderation revalidates it.
 
     return { success: true };
   } catch (err) {

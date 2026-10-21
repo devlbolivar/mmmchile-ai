@@ -1,27 +1,10 @@
 import { supabaseAdmin } from "@/lib/supabase";
 import { PrayerWallList } from "./PrayerWallList";
 
-function getRelativeTime(dateString: string) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.round((now.getTime() - date.getTime()) / 1000);
-
-    if (diffInSeconds < 60) return "Hace un momento";
-
-    const diffInMinutes = Math.round(diffInSeconds / 60);
-    if (diffInMinutes < 60) return `Hace ${diffInMinutes} ${diffInMinutes === 1 ? 'minuto' : 'minutos'}`;
-
-    const diffInHours = Math.round(diffInMinutes / 60);
-    if (diffInHours < 24) return `Hace ${diffInHours} ${diffInHours === 1 ? 'hora' : 'horas'}`;
-
-    const diffInDays = Math.round(diffInHours / 24);
-    if (diffInDays === 1) return `Ayer`;
-    if (diffInDays < 30) return `Hace ${diffInDays} días`;
-
-    return new Intl.DateTimeFormat('es-CL', {
-        day: 'numeric', month: 'short', year: 'numeric'
-    }).format(date);
-}
+// Keep cached output stable as time passes; display the actual publication date.
+const prayerDateFormatter = new Intl.DateTimeFormat('es-CL', {
+    day: 'numeric', month: 'short', year: 'numeric', timeZone: 'America/Santiago',
+});
 
 export async function PrayerWall() {
     const { data: prayers, error } = await supabaseAdmin
@@ -42,7 +25,7 @@ export async function PrayerWall() {
         id: p.id,
         name: p.is_anonymous ? "Anónimo" : (p.name || "Anónimo"),
         text: p.request,
-        date: getRelativeTime(p.created_at),
+        date: prayerDateFormatter.format(new Date(p.created_at)),
         prayCount: p.pray_count ?? 0,
         color: colors[i % colors.length],
     })) ?? [];

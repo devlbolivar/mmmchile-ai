@@ -5,7 +5,8 @@ import { VerseCards } from "@/components/prayer/VerseCards";
 import { PrayerWall } from "@/components/prayer/PrayerWall";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 
-export const revalidate = 30;
+// Moderation invalidates this route immediately; periodically refresh prayer counts.
+export const revalidate = 900;
 
 export const metadata: Metadata = {
     title: "Petición de Oración | MMM Chile",
