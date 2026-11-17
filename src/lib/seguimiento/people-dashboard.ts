@@ -10,6 +10,17 @@ export const emptyPeopleFilters: PeopleFilters = {
 };
 export type PeopleSort = 'next' | 'name' | 'responsible' | 'status' | 'latest' | 'count' | 'created';
 export type PersonSummary = {person: Person; latest?: Visit; count: number};
+const statusPriority = ['Pendiente', 'Esperando respuesta', 'Visita aceptada', 'En seguimiento', 'Finalizado', 'Archivado'];
+
+// Use calendar days in Chile, not elapsed 24-hour periods (DST safe).
+export function registrationAge(createdAt: string, day: string) {
+ const instant = new Date(createdAt);
+ if (!createdAt || Number.isNaN(instant.getTime())) return null;
+ const registered = /^\d{4}-\d{2}-\d{2}$/.test(createdAt) ? createdAt : new Intl.DateTimeFormat('en-CA', {timeZone:'America/Santiago',year:'numeric',month:'2-digit',day:'2-digit'}).format(instant);
+ const days = Math.max(0, Math.round((Date.parse(day + 'T00:00:00Z') - Date.parse(registered + 'T00:00:00Z')) / 86400000));
+ return Number.isFinite(days) ? {date: registered, days} : null;
+}
+
 const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es-CL');
 const compare = (a: string, b: string) => a.localeCompare(b, 'es-CL', {sensitivity: 'base', numeric: true});
 
@@ -33,7 +44,7 @@ export function selectPeople(rows: PersonSummary[], filters: PeopleFilters, sort
   const category = p.age_group && p.sex ? `${p.age_group.toLowerCase()}_${p.sex.toLowerCase()}` : 'unclassified';
   if (!terms.every(term => search.includes(term))) return false;
   if (p.status === 'Archivado' && filters.status !== 'Archivado') return false;
-  if (filters.status === 'active' ? ['Finalizado','Archivado'].includes(p.status) : filters.status && p.status !== filters.status) return false;
+  if (filters.status && p.status !== filters.status) return false;
   if (filters.assignedTo === 'unassigned' ? !!p.assigned_to : filters.assignedTo && p.assigned_to !== filters.assignedTo) return false;
   if (filters.kind && p.kind !== filters.kind) return false;
   if (filters.classification && category !== filters.classification) return false;
@@ -51,7 +62,7 @@ export function selectPeople(rows: PersonSummary[], filters: PeopleFilters, sort
   switch (sort) {
    case 'name': left = a.person.name; right = b.person.name; break;
    case 'responsible': left = a.person.responsible; right = b.person.responsible; break;
-   case 'status': left = a.person.status; right = b.person.status; break;
+   case 'status': left = statusPriority.indexOf(a.person.status); right = statusPriority.indexOf(b.person.status); break;
    case 'latest': left = a.latest?.date ?? ''; right = b.latest?.date ?? ''; break;
    case 'count': left = a.count; right = b.count; break;
    case 'created': left = a.person.created_at; right = b.person.created_at; break;
@@ -61,6 +72,8 @@ export function selectPeople(rows: PersonSummary[], filters: PeopleFilters, sort
   if (left === '' && right !== '') return 1;
   if (right === '' && left !== '') return -1;
   const order = typeof left === 'number' && typeof right === 'number' ? left - right : compare(String(left), String(right));
-  return order * (descending ? -1 : 1) || compare(a.person.name, b.person.name) || compare(a.person.id, b.person.id);
+  // Within a status, surface the oldest registrations first in either direction.
+  const ageOrder = sort === 'status' ? compare(a.person.created_at || '9999', b.person.created_at || '9999') : 0;
+  return order * (descending ? -1 : 1) || ageOrder || compare(a.person.name, b.person.name) || compare(a.person.id, b.person.id);
  });
 }
