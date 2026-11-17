@@ -21,15 +21,15 @@ test('schedule boundaries exclude finalized people and distinguish today from fu
  assert.deepEqual(select({schedule: 'today'}), ['1']);
  assert.deepEqual(select({schedule: 'upcoming'}), []);
  assert.deepEqual(select({schedule: 'unscheduled'}), ['3']);
- assert.deepEqual(select({status: 'active', assignedTo: 'unassigned'}), ['2', '3']);
+ assert.deepEqual(select({status: 'Pendiente', assignedTo: 'unassigned'}), ['2', '3']);
 });
 test('summaries use authorized visits only and choose the latest deterministically', () => {
  assert.equal(rows[0].latest.id, 'v2');
  assert.equal(rows[0].count, 2);
  assert.deepEqual(summarizePeople(people, [...visits].reverse()), rows);
  assert.equal(summarizePeople(people, [visits[0]])[0].count, 1);
- assert.deepEqual(select({result: 'none', status: 'active'}), ['3']);
- assert.deepEqual(select({classification: 'unclassified', status: 'active'}), ['2', '3']);
+ assert.deepEqual(select({result: 'none', status: 'Pendiente'}), ['3']);
+ assert.deepEqual(select({classification: 'unclassified', status: 'Pendiente'}), ['2', '3']);
 });
 test('sorting keeps missing dates last in both directions without mutating input', () => {
  assert.deepEqual(select({}, 'next'), ['4', '2', '1', '3']);
@@ -43,7 +43,31 @@ test('archives are hidden by default and excluded from active/scheduled filters,
  const archived=summarizePeople([person('archived',{status:'Archivado',archive_reason:'Otro motivo'})],[]);
  const find=filters=>selectPeople(archived,{...emptyPeopleFilters,...filters},'name',false,'2026-11-17');
  assert.equal(find({}).length,0);
- assert.equal(find({status:'active'}).length,0);
+ assert.equal(find({status:'En seguimiento'}).length,0);
  assert.equal(find({status:'Archivado'}).length,1);
  assert.equal(find({status:'Archivado',schedule:'unscheduled'}).length,0);
+});
+
+test('default status priority puts pending first and oldest registrations first within each state', () => {
+ const input=summarizePeople([
+  person('following',{status:'En seguimiento'}),
+  person('pending-new',{created_at:'2026-11-15'}),
+  person('finished',{status:'Finalizado'}),
+  person('accepted',{status:'Visita aceptada'}),
+  person('pending-old',{created_at:'2026-11-01'}),
+  person('waiting',{status:'Esperando respuesta'})
+ ],[]);
+ const selected=selectPeople(input,emptyPeopleFilters,'status',false,'2026-11-17');
+ assert.deepEqual(selected.map(r=>r.person.id),['pending-old','pending-new','waiting','accepted','following','finished']);
+ assert.deepEqual(selectPeople(input,{...emptyPeopleFilters,status:'En seguimiento'},'status',false,'2026-11-17').map(r=>r.person.id),['following']);
+});
+
+test('registration age uses Chile calendar dates across midnight and daylight saving', () => {
+ const {registrationAge}=module.exports;
+ assert.deepEqual(registrationAge('2026-11-17T02:30:00Z','2026-11-17'),{date:'2026-11-16',days:1});
+ assert.deepEqual(registrationAge('2026-11-17T03:30:00Z','2026-11-17'),{date:'2026-11-17',days:0});
+ assert.deepEqual(registrationAge('2026-09-05T16:00:00Z','2026-09-07'),{date:'2026-09-05',days:2});
+ assert.deepEqual(registrationAge('2026-11-01','2026-11-17'),{date:'2026-11-01',days:16});
+ assert.equal(registrationAge('invalid','2026-11-17'),null);
+ assert.equal(registrationAge('','2026-11-17'),null);
 });
