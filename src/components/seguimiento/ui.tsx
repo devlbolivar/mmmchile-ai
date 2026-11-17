@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useRef} from 'react';
+import {statusLabel} from '@/lib/seguimiento/records';
 export const button='cursor-pointer inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-dark disabled:opacity-50 disabled:cursor-wait focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
 export const secondary='cursor-pointer inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-primary hover:bg-slate-50 disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
 export const input='w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 focus:outline-2 focus:outline-primary disabled:bg-slate-100';
@@ -11,4 +12,4 @@ export function Modal({title,description,busy,onClose,children}:{title:string;de
 }
 export function Notice({children}:{children:React.ReactNode}){return <p className="my-4 rounded-lg bg-blue-50 p-4 text-sm leading-relaxed text-primary">{children}</p>;}
 export function ErrorNotice({message}:{message:string}){return message?<p role="alert" className="my-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">{message}</p>:null;}
-export function Badge({value}:{value:string}){return <span className={'inline-block whitespace-nowrap rounded-md px-2 py-1 text-xs font-semibold '+(['Realizada','Finalizado','Activo'].includes(value)?'bg-emerald-50 text-emerald-800':value==='Pendiente'?'bg-amber-50 text-amber-800':'bg-sky-50 text-sky-800')}>{value}</span>;}
+export function Badge({value}:{value:string}){return <span className={'inline-block whitespace-nowrap rounded-md px-2 py-1 text-xs font-semibold '+(value==='Archivado'?'bg-slate-100 text-slate-700':['Realizada','Finalizado','Activo'].includes(value)?'bg-emerald-50 text-emerald-800':value==='Pendiente'?'bg-amber-50 text-amber-800':'bg-sky-50 text-sky-800')}>{statusLabel(value)}</span>;}

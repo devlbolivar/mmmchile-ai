@@ -32,11 +32,12 @@ export function selectPeople(rows: PersonSummary[], filters: PeopleFilters, sort
   const search = normalize([p.name, p.phone, p.responsible, p.address].join(' '));
   const category = p.age_group && p.sex ? `${p.age_group.toLowerCase()}_${p.sex.toLowerCase()}` : 'unclassified';
   if (!terms.every(term => search.includes(term))) return false;
-  if (filters.status === 'active' ? p.status === 'Finalizado' : filters.status && p.status !== filters.status) return false;
+  if (p.status === 'Archivado' && filters.status !== 'Archivado') return false;
+  if (filters.status === 'active' ? ['Finalizado','Archivado'].includes(p.status) : filters.status && p.status !== filters.status) return false;
   if (filters.assignedTo === 'unassigned' ? !!p.assigned_to : filters.assignedTo && p.assigned_to !== filters.assignedTo) return false;
   if (filters.kind && p.kind !== filters.kind) return false;
   if (filters.classification && category !== filters.classification) return false;
-  if (filters.schedule && p.status === 'Finalizado') return false;
+  if (filters.schedule && ['Finalizado','Archivado'].includes(p.status)) return false;
   if (filters.schedule === 'overdue' && (!p.next_date || p.next_date >= day)) return false;
   if (filters.schedule === 'today' && p.next_date !== day) return false;
   if (filters.schedule === 'upcoming' && (!p.next_date || p.next_date <= day)) return false;

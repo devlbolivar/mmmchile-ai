@@ -27,7 +27,7 @@ export async function saveFollowupPerson(id:string|null,input:unknown){
  try{const {db}=await followupSession();const p=personSchema.safeParse(input);if(!p.success)throw new FollowupError(p.error.issues[0].message);
  if(id&&!z.uuid().safeParse(id).success)throw new FollowupError('Ficha inválida.');
  const {error}=await db.rpc('ac_save_person',{p_id:id,p_data:p.data});
- if(error)throw new FollowupError(error.message==='classification_change_requires_supervisor'?'Solo el supervisor puede cambiar el grupo o sexo de una ficha.':error.message==='invalid_assignee'?'El responsable debe estar activo y pertenecer al grupo y sexo seleccionados. Solicita al supervisor revisar la asignación.':error.code==='42501'?'No tienes permiso para editar esta ficha o asignar este responsable.':'No se pudo guardar. Revisa los datos y el responsable.');return {ok:true};
+ if(error)throw new FollowupError(error.message==='contact_consent_required'?'Confirma que la persona volvió a autorizar el contacto.':error.message==='classification_change_requires_supervisor'?'Solo el supervisor puede cambiar el grupo o sexo de una ficha.':error.message==='invalid_assignee'?'El responsable debe estar activo y pertenecer al grupo y sexo seleccionados. Solicita al supervisor revisar la asignación.':error.code==='42501'?'No tienes permiso para editar esta ficha o asignar este responsable.':'No se pudo guardar. Revisa los datos y el responsable.');return {ok:true};
  }catch(error){return errorMessage(error);}
 }
 export async function saveFollowupVisit(input:unknown){

@@ -38,3 +38,12 @@ test('sorting keeps missing dates last in both directions without mutating input
  assert.deepEqual(select({}, 'name'), ['4', '2', '1', '3']);
  assert.deepEqual(rows.map(r => r.person.id), ['1', '2', '3', '4']);
 });
+
+test('archives are hidden by default and excluded from active/scheduled filters, but explicitly searchable', () => {
+ const archived=summarizePeople([person('archived',{status:'Archivado',archive_reason:'Otro motivo'})],[]);
+ const find=filters=>selectPeople(archived,{...emptyPeopleFilters,...filters},'name',false,'2026-11-17');
+ assert.equal(find({}).length,0);
+ assert.equal(find({status:'active'}).length,0);
+ assert.equal(find({status:'Archivado'}).length,1);
+ assert.equal(find({status:'Archivado',schedule:'unscheduled'}).length,0);
+});

@@ -45,3 +45,11 @@ test('classification requires both fields and matches exactly one team',()=>{
  assert.deepEqual(compatibleVisitors(directory,'',''),[]);
  assert.equal(classificationLabel(null,null),'Pendiente de clasificación');
 });
+
+test('new followup states require an archive reason and prevent scheduling closed records',()=>{
+ const base={name:'Persona prueba',phone:'',address:'',kind:'Nuevo creyente',consent:true,nextDate:'',responsible:'',assignedTo:'',ageGroup:'Adulto',sex:'Femenino'};
+ for(const status of ['Pendiente','Esperando respuesta','Visita aceptada','En seguimiento','Finalizado'])assert.equal(personSchema.safeParse({...base,status}).success,true);
+ assert.equal(personSchema.safeParse({...base,status:'Archivado'}).success,false);
+ assert.equal(personSchema.safeParse({...base,status:'Archivado',archiveReason:'Otro motivo'}).success,true);
+ assert.equal(personSchema.safeParse({...base,status:'Archivado',archiveReason:'Otro motivo',nextDate:'2026-12-01'}).success,false);
+});
