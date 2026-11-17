@@ -32,7 +32,7 @@ export const activityFilterSchema=z.object({
  cursor:z.object({at:z.iso.datetime({offset:true}),id:z.uuid()}).nullable().default(null),
 }).refine(v=>!v.from||!v.to||v.from<=v.to,{message:'La fecha inicial debe ser anterior o igual a la final.'});
 
-const fieldLabels:Record<string,string>={name:'nombre',phone:'teléfono',address:'dirección',kind:'motivo',status:'estado',next_date:'próximo contacto',consent:'autorización',assigned_to:'responsable',age_group:'grupo',sex:'sexo'};
+const fieldLabels:Record<string,string>={name:'nombre',phone:'teléfono',address:'dirección',kind:'motivo',status:'estado',archive_reason:'motivo de archivo',next_date:'próximo contacto',consent:'autorización',assigned_to:'responsable',age_group:'grupo',sex:'sexo'};
 const valueLabels:Record<string,string>={supervisor:'Supervisor',lider:'Líder',visitador:'Visitador',jovenes:'Jóvenes',hombres_adultos:'Hombres adultos',mujeres_adultas:'Mujeres adultas',joven_masculino:'Joven varón',joven_femenino:'Joven mujer',adulto_masculino:'Hombre adulto',adulto_femenino:'Mujer adulta'};
 function accessSummary(value:unknown){
  if(!value||typeof value!=='object')return '';
